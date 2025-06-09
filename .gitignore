@@ -1,0 +1,14 @@
+*
+!.gitignore
+!.gitattributes
+!*/
+!*.sh
+!*.S
+!*.v
+!*.qdf 
+!*.qip 
+!*.qpf 
+!*.qsf 
+!*.qws 
+!*.rpt 
+!*.sdc
