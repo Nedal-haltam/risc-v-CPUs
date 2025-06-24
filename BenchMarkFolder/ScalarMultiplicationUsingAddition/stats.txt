@@ -8,5 +8,5 @@ Software SC vs PL differs for ScalarMultiplicationUsingAddition
 ---
 > 		Number of cycles consumed :        493
 Hardware SC vs PL differs for ScalarMultiplicationUsingAddition
-[INFO 15/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

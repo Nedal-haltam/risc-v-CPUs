@@ -8,5 +8,5 @@ Software SC vs PL differs for BinarySearch
 ---
 > 		Number of cycles consumed :         49
 Hardware SC vs PL differs for BinarySearch
-[INFO 6/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

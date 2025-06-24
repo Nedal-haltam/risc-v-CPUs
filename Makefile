@@ -32,7 +32,7 @@ BENCHMARKS=\
 	"ScalarMultiplicationUsingAddition"
 
 
-all: run_all_serial
+all: run_all_parallel
 
 run_all_parallel: $(BENCHMARKS)
 
@@ -51,7 +51,7 @@ run_benchmark:
 	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 	@$(MAKE) run_sw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 	@$(MAKE) run_hw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
-	@echo "[INFO $(INDEX)/$(TOTAL)]: Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+	@echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 	@echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 

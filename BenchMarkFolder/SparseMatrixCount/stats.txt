@@ -8,5 +8,5 @@ Software SC vs PL differs for SparseMatrixCount
 ---
 > 		Number of cycles consumed :        252
 Hardware SC vs PL differs for SparseMatrixCount
-[INFO 12/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

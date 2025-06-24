@@ -8,5 +8,5 @@ Software SC vs PL differs for BubbleSort
 ---
 > 		Number of cycles consumed :      12813
 Hardware SC vs PL differs for BubbleSort
-[INFO 3/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

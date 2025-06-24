@@ -8,5 +8,5 @@ Software SC vs PL differs for Swapping
 ---
 > 		Number of cycles consumed :         29
 Hardware SC vs PL differs for Swapping
-[INFO 13/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

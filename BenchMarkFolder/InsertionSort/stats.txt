@@ -8,5 +8,5 @@ Software SC vs PL differs for InsertionSort
 ---
 > 		Number of cycles consumed :        286
 Hardware SC vs PL differs for InsertionSort
-[INFO 2/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

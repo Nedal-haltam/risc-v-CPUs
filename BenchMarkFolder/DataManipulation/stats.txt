@@ -8,5 +8,5 @@ Software SC vs PL differs for DataManipulation
 ---
 > 		Number of cycles consumed :         21
 Hardware SC vs PL differs for DataManipulation
-[INFO 8/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------

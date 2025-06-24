@@ -8,5 +8,5 @@ Software SC vs PL differs for JR_Dependency
 ---
 > 		Number of cycles consumed :         11
 Hardware SC vs PL differs for JR_Dependency
-[INFO 1/15]: Comparing Software output with Hardware output
+Comparing Software output with Hardware output
 -------------------------------------------------------------------------------------------------------------------------------------
