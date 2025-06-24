@@ -1,29 +1,29 @@
-`define RType 6'h0
-`define hlt_inst 6'b111111
-`define add 6'h20
-`define addu 6'h21
-`define sub 6'h22
-`define subu 6'h23
-`define and_ 6'h24
-`define or_ 6'h25
-`define xor_ 6'h26
-`define nor_ 6'h27
-`define slt 6'h2a
-`define sgt 6'h2b
-`define sll 6'h00
-`define srl 6'h02
-`define jr 6'h08
-`define addi  6'h08
-`define andi  6'h0C
-`define ori  6'h0D
-`define xori  6'h0E
-`define slti  6'h2A
-`define lw  6'h23
-`define sw  6'h2B
-`define beq  6'h04
-`define bne  6'h05
-`define j  6'h02
-`define jal  6'h03
+`define OPCODE_RTYPE 6'h0
+`define OPCODE_HLT 6'b111111
+`define OPCODE_ADD 6'h20
+`define OPCODE_ADDU 6'h21
+`define OPCODE_SUB 6'h22
+`define OPCODE_SUBU 6'h23
+`define OPCODE_AND 6'h24
+`define OPCODE_OR 6'h25
+`define OPCODE_XOR 6'h26
+`define OPCODE_NOR 6'h27
+`define OPCODE_SLT 6'h2a
+`define OPCODE_SGT 6'h2b
+`define OPCODE_SLL 6'h00
+`define OPCODE_SRL 6'h02
+`define OPCODE_JR 6'h08
+`define OPCODE_ADDI  6'h08
+`define OPCODE_ANDI  6'h0C
+`define OPCODE_ORI  6'h0D
+`define OPCODE_XORI  6'h0E
+`define OPCODE_SLTI  6'h2A
+`define OPCODE_LW  6'h23
+`define OPCODE_SW  6'h2B
+`define OPCODE_BEQ  6'h04
+`define OPCODE_BNE  6'h05
+`define OPCODE_J  6'h02
+`define OPCODE_JAL  6'h03
 
 module programCounter (clk, rst, PCin, PCout);
 	
@@ -89,64 +89,64 @@ module controlUnit
 			case(opcode)
 
 
-				`hlt_inst: begin
+				`OPCODE_HLT: begin
 					hlt <= 1'b1;
 				end
 					
-				`RType : begin
+				`OPCODE_RTYPE : begin
 					
 					RegDst <= 1'b1; 
 					RegWriteEn <= 1'b1; 
 						
 					case (funct) 
 						
-						`jr : begin
+						`OPCODE_JR : begin
 						end
 
 
-						`add, `addu : begin
+						`OPCODE_ADD, `OPCODE_ADDU : begin
 							ALUOp <= 4'd0; 
 						end
 							
-						`sub, `subu : begin
+						`OPCODE_SUB, `OPCODE_SUBU : begin
 							ALUOp <= 4'd1; 
 						end
 							
-						`and_ : begin
+						`OPCODE_AND : begin
 							ALUOp <= 4'd2; 
 						end
 							
-						`or_ : begin 
+						`OPCODE_OR : begin 
 							ALUOp <= 4'd3; 
 						end
 
-						`xor_ : begin 
+						`OPCODE_XOR : begin 
 							ALUOp <= 4'd4; 
 						end
 
-						`nor_ : begin 
+						`OPCODE_NOR : begin 
 							ALUOp <= 4'd5; 
 						end
 
-						`slt : begin 
+						`OPCODE_SLT : begin 
 							ALUOp <= 4'd6; 
 						end
 
-						`sgt : begin 
+						`OPCODE_SGT : begin 
 							ALUOp <= 4'd7; 
 						end
 
-						`sll : begin 
+						`OPCODE_SLL : begin 
 							ALUSrc <= 1'b1;
 							ALUOp <= 4'd8; 
 						end
 
-						`srl : begin
+						`OPCODE_SRL : begin
 							ALUSrc <= 1'b1;
 							ALUOp <= 4'd9; 
 						end
 
-						`jr : begin
+						`OPCODE_JR : begin
 							ALUOp <= 4'd0;
 						end
 						
@@ -154,16 +154,16 @@ module controlUnit
 					
 				end
 
-				`j : begin
+				`OPCODE_J : begin
 				end
 
-				`jal : begin
+				`OPCODE_JAL : begin
 					RegWriteEn <= 1'b1;
 					RegDst <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 
-				`slti : begin
+				`OPCODE_SLTI : begin
 					RegWriteEn <= 1'b1;
 					RegDst <= 1'b0;
 					ALUSrc <= 1'b1;
@@ -171,42 +171,42 @@ module controlUnit
 				end
 
 					
-				`addi : begin
+				`OPCODE_ADDI : begin
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 
-				`andi : begin
+				`OPCODE_ANDI : begin
 					ALUOp <= 4'd2;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 
-				`ori : begin
+				`OPCODE_ORI : begin
 					ALUOp <= 4'd3;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 					
-				`xori : begin
+				`OPCODE_XORI : begin
 					ALUOp <= 4'd4;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 
-				`lw : begin
+				`OPCODE_LW : begin
 					MemReadEn <= 1'b1;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 					MemtoReg <= 1'b1;
 				end
 					
-				`sw : begin
+				`OPCODE_SW : begin
 					MemWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 					
-				`beq, `bne : begin
+				`OPCODE_BEQ, `OPCODE_BNE : begin
 					ALUOp <= 4'd1;
 				end
 				
@@ -227,9 +227,9 @@ always@(*) begin
 if (~rst)
 	PCsrc <= 0;
 else begin
-PCsrc <= (opcode == `beq && operand1 == operand2 || 
-         opcode == `bne && operand1 != operand2 ||
-		 opcode == `j || opcode == `jal || (opcode == 0 && funct == `jr));
+PCsrc <= (opcode == `OPCODE_BEQ && operand1 == operand2 || 
+         opcode == `OPCODE_BNE && operand1 != operand2 ||
+		 opcode == `OPCODE_J || opcode == `OPCODE_JAL || (opcode == 0 && funct == `OPCODE_JR));
 end
 end
 endmodule
@@ -404,7 +404,7 @@ module SC_CPU(input_clk, rst, PC, cycles_consumed, clk);
 	
 	
 	assign opcode  = (~rst) ? 0 : instruction[31:26];
-	assign rd      = (~rst) ? 0 : ((opcode == `jal) ? 5'd31 : instruction[15:11]);
+	assign rd      = (~rst) ? 0 : ((opcode == `OPCODE_JAL) ? 5'd31 : instruction[15:11]);
 	assign rs      = (~rst) ? 0 : instruction[25:21];
 	assign rt      = (~rst) ? 0 : instruction[20:16];
 	assign imm     = (~rst) ? 0 : instruction[15:0];
@@ -429,9 +429,9 @@ BranchController branchcontroller(.opcode(opcode), .funct(funct), .operand1(read
 
 
 assign PCPlus1 = PC + 32'd1;
-assign adderResult = (opcode == `jal || opcode == `j) ? address : 
+assign adderResult = (opcode == `OPCODE_JAL || opcode == `OPCODE_J) ? address : 
 (
-	(opcode == 0 && funct == `jr) ? readData1 : ( PC + {{32{imm[15]}}, imm})
+	(opcode == 0 && funct == `OPCODE_JR) ? readData1 : ( PC + {{32{imm[15]}}, imm})
 );
 
 
@@ -454,14 +454,14 @@ registerFile RF(.clk(clk), .rst(rst), .we(RegWriteEn),
 			    .writeData(writeData), .readData1(readData1), .readData2(readData2));
 
 
-assign extImm = (opcode == `andi || opcode == `ori || opcode == `xori) ? {16'd0, imm} : {{16{imm[15]}}, imm};
-assign immediate = (opcode == 0 && (funct == `sll || funct == `srl)) ? shamt : (
-	(opcode == `jal) ? 32'd1 : extImm
+assign extImm = (opcode == `OPCODE_ANDI || opcode == `OPCODE_ORI || opcode == `OPCODE_XORI) ? {16'd0, imm} : {{16{imm[15]}}, imm};
+assign immediate = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? shamt : (
+	(opcode == `OPCODE_JAL) ? 32'd1 : extImm
 );
 mux2x1 #(32) ALUMux(.in1(readData2), .in2(immediate), .s(ALUSrc), .out(ALUin2));
 	
-assign readData1_w = (opcode == 0 && (funct == `sll || funct == `srl)) ? readData2 : (
-	(opcode == `jal) ? PC : readData1
+assign readData1_w = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? readData2 : (
+	(opcode == `OPCODE_JAL) ? PC : readData1
 );
 ALU alu(.operand1(readData1_w), .operand2(ALUin2), .opSel(ALUOp), .result(ALUResult), .zero(zero));
 
