@@ -78,17 +78,17 @@ run_sw:
 		$(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt
 	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Software SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 
+# -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/SingleCycle_WaveForm.vcd\"
+# -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/PipeLine_WaveForm.vcd\"
 run_hw:
 	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(SC_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp \
-		-D vscode -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/SingleCycle_WaveForm.vcd\" \
-		-D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
+		-D vscode -D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
 		$(SC_DIR)/SingleCycle_sim.v
 	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt
 	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(PL_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp \
-		-D vscode -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/PipeLine_WaveForm.vcd\" \
-		-D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
+		-D vscode -D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
 		$(PL_DIR)/PipeLine_sim.v
 	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt
 	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Hardware SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt

@@ -15,17 +15,7 @@
 `endif
 
 `ifdef vscode
-
-`include "programCounter.v"
-`include "IM.v" 
-`include "controlUnit.v" 
-`include "mux2x1.v" 
-`include "registerFile.v" 
-`include "ALU.v" 
-`include "BranchController.v" 
-`include "DM.v" 
 `include "SC_CPU.v"
-
 `endif
 
 module SingleCycle_sim;
