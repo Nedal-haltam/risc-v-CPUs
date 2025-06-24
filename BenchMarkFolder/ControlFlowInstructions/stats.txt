@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :         15
+---
+> Number of cycles consumed :         27
+Software SC vs PL differs for ControlFlowInstructions
+4131c4131
+< Number of cycles consumed :         15
+---
+> 		Number of cycles consumed :         27
+Hardware SC vs PL differs for ControlFlowInstructions
+[INFO 7/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

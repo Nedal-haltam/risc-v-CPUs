@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :         98
+---
+> Number of cycles consumed :        151
+Software SC vs PL differs for MaxAndMinArray
+4131c4131
+< Number of cycles consumed :         98
+---
+> 		Number of cycles consumed :        151
+Hardware SC vs PL differs for MaxAndMinArray
+[INFO 5/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

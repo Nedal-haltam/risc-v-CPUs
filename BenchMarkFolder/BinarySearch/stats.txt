@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :         34
+---
+> Number of cycles consumed :         49
+Software SC vs PL differs for BinarySearch
+4131c4131
+< Number of cycles consumed :         34
+---
+> 		Number of cycles consumed :         49
+Hardware SC vs PL differs for BinarySearch
+[INFO 6/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

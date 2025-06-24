@@ -1,6 +1,8 @@
 *
 !.gitignore
 !.gitattributes
+!*stats.txt
+!Makefile
 !*/
 !*.sh
 !*.S

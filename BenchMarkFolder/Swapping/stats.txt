@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :         24
+---
+> Number of cycles consumed :         29
+Software SC vs PL differs for Swapping
+4131c4131
+< Number of cycles consumed :         24
+---
+> 		Number of cycles consumed :         29
+Hardware SC vs PL differs for Swapping
+[INFO 13/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

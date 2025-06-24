@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :       3703
+---
+> Number of cycles consumed :       4716
+Software SC vs PL differs for SelectionSort
+4131c4131
+< Number of cycles consumed :       3703
+---
+> 		Number of cycles consumed :       4716
+Hardware SC vs PL differs for SelectionSort
+[INFO 11/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

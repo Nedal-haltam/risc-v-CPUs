@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :       9076
+---
+> Number of cycles consumed :      12813
+Software SC vs PL differs for BubbleSort
+4131c4131
+< Number of cycles consumed :       9076
+---
+> 		Number of cycles consumed :      12813
+Hardware SC vs PL differs for BubbleSort
+[INFO 3/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

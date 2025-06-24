@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :        229
+---
+> Number of cycles consumed :        286
+Software SC vs PL differs for InsertionSort
+4131c4131
+< Number of cycles consumed :        229
+---
+> 		Number of cycles consumed :        286
+Hardware SC vs PL differs for InsertionSort
+[INFO 2/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

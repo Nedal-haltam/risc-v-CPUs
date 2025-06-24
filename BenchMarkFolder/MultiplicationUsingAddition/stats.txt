@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :         21
+---
+> Number of cycles consumed :         33
+Software SC vs PL differs for MultiplicationUsingAddition
+4131c4131
+< Number of cycles consumed :         21
+---
+> 		Number of cycles consumed :         33
+Hardware SC vs PL differs for MultiplicationUsingAddition
+[INFO 14/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

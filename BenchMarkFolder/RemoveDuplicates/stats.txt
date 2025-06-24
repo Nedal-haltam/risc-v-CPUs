@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :        515
+---
+> Number of cycles consumed :        680
+Software SC vs PL differs for RemoveDuplicates
+4131c4131
+< Number of cycles consumed :        515
+---
+> 		Number of cycles consumed :        680
+Hardware SC vs PL differs for RemoveDuplicates
+[INFO 10/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,12 @@
+4131c4131
+< Number of cycles consumed :        277
+---
+> Number of cycles consumed :        285
+Software SC vs PL differs for Fibonacci
+4131c4131
+< Number of cycles consumed :        277
+---
+> 		Number of cycles consumed :        285
+Hardware SC vs PL differs for Fibonacci
+[INFO 4/15]: Comparing Software output with Hardware output
+-------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,95 @@
+MAKEFLAGS += --no-print-directory
+
+.PHONY: all run_all_serial run_all_parallel run_benchmark run_sw run_hw
+
+# Tools
+ASSEMBLER=../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.exe
+CAS=../risc-v-CAS/bin/Debug/net8.0/CAS.exe
+IVERILOG=iverilog
+VVP=vvp
+
+# Paths
+BENCHMARK_DIR=./BenchMarkFolder
+SC_DIR=./singlecycle
+PL_DIR=./PipeLine
+
+# Benchmarks
+BENCHMARKS=\
+	"JR_Dependency" \
+	"InsertionSort" \
+	"BubbleSort" \
+	"Fibonacci" \
+	"MaxAndMinArray" \
+	"BinarySearch" \
+	"ControlFlowInstructions" \
+	"DataManipulation" \
+	"SumOfNumbers" \
+	"RemoveDuplicates" \
+	"SelectionSort" \
+	"SparseMatrixCount" \
+	"Swapping" \
+	"MultiplicationUsingAddition" \
+	"ScalarMultiplicationUsingAddition"
+
+
+all: run_all_serial
+
+run_all_parallel: $(BENCHMARKS)
+
+$(BENCHMARKS):
+	$(MAKE) run_benchmark BENCH=$@
+
+run_all_serial:
+	@i=1; total=`echo $(BENCHMARKS) | wc -w`; \
+	for bench in $(BENCHMARKS); do \
+		echo "[INFO $$i/$$total]: Running benchmark $$bench"; \
+		$(MAKE) run_benchmark BENCH=$$bench INDEX=$$i TOTAL=$$total; \
+		i=`expr $$i + 1`; \
+	done
+
+run_benchmark:
+	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+	@$(MAKE) run_sw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
+	@$(MAKE) run_hw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
+	@echo "[INFO $(INDEX)/$(TOTAL)]: Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+	@echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+
+run_sw:
+	@echo "[INFO $(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."
+	@$(ASSEMBLER) \
+		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
+		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/IM_INIT.INIT \
+		$(BENCHMARK_DIR)/$(BENCH)/DM_INIT.INIT \
+		$(BENCHMARK_DIR)/$(BENCH)/InstMem_MIF.mif \
+		$(BENCHMARK_DIR)/$(BENCH)/DataMem_MIF.mif
+	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"
+	@$(CAS) sim singlecycle \
+		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt
+	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"
+	@$(CAS) sim pipeline \
+		$(BENCHMARK_DIR)/$(BENCH)/BranchPredictorDataset.csv \
+		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt
+	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Software SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+
+run_hw:
+	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"
+	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(SC_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp \
+		-D vscode -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/SingleCycle_WaveForm.vcd\" \
+		-D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
+		$(SC_DIR)/SingleCycle_sim.v
+	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt
+	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"
+	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(PL_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp \
+		-D vscode -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/PipeLine_WaveForm.vcd\" \
+		-D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
+		$(PL_DIR)/PipeLine_sim.v
+	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt
+	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Hardware SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+
