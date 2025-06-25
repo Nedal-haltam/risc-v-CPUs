@@ -1,9 +1,9 @@
-4131c4131
+1059c1059
 < Number of cycles consumed :         46
 ---
 > Number of cycles consumed :         57
 Software SC vs PL differs for SumOfNumbers
-4131c4131
+1059c1059
 < Number of cycles consumed :         46
 ---
 > 		Number of cycles consumed :         57

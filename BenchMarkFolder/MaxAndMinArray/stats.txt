@@ -1,9 +1,9 @@
-4131c4131
+1059c1059
 < Number of cycles consumed :         98
 ---
 > Number of cycles consumed :        151
 Software SC vs PL differs for MaxAndMinArray
-4131c4131
+1059c1059
 < Number of cycles consumed :         98
 ---
 > 		Number of cycles consumed :        151

@@ -3,13 +3,6 @@
 
 `define reset 4
 
-
-`ifndef MEMORY_SIZE
-`define MEMORY_SIZE 4096
-`define MEMORY_BITS 12
-`endif
-
-
 `ifndef vscode
 `timescale 1ns/1ps
 `endif
@@ -21,10 +14,9 @@
 module SingleCycle_sim;
 
 reg clk = 1, rst = 1;
-wire [31:0] PC;
 wire [31 : 0] cycles_consumed;
 
-SC_CPU cpu(clk, rst, PC, cycles_consumed, clkout);
+SC_CPU cpu(clk, rst, cycles_consumed, clkout);
 
 
 always #1 clk <= ~clk;

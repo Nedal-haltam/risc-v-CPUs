@@ -59,14 +59,13 @@ module IM
 	input [31:0] addr,
 	output [31:0] Data_Out
 );
-	reg [31:0] InstMem [0 : 2047];
-	assign Data_Out = InstMem[addr[10:0]];
+	reg [31:0] InstMem [0 : 1023];
+	assign Data_Out = InstMem[addr[9:0]];
 
 	integer i;
 	initial begin
-		for (i = 0; i <= 2047; i = i + 1)
+		for (i = 0; i <= 1023; i = i + 1)
 			InstMem[i] <= 0;
-
 		`include "IM_INIT.INIT"
 	end      
 endmodule
@@ -255,13 +254,14 @@ module registerFile
 		end
 	end
 `ifdef vscode
-integer i;
-initial begin
-  #(`MAX_CLOCKS + `reset);
-  $display("Register file content : ");
-  for (i = 0; i <= 31; i = i + 1)
-    $display("index = %d , reg_out : signed = %d , unsigned = %d",i[31:0], $signed(registers[i]), $unsigned(registers[i]));
-end 
+	integer i;
+	initial begin
+		#(`MAX_CLOCKS + `reset);
+		$display("Register file content : ");
+		for (i = 0; i <= 31; i = i + 1) begin
+			$display("index = %d , reg_out : signed = %d , unsigned = %d",i[31:0], $signed(registers[i]), $unsigned(registers[i]));
+		end
+	end 
 `endif
 
 endmodule
@@ -317,41 +317,33 @@ for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1)
 end
 
 `ifdef vscode
-integer i;
-initial begin
-  #(`MAX_CLOCKS + `reset);
-  // iterating through some of the addresses of the memory to check if the program loaded and stored the values properly
-  $display("Data Memory Content : ");
-  for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1)
-    $display("Mem[%d] = %d",i[(`MEMORY_BITS-1):0],$signed(DataMem[i]));
-end 
+	integer i;
+	initial begin
+		#(`MAX_CLOCKS + `reset);
+		$display("Data Memory Content : ");
+		for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1) begin
+			$display("Mem[%d] = %d",i[(`MEMORY_BITS-1):0],$signed(DataMem[i]));
+		end
+	end 
 `endif
 endmodule
 
-module mux2x1 #(parameter size = 32) (in1, in2, s, out);
-
-	// inputs	
-	input s;
-	//input [size:0] in1, in2;
-	input [size - 1:0] in1, in2;
-	
-	// outputs
-	//output [size:0] out; // was
-	output [size - 1:0] out;
-
-	// Unit logic
+module mux2x1 #(parameter size = 32) 
+(
+	input [size-1:0] in1, in2, 
+	input s, 
+	output [size-1:0]out
+);
 	assign out = (~s) ? in1 : in2;
-	
 endmodule
 
-module SC_CPU(input_clk, rst, PC, cycles_consumed, clk);
-
-	//inputs
-	input input_clk, rst;
-	output wire clk;
-	//outputs
-	output [31:0] PC;
-	output reg [31:0] cycles_consumed;
+module SC_CPU
+(
+	input input_clk, rst, 
+	output reg [31:0] cycles_consumed, 
+	output clk
+);
+	wire [31:0] PC;
 	
 	wire [31:0] instruction, wire_instruction, writeData, readData1, readData2, readData1_w, extImm, ALUin2;
 	wire [31:0] ALUResult, memoryReadData, immediate, shamt, address, nextPC, PCPlus1, adderResult;

@@ -1,9 +1,9 @@
-4131c4131
+1059c1059
 < Number of cycles consumed :         24
 ---
 > Number of cycles consumed :         29
 Software SC vs PL differs for Swapping
-4131c4131
+1059c1059
 < Number of cycles consumed :         24
 ---
 > 		Number of cycles consumed :         29

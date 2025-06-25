@@ -1,9 +1,9 @@
-4131c4131
+1059c1059
 < Number of cycles consumed :        515
 ---
 > Number of cycles consumed :        680
 Software SC vs PL differs for RemoveDuplicates
-4131c4131
+1059c1059
 < Number of cycles consumed :        515
 ---
 > 		Number of cycles consumed :        680

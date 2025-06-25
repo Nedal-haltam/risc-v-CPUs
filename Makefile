@@ -32,6 +32,9 @@ BENCHMARKS=\
 	"MultiplicationUsingAddition" \
 	"ScalarMultiplicationUsingAddition"
 
+IM_SIZE=1024
+DM_SIZE=1024
+DM_BITS=10
 
 all: run_all_parallel
 
@@ -70,13 +73,16 @@ run_sw:
 	@$(CAS) sim singlecycle \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
 		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt
+		$(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt \
+		$(IM_SIZE) \
+		$(DM_SIZE)
 	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"
 	@$(CAS) sim pipeline \
-		$(BENCHMARK_DIR)/$(BENCH)/BranchPredictorDataset.csv \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
 		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt
+		$(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt \
+		$(IM_SIZE) \
+		$(DM_SIZE)
 	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Software SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 
 # -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/SingleCycle_WaveForm.vcd\"
@@ -84,12 +90,12 @@ run_sw:
 run_hw:
 	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(SC_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp \
-		-D vscode -D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
+		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
 		$(SC_DIR)/SingleCycle_sim.v
 	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt
 	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(PL_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp \
-		-D vscode -D MEMORY_SIZE=4096 -D MEMORY_BITS=12 -D MAX_CLOCKS=1000000 \
+		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
 		$(PL_DIR)/PipeLine_sim.v
 	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt
 	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Hardware SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt

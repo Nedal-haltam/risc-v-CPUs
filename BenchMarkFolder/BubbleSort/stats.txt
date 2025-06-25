@@ -1,9 +1,9 @@
-4131c4131
+1059c1059
 < Number of cycles consumed :       9076
 ---
 > Number of cycles consumed :      12813
 Software SC vs PL differs for BubbleSort
-4131c4131
+1059c1059
 < Number of cycles consumed :       9076
 ---
 > 		Number of cycles consumed :      12813

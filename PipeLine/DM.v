@@ -1,6 +1,4 @@
 
-`define MEMORY_SIZE 4096
-`define MEMORY_BITS 12
 
 module DM(addr , Data_In , Data_Out , Write_en , clk);
 

@@ -1,9 +1,9 @@
-4131c4131
+1059c1059
 < Number of cycles consumed :          5
 ---
 > Number of cycles consumed :         11
 Software SC vs PL differs for JR_Dependency
-4131c4131
+1059c1059
 < Number of cycles consumed :          5
 ---
 > 		Number of cycles consumed :         11

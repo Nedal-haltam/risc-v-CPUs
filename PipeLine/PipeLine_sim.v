@@ -3,12 +3,6 @@
 
 `define reset 4
 
-`ifndef MEMORY_SIZE
-`define MEMORY_SIZE 4096
-`define MEMORY_BITS 12
-`endif
-
-
 `ifndef vscode
 `timescale 1ns/1ps
 `endif
