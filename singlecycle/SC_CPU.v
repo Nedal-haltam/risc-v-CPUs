@@ -25,6 +25,17 @@
 `define OPCODE_J  6'h02
 `define OPCODE_JAL  6'h03
 
+`define ALU_OPCODE_ADD 4'd1 
+`define ALU_OPCODE_SUB 4'd2 
+`define ALU_OPCODE_AND 4'd3 
+`define ALU_OPCODE_OR 4'd4 
+`define ALU_OPCODE_XOR 4'd5 
+`define ALU_OPCODE_NOR 4'd6 
+`define ALU_OPCODE_SLT 4'd7 
+`define ALU_OPCODE_SGT 4'd8 
+`define ALU_OPCODE_SLL 4'd9
+`define ALU_OPCODE_SRL 4'd10
+
 module programCounter 
 (
 	input clk, rst, 
@@ -32,7 +43,6 @@ module programCounter
 	output reg [31:0] PCout
 );
 	parameter initialaddr = -1;
-	//Counter logic
 	always@(posedge clk, negedge rst) begin
 		if(~rst) begin
 			PCout <= initialaddr;
@@ -70,55 +80,79 @@ module controlUnit
 );
 	always @(*) begin
 		if(~rst) begin 
-			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, ALUOp, hlt} <= 0;
+			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUOp, ALUSrc, hlt} <= 0;
 		end
 		else begin
-			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, ALUOp, hlt} = 0;
+			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUOp, ALUSrc, hlt} = 0;
 			case(opcode)
 				`OPCODE_HLT: begin
 					hlt <= 1'b1;
 				end
 				`OPCODE_RTYPE : begin
-					RegDst <= 1'b1; 
-					RegWriteEn <= 1'b1; 
-						
 					case (funct) 
 						`OPCODE_JR : begin
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_ADD, `OPCODE_ADDU : begin
-							ALUOp <= 4'd0; 
+							ALUOp <= `ALU_OPCODE_ADD;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_SUB, `OPCODE_SUBU : begin
-							ALUOp <= 4'd1; 
+							ALUOp <= `ALU_OPCODE_SUB;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_AND : begin
-							ALUOp <= 4'd2; 
+							ALUOp <= `ALU_OPCODE_AND;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_OR : begin 
-							ALUOp <= 4'd3; 
+							ALUOp <= `ALU_OPCODE_OR;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_XOR : begin 
-							ALUOp <= 4'd4; 
+							ALUOp <= `ALU_OPCODE_XOR;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_NOR : begin 
-							ALUOp <= 4'd5; 
+							ALUOp <= `ALU_OPCODE_NOR;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_SLT : begin 
-							ALUOp <= 4'd6; 
+							ALUOp <= `ALU_OPCODE_SLT;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_SGT : begin 
-							ALUOp <= 4'd7; 
+							ALUOp <= `ALU_OPCODE_SGT;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_SLL : begin 
 							ALUSrc <= 1'b1;
-							ALUOp <= 4'd8; 
+							ALUOp <= `ALU_OPCODE_SLL;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_SRL : begin
 							ALUSrc <= 1'b1;
-							ALUOp <= 4'd9; 
+							ALUOp <= `ALU_OPCODE_SRL;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
 						end
 						`OPCODE_JR : begin
-							ALUOp <= 4'd0;
+							ALUOp <= `ALU_OPCODE_ADD;
+							RegDst <= 1'b1; 
+							RegWriteEn <= 1'b1; 
+						end
+						default : begin
+							RegWriteEn <= 1'b0;
 						end
 					endcase
 				end
@@ -128,29 +162,31 @@ module controlUnit
 					RegWriteEn <= 1'b1;
 					RegDst <= 1'b1;
 					ALUSrc <= 1'b1;
+					ALUOp <= `ALU_OPCODE_ADD;
 				end
 				`OPCODE_SLTI : begin
 					RegWriteEn <= 1'b1;
 					RegDst <= 1'b0;
 					ALUSrc <= 1'b1;
-					ALUOp <= 4'd6;
+					ALUOp <= `ALU_OPCODE_SLT;
 				end
 				`OPCODE_ADDI : begin
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
+					ALUOp <= `ALU_OPCODE_ADD;
 				end
 				`OPCODE_ANDI : begin
-					ALUOp <= 4'd2;
+					ALUOp <= `ALU_OPCODE_AND;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 				`OPCODE_ORI : begin
-					ALUOp <= 4'd3;
+					ALUOp <= `ALU_OPCODE_OR;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
 				`OPCODE_XORI : begin
-					ALUOp <= 4'd4;
+					ALUOp <= `ALU_OPCODE_XOR;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
@@ -159,15 +195,20 @@ module controlUnit
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 					MemtoReg <= 1'b1;
+					ALUOp <= `ALU_OPCODE_ADD;
 				end
 				`OPCODE_SW : begin
 					MemWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
+					ALUOp <= `ALU_OPCODE_ADD;
 				end
 				`OPCODE_BEQ, `OPCODE_BNE : begin
-					ALUOp <= 4'd1;
+					ALUOp <= `ALU_OPCODE_SUB;
 				end
-				default: ;
+				default : begin
+					MemWriteEn <= 1'b0; 
+					RegWriteEn <= 1'b0;
+				end
 			endcase
 		end	
 	end
@@ -207,14 +248,11 @@ module registerFile
 	always@(posedge clk,  negedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(~rst) begin
-			for(i=0; i<32; i = i + 1) registers[i] <= 0; //it was = I changed it to <= for non-blocking assignment ID = 8
+			for(i=0; i<32; i = i + 1) registers[i] <= 0;
 		end
-		else if(we) begin
+		else if(we && writeRegister != 0) begin
 			registers[writeRegister] <= writeData;
-			registers[0] <= 32'b0; //added this line because writing on register 0 is illegal for MIPS-like architecture ID = 9
 		end
-		// Defualt to prevent latching
-		else;
 	end
 `ifdef vscode
 integer i;
@@ -235,20 +273,19 @@ module ALU
 	output reg [31:0] result, 
 	output zero
 );
-parameter ALU_ADD = 4'd0, ALU_SUB = 4'd1, ALU_AND = 4'd2, ALU_OR = 4'd3, ALU_XOR = 4'd4, ALU_NOR = 4'd5, ALU_SLT = 4'd6, ALU_SGT = 4'd7, ALU_SLL = 4'd8, ALU_SRL = 4'd9;
 
 always @ (*) begin
   case(opSel)
-    ALU_ADD: result <= operand1 + operand2;
-    ALU_SUB: result <= operand1 - operand2;
-    ALU_AND: result <= operand1 & operand2;
-    ALU_OR : result <= operand1 | operand2;
-    ALU_XOR: result <= operand1 ^ operand2; 
-    ALU_NOR: result <= ~(operand1 | operand2);
-    ALU_SLT: result <= ($signed(operand1) < $signed(operand2)) ? 32'b1 : 32'b0; 
-    ALU_SGT: result <= ($signed(operand1) > $signed(operand2)) ? 32'b1 : 32'b0; 
-    ALU_SLL: result <= operand1 << operand2;
-    ALU_SRL: result <= operand1 >> operand2;
+    `ALU_OPCODE_ADD: result <= operand1 + operand2;
+    `ALU_OPCODE_SUB: result <= operand1 - operand2;
+    `ALU_OPCODE_AND: result <= operand1 & operand2;
+    `ALU_OPCODE_OR : result <= operand1 | operand2;
+    `ALU_OPCODE_XOR: result <= operand1 ^ operand2; 
+    `ALU_OPCODE_NOR: result <= ~(operand1 | operand2);
+    `ALU_OPCODE_SLT: result <= ($signed(operand1) < $signed(operand2)) ? 32'b1 : 32'b0; 
+    `ALU_OPCODE_SGT: result <= ($signed(operand1) > $signed(operand2)) ? 32'b1 : 32'b0; 
+    `ALU_OPCODE_SLL: result <= operand1 << operand2;
+    `ALU_OPCODE_SRL: result <= operand1 >> operand2;
 
     default: result <= -1;
   endcase
