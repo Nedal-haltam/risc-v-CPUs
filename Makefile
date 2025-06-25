@@ -13,7 +13,8 @@ BENCHMARK_DIR=./BenchMarkFolder
 SC_DIR=./singlecycle
 PL_DIR=./PipeLine
 
-# Benchmarks
+
+# BENCHMARKS="JR_Dependency"
 BENCHMARKS=\
 	"JR_Dependency" \
 	"InsertionSort" \

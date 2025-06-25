@@ -25,15 +25,12 @@
 `define OPCODE_J  6'h02
 `define OPCODE_JAL  6'h03
 
-module programCounter (clk, rst, PCin, PCout);
-	
-	//inputs
-	input clk, rst;
-	input [31:0] PCin;
-	
-	//outputs 
-	output reg [31:0] PCout;
-	
+module programCounter 
+(
+	input clk, rst, 
+	input [31:0] PCin, 
+	output reg [31:0] PCout
+);
 	parameter initialaddr = -1;
 	//Counter logic
 	always@(posedge clk, negedge rst) begin
@@ -47,169 +44,129 @@ module programCounter (clk, rst, PCin, PCout);
 	
 endmodule
 
-module IM(addr , Data_Out);
+module IM
+(
+	input [31:0] addr,
+	output [31:0] Data_Out
+);
+	reg [31:0] InstMem [0 : 2047];
+	assign Data_Out = InstMem[addr[10:0]];
 
-parameter bit_width = 32;
-input [bit_width - 1:0] addr;
-output [bit_width - 1:0] Data_Out;
+	integer i;
+	initial begin
+		for (i = 0; i <= 2047; i = i + 1)
+			InstMem[i] <= 0;
 
-reg [bit_width - 1:0] InstMem [0 : 2047];
-
-assign Data_Out = InstMem[addr[10:0]];
-
-integer i;
-initial begin
-// here we initialize the instruction memory
-
-for (i = 0; i <= 2047; i = i + 1)
-    InstMem[i] <= 0;
-
-`include "IM_INIT.INIT"
-
-end      
+		`include "IM_INIT.INIT"
+	end      
 endmodule
 
 module controlUnit
 (
-	opcode, funct, rst,
-	RegDst, MemReadEn, MemtoReg,
-	ALUOp, MemWriteEn, RegWriteEn, ALUSrc, hlt
+	input rst,
+	input wire [5:0] opcode, funct,
+	output reg [3:0] ALUOp,
+	output reg RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, hlt
 );
-	input wire [5:0] opcode, funct;
-	input rst;
-	output reg RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, hlt;
-	output reg [3:0] ALUOp;
 	always @(*) begin
 		if(~rst) begin 
 			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, ALUOp, hlt} <= 0;
 		end
 		else begin
 			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, ALUOp, hlt} = 0;
-
 			case(opcode)
-
-
 				`OPCODE_HLT: begin
 					hlt <= 1'b1;
 				end
-					
 				`OPCODE_RTYPE : begin
-					
 					RegDst <= 1'b1; 
 					RegWriteEn <= 1'b1; 
 						
 					case (funct) 
-						
 						`OPCODE_JR : begin
 						end
-
-
 						`OPCODE_ADD, `OPCODE_ADDU : begin
 							ALUOp <= 4'd0; 
 						end
-							
 						`OPCODE_SUB, `OPCODE_SUBU : begin
 							ALUOp <= 4'd1; 
 						end
-							
 						`OPCODE_AND : begin
 							ALUOp <= 4'd2; 
 						end
-							
 						`OPCODE_OR : begin 
 							ALUOp <= 4'd3; 
 						end
-
 						`OPCODE_XOR : begin 
 							ALUOp <= 4'd4; 
 						end
-
 						`OPCODE_NOR : begin 
 							ALUOp <= 4'd5; 
 						end
-
 						`OPCODE_SLT : begin 
 							ALUOp <= 4'd6; 
 						end
-
 						`OPCODE_SGT : begin 
 							ALUOp <= 4'd7; 
 						end
-
 						`OPCODE_SLL : begin 
 							ALUSrc <= 1'b1;
 							ALUOp <= 4'd8; 
 						end
-
 						`OPCODE_SRL : begin
 							ALUSrc <= 1'b1;
 							ALUOp <= 4'd9; 
 						end
-
 						`OPCODE_JR : begin
 							ALUOp <= 4'd0;
 						end
-						
 					endcase
-					
 				end
-
 				`OPCODE_J : begin
 				end
-
 				`OPCODE_JAL : begin
 					RegWriteEn <= 1'b1;
 					RegDst <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
-
 				`OPCODE_SLTI : begin
 					RegWriteEn <= 1'b1;
 					RegDst <= 1'b0;
 					ALUSrc <= 1'b1;
 					ALUOp <= 4'd6;
 				end
-
-					
 				`OPCODE_ADDI : begin
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
-
 				`OPCODE_ANDI : begin
 					ALUOp <= 4'd2;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
-
 				`OPCODE_ORI : begin
 					ALUOp <= 4'd3;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
-					
 				`OPCODE_XORI : begin
 					ALUOp <= 4'd4;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
-
 				`OPCODE_LW : begin
 					MemReadEn <= 1'b1;
 					RegWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 					MemtoReg <= 1'b1;
 				end
-					
 				`OPCODE_SW : begin
 					MemWriteEn <= 1'b1;
 					ALUSrc <= 1'b1;
 				end
-					
 				`OPCODE_BEQ, `OPCODE_BNE : begin
 					ALUOp <= 4'd1;
 				end
-				
 				default: ;
 			endcase
 		end	
@@ -217,57 +174,47 @@ module controlUnit
 endmodule
 
 module BranchController(
+	input rst,
 	input [5:0] opcode, funct,
 	input [31:0] operand1, operand2,
-	input rst,
 	output reg PCsrc
 );
 
-always@(*) begin
-if (~rst)
-	PCsrc <= 0;
-else begin
-PCsrc <= (opcode == `OPCODE_BEQ && operand1 == operand2 || 
-         opcode == `OPCODE_BNE && operand1 != operand2 ||
-		 opcode == `OPCODE_J || opcode == `OPCODE_JAL || (opcode == 0 && funct == `OPCODE_JR));
-end
-end
+	always@(*) begin
+		if (~rst)
+			PCsrc <= 0;
+		else begin
+			PCsrc <= (
+						opcode == `OPCODE_BEQ && operand1 == operand2 || 
+						opcode == `OPCODE_BNE && operand1 != operand2 ||
+						opcode == `OPCODE_J || opcode == `OPCODE_JAL || (opcode == 0 && funct == `OPCODE_JR)
+					);
+		end
+	end
 endmodule
 
-module registerFile (clk, rst, we, 
-					 readRegister1, readRegister2, writeRegister,
-					 writeData, readData1, readData2);
-	// inputs
-	input wire clk, rst, we;
-	input wire [4:0] readRegister1, readRegister2, writeRegister;
-	input wire [31:0] writeData;
-	
-	// outputs
-	output wire [31:0] readData1, readData2;
-	
-	// register file (registers)
+module registerFile 
+(
+	input clk, rst, we,
+	input [4:0] readRegister1, readRegister2, writeRegister,
+	input [31:0] writeData,
+	output wire [31:0] readData1, readData2
+);
+
 	reg [31:0] registers [0:31];
-	
-	// Read from the register file
 	assign readData1 = registers[readRegister1];
-  assign readData2 = registers[readRegister2];
-						
-  						
-  always@(posedge clk,  negedge rst) begin : Write_on_register_file_block
-	
+	assign readData2 = registers[readRegister2];
+	always@(posedge clk,  negedge rst) begin : Write_on_register_file_block
 		integer i;
-		// Reset the register file
 		if(~rst) begin
 			for(i=0; i<32; i = i + 1) registers[i] <= 0; //it was = I changed it to <= for non-blocking assignment ID = 8
 		end
-		// Write to the register file
 		else if(we) begin
 			registers[writeRegister] <= writeData;
 			registers[0] <= 32'b0; //added this line because writing on register 0 is illegal for MIPS-like architecture ID = 9
 		end
 		// Defualt to prevent latching
 		else;
-		
 	end
 `ifdef vscode
 integer i;
@@ -281,31 +228,27 @@ end
 
 endmodule
 
-module ALU (operand1, operand2, opSel, result, zero);
-	
-parameter data_width = 32;  
-parameter sel_width = 4;
-	
-input [data_width - 1 : 0] operand1, operand2;  
-input [sel_width - 1 : 0] opSel;                  
-
-output reg [data_width - 1 : 0] result;  
-output zero;                          
-
-parameter ADD = 4'd0, SUB = 4'd1, AND = 4'd2, OR = 4'd3, XOR = 4'd4, NOR = 4'd5, SLT = 4'd6, SGT = 4'd7, SLL = 4'd8, SRL = 4'd9;
+module ALU 
+(
+	input [31:0] operand1, operand2, 
+	input [3:0] opSel, 
+	output reg [31:0] result, 
+	output zero
+);
+parameter ALU_ADD = 4'd0, ALU_SUB = 4'd1, ALU_AND = 4'd2, ALU_OR = 4'd3, ALU_XOR = 4'd4, ALU_NOR = 4'd5, ALU_SLT = 4'd6, ALU_SGT = 4'd7, ALU_SLL = 4'd8, ALU_SRL = 4'd9;
 
 always @ (*) begin
   case(opSel)
-    ADD: result <= operand1 + operand2;
-    SUB: result <= operand1 - operand2;
-    AND: result <= operand1 & operand2;
-    OR : result <= operand1 | operand2;
-    XOR: result <= operand1 ^ operand2; 
-    NOR: result <= ~(operand1 | operand2);
-    SLT: result <= ($signed(operand1) < $signed(operand2)) ? 32'b1 : 32'b0; 
-    SGT: result <= ($signed(operand1) > $signed(operand2)) ? 32'b1 : 32'b0; 
-    SLL: result <= operand1 << operand2;
-    SRL: result <= operand1 >> operand2;
+    ALU_ADD: result <= operand1 + operand2;
+    ALU_SUB: result <= operand1 - operand2;
+    ALU_AND: result <= operand1 & operand2;
+    ALU_OR : result <= operand1 | operand2;
+    ALU_XOR: result <= operand1 ^ operand2; 
+    ALU_NOR: result <= ~(operand1 | operand2);
+    ALU_SLT: result <= ($signed(operand1) < $signed(operand2)) ? 32'b1 : 32'b0; 
+    ALU_SGT: result <= ($signed(operand1) > $signed(operand2)) ? 32'b1 : 32'b0; 
+    ALU_SLL: result <= operand1 << operand2;
+    ALU_SRL: result <= operand1 >> operand2;
 
     default: result <= -1;
   endcase
@@ -314,19 +257,14 @@ assign zero = (result == 32'b0);
 
 endmodule
 
+module DM
+(
+	input clock, rden, wren,
+	input [31:0] address,
+	input [31:0] data,
+	output reg [31:0] q
+);
 
-`define MEMORY_SIZE 4096
-`define MEMORY_BITS 12 
-
-module DM(address, clock,  data,  rden,  wren,  q);
-
-input clock, rden, wren;
-input [31 : 0] address;
-input [31 : 0] data;
-
-
-`ifdef vscode
-output reg [31 : 0] q;
 reg [31 : 0] DataMem [0 : (`MEMORY_SIZE-1)];
 always @(posedge clock) begin
     if (rden)
@@ -340,21 +278,6 @@ for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1)
 
 `include "DM_INIT.INIT"
 end
-
-`else
-
-output [31:0] q;
-DataMemory_IP DataMemory
-(
-	address[(`MEMORY_BITS-1):0],
-	clock,
-	data,
-	wren,
-	q
-);
-
-`endif
-
 
 `ifdef vscode
 integer i;
