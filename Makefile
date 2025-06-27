@@ -1,6 +1,6 @@
 MAKEFLAGS += --no-print-directory
 
-.PHONY: all run_all_serial run_all_parallel run_benchmark run_sw run_hw
+.PHONY: serial run_all_serial parallel run_all_parallel run_benchmark run_sw run_hw
 
 # Tools
 ASSEMBLER=../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.exe
@@ -31,12 +31,14 @@ BENCHMARKS=\
 	"Swapping" \
 	"MultiplicationUsingAddition" \
 	"ScalarMultiplicationUsingAddition"
-
+# constants
 IM_SIZE=1024
 DM_SIZE=1024
 DM_BITS=10
 
-all: run_all_parallel
+parallel: run_all_parallel
+
+serial: run_all_serial
 
 run_all_parallel: $(BENCHMARKS)
 
