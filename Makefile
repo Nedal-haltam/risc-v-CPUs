@@ -40,7 +40,7 @@ DM_BITS=10
 PARALLEL=0
 
 all:
-	if [ "$(PARALLEL)" = "1" ]; then \
+	@if [ "$(PARALLEL)" = "1" ]; then \
 		$(MAKE) parallel -j; \
 	else \
 		$(MAKE) serial; \
