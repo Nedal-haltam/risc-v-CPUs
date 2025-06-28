@@ -73,7 +73,7 @@ run_benchmark:
 
 run_sw:
 	@if [ "$(PARALLEL)" = "0" ]; then \
-		@echo "[INFO $(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
+		echo "[INFO $(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
 	fi
 	@$(ASSEMBLER) \
 		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
@@ -84,7 +84,7 @@ run_sw:
 		$(BENCHMARK_DIR)/$(BENCH)/InstMem_MIF.mif \
 		$(BENCHMARK_DIR)/$(BENCH)/DataMem_MIF.mif
 	@if [ "$(PARALLEL)" = "0" ]; then \
-		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
+		echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
 	fi
 	@$(CAS) sim singlecycle \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
@@ -93,7 +93,7 @@ run_sw:
 		$(IM_SIZE) \
 		$(DM_SIZE)
 	@if [ "$(PARALLEL)" = "0" ]; then \
-		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"; \
+		echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"; \
 	fi
 	@$(CAS) sim pipeline \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
@@ -107,14 +107,14 @@ run_sw:
 # -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/PipeLine_WaveForm.vcd\"
 run_hw:
 	@if [ "$(PARALLEL)" = "0" ]; then \
-		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
+		echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
 	fi
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(SC_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp \
 		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
 		$(SC_DIR)/SingleCycle_sim.v
 	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt
 	@if [ "$(PARALLEL)" = "0" ]; then \
-		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"; \
+		echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"; \
 	fi
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(PL_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp \
 		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
