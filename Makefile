@@ -37,6 +37,15 @@ IM_SIZE=1024
 DM_SIZE=1024
 DM_BITS=10
 
+PARALLEL=0
+
+all:
+	if [ "$(PARALLEL)" = "1" ]; then \
+		$(MAKE) parallel -j; \
+	else \
+		$(MAKE) serial; \
+	fi
+
 serial: run_all_serial
 
 parallel: run_all_parallel
@@ -63,7 +72,9 @@ run_benchmark:
 	@echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
 
 run_sw:
-	@echo "[INFO $(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."
+	@if [ "$(PARALLEL)" = "0" ]; then \
+		@echo "[INFO $(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
+	fi
 	@$(ASSEMBLER) \
 		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
@@ -72,14 +83,18 @@ run_sw:
 		$(BENCHMARK_DIR)/$(BENCH)/DM_INIT.INIT \
 		$(BENCHMARK_DIR)/$(BENCH)/InstMem_MIF.mif \
 		$(BENCHMARK_DIR)/$(BENCH)/DataMem_MIF.mif
-	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"
+	@if [ "$(PARALLEL)" = "0" ]; then \
+		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
+	fi
 	@$(CAS) sim singlecycle \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
 		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
 		$(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt \
 		$(IM_SIZE) \
 		$(DM_SIZE)
-	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"
+	@if [ "$(PARALLEL)" = "0" ]; then \
+		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"; \
+	fi
 	@$(CAS) sim pipeline \
 		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
 		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
@@ -91,12 +106,16 @@ run_sw:
 # -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/SingleCycle_WaveForm.vcd\"
 # -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/PipeLine_WaveForm.vcd\"
 run_hw:
-	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"
+	@if [ "$(PARALLEL)" = "0" ]; then \
+		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
+	fi
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(SC_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp \
 		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
 		$(SC_DIR)/SingleCycle_sim.v
 	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt
-	@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"
+	@if [ "$(PARALLEL)" = "0" ]; then \
+		@echo "[INFO $(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"; \
+	fi
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(PL_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp \
 		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
 		$(PL_DIR)/PipeLine_sim.v
