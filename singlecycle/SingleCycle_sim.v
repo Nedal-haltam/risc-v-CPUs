@@ -1,6 +1,4 @@
 
-
-
 `define reset 4
 
 `ifndef vscode
@@ -13,17 +11,30 @@
 
 module SingleCycle_sim;
 
-reg InputClk = 1, rst = 1;
+reg InputClk = 1, rst = 0;
+wire `BIT_WIDTH AddressBus, DataBusIn, DataBusOut;
+wire [2:0] ControlBus;
 wire [31:0] CyclesConsumed;
 
 SC_CPU dut
 (
 	.InputClk(InputClk), 
     .rst(rst),
-	// output `BIT_WIDTH AddressBus,
-	// output `BIT_WIDTH DataBus,
-	// output [2:0] ControlBus,
+	.AddressBus(AddressBus),
+	.DataBusIn(DataBusIn),
+	.DataBusOut(DataBusOut),
+	.ControlBus(ControlBus),
 	.CyclesConsumed(CyclesConsumed)
+);
+
+DataMemory MemoryModule
+(
+	.clock(InputClk), 
+    .MemReadEn(ControlBus[1]), 
+    .MemWriteEn(ControlBus[2]),
+	.AddressBus(AddressBus),
+	.DataMemoryInput(DataBusOut),
+	.DataMemoryOutput(DataBusIn)
 );
 
 always #1 InputClk <= ~InputClk;
@@ -41,7 +52,7 @@ $dumpvars;
 
 `endif
 
-rst = 0; #(`reset) rst = 1;
+rst = 1; #(`reset) rst = 0;
 
 #(`MAX_CLOCKS + 1);
 
