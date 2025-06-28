@@ -13,13 +13,20 @@
 
 module SingleCycle_sim;
 
-reg clk = 1, rst = 1;
-wire [31 : 0] cycles_consumed;
+reg InputClk = 1, rst = 1;
+wire [31:0] CyclesConsumed;
 
-SC_CPU cpu(clk, rst, cycles_consumed, clkout);
+SC_CPU dut
+(
+	.InputClk(InputClk), 
+    .rst(rst),
+	// output `BIT_WIDTH AddressBus,
+	// output `BIT_WIDTH DataBus,
+	// output [2:0] ControlBus,
+	.CyclesConsumed(CyclesConsumed)
+);
 
-
-always #1 clk <= ~clk;
+always #1 InputClk <= ~InputClk;
 initial begin
 
 `ifdef VCD_OUT
@@ -38,7 +45,7 @@ rst = 0; #(`reset) rst = 1;
 
 #(`MAX_CLOCKS + 1);
 
-$display("Number of cycles consumed : %d", cycles_consumed);
+$display("Number of cycles consumed : ", CyclesConsumed);
 $finish;
 
 end

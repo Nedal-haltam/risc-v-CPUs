@@ -36,11 +36,13 @@
 `define ALU_OPCODE_SLL 4'd9
 `define ALU_OPCODE_SRL 4'd10
 
+`define BIT_WIDTH [31:0]
+
 module programCounter 
 (
 	input clk, rst, 
-	input [31:0] PCin, 
-	output reg [31:0] PCout
+	input `BIT_WIDTH PCin, 
+	output reg `BIT_WIDTH PCout
 );
 	parameter initialaddr = -1;
 	always@(posedge clk, negedge rst) begin
@@ -56,10 +58,10 @@ endmodule
 
 module IM
 (
-	input [31:0] addr,
-	output [31:0] Data_Out
+	input `BIT_WIDTH addr,
+	output `BIT_WIDTH Data_Out
 );
-	reg [31:0] InstMem [0 : 1023];
+	reg `BIT_WIDTH InstMem [0 : 1023];
 	assign Data_Out = InstMem[addr[9:0]];
 
 	integer i;
@@ -216,7 +218,7 @@ endmodule
 module BranchController(
 	input rst,
 	input [5:0] opcode, funct,
-	input [31:0] operand1, operand2,
+	input `BIT_WIDTH operand1, operand2,
 	output reg PCsrc
 );
 
@@ -237,11 +239,11 @@ module registerFile
 (
 	input clk, rst, we,
 	input [4:0] readRegister1, readRegister2, writeRegister,
-	input [31:0] writeData,
-	output wire [31:0] readData1, readData2
+	input `BIT_WIDTH writeData,
+	output wire `BIT_WIDTH readData1, readData2
 );
 
-	reg [31:0] registers [0:31];
+	reg `BIT_WIDTH registers [0:31];
 	assign readData1 = registers[readRegister1];
 	assign readData2 = registers[readRegister2];
 	always@(posedge clk,  negedge rst) begin : Write_on_register_file_block
@@ -259,7 +261,7 @@ module registerFile
 		#(`MAX_CLOCKS + `reset);
 		$display("Register file content : ");
 		for (i = 0; i <= 31; i = i + 1) begin
-			$display("index = %d , reg_out : signed = %d , unsigned = %d",i[31:0], $signed(registers[i]), $unsigned(registers[i]));
+			$display("index = %d , reg_out : signed = %d , unsigned = %d",i`BIT_WIDTH, $signed(registers[i]), $unsigned(registers[i]));
 		end
 	end 
 `endif
@@ -268,9 +270,9 @@ endmodule
 
 module ALU 
 (
-	input [31:0] operand1, operand2, 
+	input `BIT_WIDTH operand1, operand2, 
 	input [3:0] opSel, 
-	output reg [31:0] result, 
+	output reg `BIT_WIDTH result, 
 	output zero
 );
 
@@ -297,9 +299,9 @@ endmodule
 module DM
 (
 	input clock, rden, wren,
-	input [31:0] address,
-	input [31:0] data,
-	output reg [31:0] q
+	input `BIT_WIDTH address,
+	input `BIT_WIDTH data,
+	output reg `BIT_WIDTH q
 );
 
 reg [31 : 0] DataMem [0 : (`MEMORY_SIZE-1)];
@@ -337,16 +339,19 @@ module mux2x1 #(parameter size = 32)
 	assign out = (~s) ? in1 : in2;
 endmodule
 
+
 module SC_CPU
 (
-	input input_clk, rst, 
-	output reg [31:0] cycles_consumed, 
-	output clk
+	input InputClk, rst,
+	output `BIT_WIDTH AddressBus,
+	output `BIT_WIDTH DataBus,
+	output [2:0] ControlBus,
+	output reg `BIT_WIDTH CyclesConsumed
 );
-	wire [31:0] PC;
+	wire `BIT_WIDTH PC;
 	
-	wire [31:0] instruction, wire_instruction, writeData, readData1, readData2, readData1_w, extImm, ALUin2;
-	wire [31:0] ALUResult, memoryReadData, immediate, shamt, address, nextPC, PCPlus1, adderResult;
+	wire `BIT_WIDTH instruction, wire_instruction, writeData, readData1, readData2, readData1_w, extImm, ALUin2;
+	wire `BIT_WIDTH ALUResult, memoryReadData, immediate, shamt, address, nextPC, PCPlus1, adderResult;
 	wire [15:0] imm;
 	wire [5:0] opcode, funct;
 	wire [4:0] rs, rt, rd, WriteRegister;
@@ -365,63 +370,125 @@ module SC_CPU
 	assign address = (~rst) ? 0 : {32'd0, instruction[25:0]};
 
 
-or hlt_logic(clk, input_clk, hlt);
- 
+	or hlt_logic(clk, InputClk, hlt);
+		
+	always@(posedge clk , negedge rst) begin
+		if (~rst)
+			CyclesConsumed <= 32'd0;
+		else
+			CyclesConsumed <= CyclesConsumed + 32'd1;
+	end
+
+	BranchController branchcontroller
+	(
+		.opcode(opcode), 
+		.funct(funct), 
+		.operand1(readData1), 
+		.operand2(ALUin2), 
+		.PCsrc(PCsrc), 
+		.rst(rst)
+	);
+
+	programCounter pc
+	(
+		.clk(clk), 
+		.rst(rst), 
+		.PCin(nextPC), 
+		.PCout(PC)
+	);
+
+	IM InstMem
+	(
+		.addr(PC), 
+		.Data_Out(wire_instruction)
+	);
+
+	controlUnit CU
+	(
+		.opcode(opcode), 
+		.funct(funct), 
+		.rst(rst), 
+		.RegDst(RegDst), 
+		.MemReadEn(MemReadEn), 
+		.MemtoReg(MemtoReg), 
+		.ALUOp(ALUOp), 
+		.MemWriteEn(MemWriteEn), 
+		.RegWriteEn(RegWriteEn), 
+		.ALUSrc(ALUSrc), 
+		.hlt(hlt)
+	);
+		
+	mux2x1 #(5) RFMux
+	(
+		.in1(rt), 
+		.in2(rd), 
+		.s(RegDst), 
+		.out(WriteRegister)
+	);
+		
+	registerFile RF
+	(
+		.clk(clk), 
+		.rst(rst), 
+		.we(RegWriteEn), 
+		.readRegister1(rs), 
+		.readRegister2(rt), 
+		.writeRegister(WriteRegister), 
+		.writeData(writeData), 
+		.readData1(readData1), 
+		.readData2(readData2)
+	);
+
+	mux2x1 #(32) ALUMux
+	(
+		.in1(readData2), 
+		.in2(immediate), 
+		.s(ALUSrc), 
+		.out(ALUin2)
+	);
+		
+	ALU alu
+	(
+		.operand1(readData1_w), 
+		.operand2(ALUin2), 
+		.opSel(ALUOp), 
+		.result(ALUResult), 
+		.zero(zero)
+	);
+
+	DM dataMem
+	(
+		.address(ALUResult), 
+		.clock(~clk), 
+		.data(readData2), 
+		.rden(MemReadEn), 
+		.wren(MemWriteEn), 
+		.q(memoryReadData)
+	);
+
+	mux2x1 #(32) WBMux
+	(
+		.in1(ALUResult), 
+		.in2(memoryReadData), 
+		.s(MemtoReg), 
+		.out(writeData)
+	);
+
+	assign PCPlus1 = PC + 32'd1;
+	assign adderResult = (opcode == `OPCODE_JAL || opcode == `OPCODE_J) ? address : 
+	(
+		(opcode == 0 && funct == `OPCODE_JR) ? readData1 : ( PC + {{32{imm[15]}}, imm})
+	);
+	assign nextPC = (PCsrc) ? adderResult : PCPlus1;
+	assign extImm = (opcode == `OPCODE_ANDI || opcode == `OPCODE_ORI || opcode == `OPCODE_XORI) ? {16'd0, imm} : {{16{imm[15]}}, imm};
+	assign immediate = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? shamt : (
+		(opcode == `OPCODE_JAL) ? 32'd1 : extImm
+	);
+	assign readData1_w = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? readData2 : ((opcode == `OPCODE_JAL) ? PC : readData1);
+	assign instruction = (~rst) ? 0 : wire_instruction;
 	
-always@(posedge clk , negedge rst) begin
+	assign AddressBus = ALUResult;
+	assign DataBus = readData2;
+	assign ControlBus = {MemWriteEn, MemReadEn, RegWriteEn};
 
-	if (~rst)
-		cycles_consumed <= 32'd0;
-	else
-		cycles_consumed <= cycles_consumed + 32'd1;
-
-end
-
-BranchController branchcontroller(.opcode(opcode), .funct(funct), .operand1(readData1), .operand2(ALUin2), .PCsrc(PCsrc), .rst(rst));
-
-
-assign PCPlus1 = PC + 32'd1;
-assign adderResult = (opcode == `OPCODE_JAL || opcode == `OPCODE_J) ? address : 
-(
-	(opcode == 0 && funct == `OPCODE_JR) ? readData1 : ( PC + {{32{imm[15]}}, imm})
-);
-
-
-assign nextPC = (PCsrc) ? adderResult : PCPlus1;
-programCounter pc(.clk(clk), .rst(rst), .PCin(nextPC), .PCout(PC));	
-
-
-IM InstMem(.addr(PC), .Data_Out(wire_instruction));
-
-assign instruction = (~rst) ? 0 : wire_instruction;
-
-controlUnit CU(.opcode(opcode), .funct(funct), .rst(rst),
-				      .RegDst(RegDst), .MemReadEn(MemReadEn), .MemtoReg(MemtoReg),
-				      .ALUOp(ALUOp), .MemWriteEn(MemWriteEn), .RegWriteEn(RegWriteEn), .ALUSrc(ALUSrc), .hlt(hlt));
-	
-mux2x1 #(5) RFMux(.in1(rt), .in2(rd), .s(RegDst), .out(WriteRegister));
-	
-registerFile RF(.clk(clk), .rst(rst), .we(RegWriteEn), 					
-			    .readRegister1(rs), .readRegister2(rt), .writeRegister(WriteRegister),
-			    .writeData(writeData), .readData1(readData1), .readData2(readData2));
-
-
-assign extImm = (opcode == `OPCODE_ANDI || opcode == `OPCODE_ORI || opcode == `OPCODE_XORI) ? {16'd0, imm} : {{16{imm[15]}}, imm};
-assign immediate = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? shamt : (
-	(opcode == `OPCODE_JAL) ? 32'd1 : extImm
-);
-mux2x1 #(32) ALUMux(.in1(readData2), .in2(immediate), .s(ALUSrc), .out(ALUin2));
-	
-assign readData1_w = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? readData2 : (
-	(opcode == `OPCODE_JAL) ? PC : readData1
-);
-ALU alu(.operand1(readData1_w), .operand2(ALUin2), .opSel(ALUOp), .result(ALUResult), .zero(zero));
-
-
-
-DM dataMem(.address(ALUResult[31:0]), .clock(~clk), .data(readData2), .rden(MemReadEn), .wren(MemWriteEn), .q(memoryReadData));
-
-mux2x1 #(32) WBMux(.in1(ALUResult), .in2(memoryReadData), .s(MemtoReg), .out(writeData));
-
-	
 endmodule

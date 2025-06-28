@@ -31,14 +31,15 @@ BENCHMARKS=\
 	"Swapping" \
 	"MultiplicationUsingAddition" \
 	"ScalarMultiplicationUsingAddition"
+
 # constants
 IM_SIZE=1024
 DM_SIZE=1024
 DM_BITS=10
 
-parallel: run_all_parallel
-
 serial: run_all_serial
+
+parallel: run_all_parallel
 
 run_all_parallel: $(BENCHMARKS)
 
