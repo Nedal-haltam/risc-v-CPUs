@@ -244,12 +244,12 @@ module registerFile
 	input clk, rst, we,
 	input [4:0] readRegister1, readRegister2, writeRegister,
 	input `BIT_WIDTH writeData,
-	output wire `BIT_WIDTH readData1, readData2
+	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2
 );
 
 	reg `BIT_WIDTH registers [0:31];
-	assign readData1 = registers[readRegister1];
-	assign readData2 = registers[readRegister2];
+	assign RegFileDataOut_1 = registers[readRegister1];
+	assign RegFileDataOut_2 = registers[readRegister2];
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(rst) begin
@@ -321,8 +321,9 @@ module SC_CPU
 );
 	wire `BIT_WIDTH PC;
 	
-	wire `BIT_WIDTH instruction, wire_instruction, readData1, _readData2, readData1_w, extImm, ALUin2, DataBus;
-	wire `BIT_WIDTH _ALUResult, immediate, shamt, address, nextPC, PCPlus1, adderResult;
+	wire `BIT_WIDTH Instruction, InstructionMemoryOut, RegFileDataOut_1, RegFileDataOut_2, 
+	RegFileDataOut_1_w, extImm, ALUin2, DataBus, ALUResult, immediate, shamt, address, nextPC, PCPlus1, adderResult;
+
 	wire [15:0] imm;
 	wire [5:0] opcode, funct;
 	wire [4:0] rs, rt, rd, WriteRegister;
@@ -331,14 +332,14 @@ module SC_CPU
 	wire PCsrc;
 	
 	
-	assign opcode  = (rst) ? 0 : instruction[31:26];
-	assign rd      = (rst) ? 0 : ((opcode == `OPCODE_JAL) ? 5'd31 : instruction[15:11]);
-	assign rs      = (rst) ? 0 : instruction[25:21];
-	assign rt      = (rst) ? 0 : instruction[20:16];
-	assign imm     = (rst) ? 0 : instruction[15:0];
-	assign shamt   = (rst) ? 0 : {32'd0, instruction[10:6]};
-	assign funct   = (rst) ? 0 : instruction[5:0];
-	assign address = (rst) ? 0 : {32'd0, instruction[25:0]};
+	assign opcode  = Instruction[31:26];
+	assign rd      = ((opcode == `OPCODE_JAL) ? 5'd31 : Instruction[15:11]);
+	assign rs      = Instruction[25:21];
+	assign rt      = Instruction[20:16];
+	assign imm     = Instruction[15:0];
+	assign shamt   = {32'd0, Instruction[10:6]};
+	assign funct   = Instruction[5:0];
+	assign address = {32'd0, Instruction[25:0]};
 
 
 	or hlt_logic(clk, InputClk, hlt);
@@ -361,14 +362,14 @@ module SC_CPU
 	IM InstMem
 	(
 		.addr(PC), 
-		.Data_Out(wire_instruction)
+		.Data_Out(InstructionMemoryOut)
 	);
 
 	BranchController branchcontroller
 	(
 		.opcode(opcode), 
 		.funct(funct), 
-		.operand1(readData1), 
+		.operand1(RegFileDataOut_1), 
 		.operand2(ALUin2), 
 		.PCsrc(PCsrc), 
 		.rst(rst)
@@ -398,16 +399,16 @@ module SC_CPU
 		.readRegister2(rt), 
 		.writeRegister(WriteRegister), 
 		.writeData(DataBus), 
-		.readData1(readData1), 
-		.readData2(_readData2)
+		.RegFileDataOut_1(RegFileDataOut_1), 
+		.RegFileDataOut_2(RegFileDataOut_2)
 	);
 		
 	ALU alu
 	(
-		.operand1(readData1_w), 
+		.operand1(RegFileDataOut_1_w), 
 		.operand2(ALUin2), 
 		.opSel(ALUOp), 
-		.result(_ALUResult), 
+		.result(ALUResult), 
 		.zero(zero)
 	);
 
@@ -421,7 +422,7 @@ module SC_CPU
 
 	mux2x1 #(32) ALUMux
 	(
-		.in1(_readData2), 
+		.in1(RegFileDataOut_2), 
 		.in2(immediate), 
 		.s(ALUSrc), 
 		.out(ALUin2)
@@ -430,19 +431,19 @@ module SC_CPU
 	assign PCPlus1 = PC + 32'd1;
 	assign adderResult = (opcode == `OPCODE_JAL || opcode == `OPCODE_J) ? address : 
 	(
-		(opcode == 0 && funct == `OPCODE_JR) ? readData1 : ( PC + {{32{imm[15]}}, imm})
+		(opcode == 0 && funct == `OPCODE_JR) ? RegFileDataOut_1 : ( PC + {{32{imm[15]}}, imm})
 	);
 	assign nextPC = (PCsrc) ? adderResult : PCPlus1;
 	assign extImm = (opcode == `OPCODE_ANDI || opcode == `OPCODE_ORI || opcode == `OPCODE_XORI) ? {16'd0, imm} : {{16{imm[15]}}, imm};
 	assign immediate = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? shamt : (
 		(opcode == `OPCODE_JAL) ? 32'd1 : extImm
 	);
-	assign readData1_w = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? _readData2 : ((opcode == `OPCODE_JAL) ? PC : readData1);
-	assign instruction = (rst) ? 0 : wire_instruction;
+	assign RegFileDataOut_1_w = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? RegFileDataOut_2 : ((opcode == `OPCODE_JAL) ? PC : RegFileDataOut_1);
+	assign Instruction = (rst) ? 0 : InstructionMemoryOut;
 	
-	assign AddressBus = _ALUResult;
-	assign DataBusOut = _readData2;
-	assign DataBus = (MemReadEn) ? DataBusIn : _ALUResult;
+	assign AddressBus = ALUResult;
+	assign DataBusOut = RegFileDataOut_2;
+	assign DataBus = (MemReadEn) ? DataBusIn : ALUResult;
 	assign ControlBus = {MemWriteEn, MemReadEn, RegWriteEn};
 
 endmodule
