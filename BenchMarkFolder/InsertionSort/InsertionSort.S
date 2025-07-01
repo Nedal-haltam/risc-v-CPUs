@@ -1,10 +1,11 @@
-.data
+.section .data
 Arr: .word 0x5, 0x7, 0x2, 0xF, 0xA, 0x10, 0x30, 0x1, 0xFF, 0x55
 
 
-.text
+.section .text 
+.globl main
+main: 
 
-main:
 ADDI $20, $0, 10
 ADDI $19, $0, 2
 ADDI  $22, $0, -1

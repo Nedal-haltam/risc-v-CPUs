@@ -14,6 +14,7 @@
 !*CAS_SC_OUT.txt 
 !*VERILOG_SC_OUT.txt 
 !*VERILOG_PL_OUT.txt
+!*.INIT
 
 !*.qdf 
 !*.qip 
