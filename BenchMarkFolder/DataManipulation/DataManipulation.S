@@ -1,9 +1,10 @@
 
-    .data 
+.section .data 
 value: .word 0x5                    # sample data for loading 
  
-    .text 
-main: 
+.section .text 
+.globl main
+main:
     # Immediate instructions to initialize registers 
     ADDI $1, $0, 0xA                 
     ORI  $2, $0, 0xB                 
@@ -11,7 +12,7 @@ main:
  
     # Basic ALU operations 
     ADD  $4, $1, $2                  
-    SUB  $5, $4, $3                  
+    SUB  $15, $4, $3                  
     AND  $6, $1, $3                  
     OR   $7, $2, $3                  
     NOR  $8, $2, $3                  

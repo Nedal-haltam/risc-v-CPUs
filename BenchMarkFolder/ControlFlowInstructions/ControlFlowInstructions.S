@@ -1,5 +1,6 @@
- .text  
-main:  
+.section .text 
+.globl main
+main:
   # Initialize registers with immediate values  
   ADDI $1, $0, -5         
   ADDI $2, $0, 5          

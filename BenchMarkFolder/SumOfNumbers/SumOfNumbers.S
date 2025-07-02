@@ -1,5 +1,6 @@
-.text 
-main: 
+.section .text 
+.globl main
+main:
 # Initialize registers 
 ORI $2, $0, 0x1          
 ORI $3, $0, 0x0          

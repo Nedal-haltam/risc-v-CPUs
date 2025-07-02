@@ -5,3 +5,4 @@ InstMem[ 3] <= 32'h2002007B;// addi $2 $0 123
 InstMem[ 4] <= 32'h2003007B;// addi $3 $0 123
 InstMem[ 5] <= 32'h2004007B;// addi $4 $0 123
 InstMem[ 6] <= 32'hFC000000;// hlt
+InstMem[ 7] <= 32'hFC000000;// hlt

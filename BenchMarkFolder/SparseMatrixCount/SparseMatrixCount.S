@@ -1,7 +1,9 @@
-.data 
+.section .data 
 matrix:   .word 1, 0, 0, 0, 3, 5, 0, 0, 0, 0, 22, 0   # 4x3 matrix (row-major order) 
  
-.text 
+.section .text 
+.globl main
+main:
         # Initializations 
         ADDI $8  , $0, 0              # Zero counter 
         ADDI $16 , $0, 4              # Rows 

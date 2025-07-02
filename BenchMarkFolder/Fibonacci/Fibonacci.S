@@ -1,6 +1,6 @@
 
-.text
-
+.section .text 
+.globl main
 main:
 # the final Fibonacci value is in register $3
 # the number of iteration is specified by the value
@@ -16,9 +16,9 @@ JAL FIB
 
 J END
 FIB:
-ADD $5, $3, $0
+ADD $7, $3, $0
 ADD $3, $2, $3
-ADD $2, $5, $0
+ADD $2, $7, $0
 ADDI $4, $4, 1
 BEQ $4, $6, FINISH
 J FIB

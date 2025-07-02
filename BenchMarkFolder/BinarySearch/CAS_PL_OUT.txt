@@ -4,12 +4,12 @@ index =          1 , reg_out : signed =           3 , unsigned =          3
 index =          2 , reg_out : signed =           4 , unsigned =          4
 index =          3 , reg_out : signed =           7 , unsigned =          7
 index =          4 , reg_out : signed =           7 , unsigned =          7
-index =          5 , reg_out : signed =           3 , unsigned =          3
+index =          5 , reg_out : signed =           0 , unsigned =          0
 index =          6 , reg_out : signed =           7 , unsigned =          7
 index =          7 , reg_out : signed =           0 , unsigned =          0
 index =          8 , reg_out : signed =           3 , unsigned =          3
 index =          9 , reg_out : signed =           0 , unsigned =          0
-index =         10 , reg_out : signed =           0 , unsigned =          0
+index =         10 , reg_out : signed =           3 , unsigned =          3
 index =         11 , reg_out : signed =           0 , unsigned =          0
 index =         12 , reg_out : signed =           0 , unsigned =          0
 index =         13 , reg_out : signed =           0 , unsigned =          0

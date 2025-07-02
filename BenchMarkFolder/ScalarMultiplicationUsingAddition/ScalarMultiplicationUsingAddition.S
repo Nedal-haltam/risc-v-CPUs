@@ -1,8 +1,10 @@
 
-.data
+.section .data
  Arr: .word 0x5, 0x3, 0x2, 0x1, 0x2, 0x10, 0x30, 0x1, 0x1, 0x5  
   
-.text
+.section .text 
+.globl main
+main:
  
 ADDI $17, $0, 10  # size = 10 (initilize) 
 ANDI $18, $0, 0   # count = 0 (initilize) 

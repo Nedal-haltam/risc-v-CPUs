@@ -1,6 +1,7 @@
 
 
-.text
+.section .text 
+.globl main
 main:
 
 ADDI $1 $zero 3

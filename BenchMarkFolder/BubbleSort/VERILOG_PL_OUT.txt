@@ -1,14 +1,14 @@
 Register file content : 
 index =          0 , reg_out : signed =           0 , unsigned =          0
-index =          1 , reg_out : signed =           0 , unsigned =          0
+index =          1 , reg_out : signed =          10 , unsigned =         10
 index =          2 , reg_out : signed =          42 , unsigned =         42
 index =          3 , reg_out : signed =          41 , unsigned =         41
 index =          4 , reg_out : signed =           1 , unsigned =          1
-index =          5 , reg_out : signed =         -10 , unsigned = 4294967286
+index =          5 , reg_out : signed =           0 , unsigned =          0
 index =          6 , reg_out : signed =         -10 , unsigned = 4294967286
 index =          7 , reg_out : signed =           1 , unsigned =          1
 index =          8 , reg_out : signed =           0 , unsigned =          0
-index =          9 , reg_out : signed =           0 , unsigned =          0
+index =          9 , reg_out : signed =         -10 , unsigned = 4294967286
 index =         10 , reg_out : signed =           0 , unsigned =          0
 index =         11 , reg_out : signed =          41 , unsigned =         41
 index =         12 , reg_out : signed =           0 , unsigned =          0

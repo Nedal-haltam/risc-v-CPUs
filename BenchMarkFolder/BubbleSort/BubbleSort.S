@@ -2,8 +2,8 @@
 
 
 
-.text
-
+.section .text 
+.globl main
 main:
 # range : -10 : 10 (duplicates)
 ADDI $1, $0, 10
@@ -38,11 +38,11 @@ SUB $7, $7, $3
 L2:
 BEQ $4, $7, EXITL2
 
-LW $5, 0x0($4)
+LW $9, 0x0($4)
 LW $6, 0x1($4)
-sub $8, $5, $6
+sub $8, $9, $6
 BLTZ $8, else
-SW $5, 0x1($4)
+SW $9, 0x1($4)
 SW $6, 0x0($4)
 else:
 

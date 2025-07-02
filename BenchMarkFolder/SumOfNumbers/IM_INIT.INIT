@@ -7,3 +7,4 @@ InstMem[ 5] <= 32'h0082282A;// slt $5 $4 $2
 InstMem[ 6] <= 32'h10A0FFFD;// beq $5 $0 -3
 InstMem[ 7] <= 32'hAC030000;// sw $3 0x0 ( $0 )
 InstMem[ 8] <= 32'h00000000;// nop
+InstMem[ 9] <= 32'hFC000000;// hlt

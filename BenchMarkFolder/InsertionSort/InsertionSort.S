@@ -26,13 +26,13 @@ WHILE_LOOP:
 SGT  $3, $2, $22
 BEQ  $3, $0, EXIT_WHILE
 
-LW   $5, 0($2)
-SGT  $4, $5, $8
+LW   $15, 0($2)
+SGT  $4, $15, $8
 AND  $7, $3, $4
 BEQ  $7, $0, EXIT_WHILE
 
 ADDI $6, $2, 1
-SW   $5, 0($6)
+SW   $15, 0($6)
 ADDI $2, $2, -1
 J    WHILE_LOOP
 

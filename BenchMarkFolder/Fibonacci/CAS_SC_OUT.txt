@@ -4,9 +4,9 @@ index =          1 , reg_out : signed =           0 , unsigned =          0
 index =          2 , reg_out : signed =  1134903170 , unsigned = 1134903170
 index =          3 , reg_out : signed =  1836311903 , unsigned = 1836311903
 index =          4 , reg_out : signed =          45 , unsigned =         45
-index =          5 , reg_out : signed =  1134903170 , unsigned = 1134903170
+index =          5 , reg_out : signed =           0 , unsigned =          0
 index =          6 , reg_out : signed =          45 , unsigned =         45
-index =          7 , reg_out : signed =           0 , unsigned =          0
+index =          7 , reg_out : signed =  1134903170 , unsigned = 1134903170
 index =          8 , reg_out : signed =           0 , unsigned =          0
 index =          9 , reg_out : signed =           0 , unsigned =          0
 index =         10 , reg_out : signed =           0 , unsigned =          0

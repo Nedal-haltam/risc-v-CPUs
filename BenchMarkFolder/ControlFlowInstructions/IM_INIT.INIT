@@ -22,3 +22,4 @@ InstMem[20] <= 32'h00800008;// jr $4
 InstMem[21] <= 32'h00000000;// nop
 InstMem[22] <= 32'h0C000014;// jal l7
 InstMem[23] <= 32'h00000000;// nop
+InstMem[24] <= 32'hFC000000;// hlt

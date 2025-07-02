@@ -14,7 +14,7 @@ SC_DIR=./singlecycle
 PL_DIR=./PipeLine
 
 
-# BENCHMARKS="BubbleSort"
+# BENCHMARKS="InsertionSort"
 BENCHMARKS=\
 	"JR_Dependency" \
 	"InsertionSort" \

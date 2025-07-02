@@ -1,8 +1,10 @@
-.data 
+.section .data 
 array:      .word 5, 1, 3, 5, 1, 2, 3, 4, 5, 6, 7, 6, 0, 10   
 result:     .space                                   # Space for the resulting array  
  
-.text 
+.section .text 
+.globl main
+main:
     ADDI $8 , $0, 14                           # $8 = size of array (n)     
     ADDI $9, $0, 0                              # $9 = index i (outer loop index) 
     ADDI $10, $0, 0                            # $10 = write index for result array 

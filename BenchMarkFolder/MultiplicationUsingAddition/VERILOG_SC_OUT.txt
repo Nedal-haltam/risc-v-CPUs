@@ -1,10 +1,10 @@
 Register file content : 
 index =          0 , reg_out : signed =           0 , unsigned =          0
-index =          1 , reg_out : signed =           1 , unsigned =          1
+index =          1 , reg_out : signed =           0 , unsigned =          0
 index =          2 , reg_out : signed =           0 , unsigned =          0
 index =          3 , reg_out : signed =           0 , unsigned =          0
 index =          4 , reg_out : signed =           0 , unsigned =          0
-index =          5 , reg_out : signed =           0 , unsigned =          0
+index =          5 , reg_out : signed =           1 , unsigned =          1
 index =          6 , reg_out : signed =           0 , unsigned =          0
 index =          7 , reg_out : signed =           0 , unsigned =          0
 index =          8 , reg_out : signed =           0 , unsigned =          0

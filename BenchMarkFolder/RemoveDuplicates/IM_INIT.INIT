@@ -23,3 +23,4 @@ InstMem[21] <= 32'hAF2D000E;// sw $13 14 ( $25 )
 InstMem[22] <= 32'h214A0001;// addi $10 $10 1
 InstMem[23] <= 32'h21290001;// addi $9 $9 1
 InstMem[24] <= 32'h0C000003;// jal outerloop
+InstMem[25] <= 32'hFC000000;// hlt

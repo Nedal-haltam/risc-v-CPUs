@@ -27,3 +27,4 @@ InstMem[25] <= 32'h0C000011;// jal innerloop
 InstMem[26] <= 32'h21290001;// addi $9 $9 1
 InstMem[27] <= 32'h0C000005;// jal outerloop
 InstMem[28] <= 32'h00000000;// nop
+InstMem[29] <= 32'hFC000000;// hlt

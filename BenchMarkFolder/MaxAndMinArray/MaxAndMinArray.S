@@ -1,15 +1,16 @@
-    .data 
+.section .data 
 Array: .word 0x10, 0xF, 0x5, 0x9, 0x20, 0x19, 0x4, 0x1E, 0x9, 0xB 
  
-    .text 
-main: 
+.section .text 
+.globl main
+main:
     # Initialize registers 
     ORI  $2 , $0, 0x0       
     ADDI $20, $0, 0xA       
     XORI $31, $0, 0x1       
-    ANDI $5 , $0, 0x0       
-    LW   $10, 0x0($5)       
-    LW   $15, 0x0($5)       
+    ANDI $17 , $0, 0x0       
+    LW   $10, 0x0($17)       
+    LW   $15, 0x0($17)       
  
 LOOP: 
     ADDI $2,  $2, 1         
@@ -18,9 +19,9 @@ LOOP:
  
     # Choose one of these Insertion based on your memory 
     # For Word addressable        # For byte addressable 
-    ADD  $5, $2, $0             # SLL  $5, $2, 2        
+    ADD  $17, $2, $0             # SLL  $17, $2, 2        
  
-    LW   $16, 0x0($5)       
+    LW   $16, 0x0($17)       
     SGT  $26, $16, $10      
     BEQ  $26, $0, MIN       
     OR   $10, $16, $0       

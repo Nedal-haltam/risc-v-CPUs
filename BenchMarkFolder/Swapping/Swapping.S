@@ -1,5 +1,6 @@
-   .text 
-main: 
+.section .text 
+.globl main
+main:
     # Initialize registers 
     ADDI $2 , $0, 5        # $2 = 5  
     ADDI $3 , $0, 10      # $3 = 10 
@@ -13,14 +14,14 @@ main:
     Sw  $3, 0x2($0)           # Sw  $3, 0x8($0)  
  
     ADDI $4 , $0, 15    # $4 = 15  
-    ADDI $5 , $0, 20    # $5 = 20 
-    ADD  $5 , $4, $5 
-    SUB  $4 , $5, $4 
-    SUB  $5 , $5, $4 
+    ADDI $8 , $0, 20    # $8 = 20 
+    ADD  $8 , $4, $8 
+    SUB  $4 , $8, $4 
+    SUB  $8 , $8, $4 
  
     # For word addressable      # For Byte Addressable 
     Sw  $4, 0x3($0)         # Sw  $4, 0xb($0)       
-    Sw  $5, 0x4($0)           # Sw  $5, 0x10($0)  
+    Sw  $8, 0x4($0)           # Sw  $8, 0x10($0)  
  
     ADDI $6, $0 , 25    # $6 = 25            
     ADDI $7, $0 , 30    # $7 = 30                                                                     

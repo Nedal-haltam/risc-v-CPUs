@@ -4,7 +4,7 @@ index =          1 , reg_out : signed =           0 , unsigned =          0
 index =          2 , reg_out : signed =           8 , unsigned =          8
 index =          3 , reg_out : signed =           1 , unsigned =          1
 index =          4 , reg_out : signed =           0 , unsigned =          0
-index =          5 , reg_out : signed =          48 , unsigned =         48
+index =          5 , reg_out : signed =           0 , unsigned =          0
 index =          6 , reg_out : signed =           9 , unsigned =          9
 index =          7 , reg_out : signed =           0 , unsigned =          0
 index =          8 , reg_out : signed =          85 , unsigned =         85
@@ -14,7 +14,7 @@ index =         11 , reg_out : signed =           0 , unsigned =          0
 index =         12 , reg_out : signed =           0 , unsigned =          0
 index =         13 , reg_out : signed =           0 , unsigned =          0
 index =         14 , reg_out : signed =           0 , unsigned =          0
-index =         15 , reg_out : signed =           0 , unsigned =          0
+index =         15 , reg_out : signed =          48 , unsigned =         48
 index =         16 , reg_out : signed =           0 , unsigned =          0
 index =         17 , reg_out : signed =           0 , unsigned =          0
 index =         18 , reg_out : signed =           0 , unsigned =          0
