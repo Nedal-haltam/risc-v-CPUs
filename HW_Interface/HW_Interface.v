@@ -72,3 +72,4 @@ assign ARDUINO_IO[8] = DataTrigger;
 assign ARDUINO_RESET_N = 1'b1;
 
 endmodule
+
