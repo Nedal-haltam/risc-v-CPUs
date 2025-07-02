@@ -14,7 +14,7 @@ SC_DIR=./singlecycle
 PL_DIR=./PipeLine
 
 
-# BENCHMARKS="InsertionSort"
+# BENCHMARKS="Fibonacci"
 BENCHMARKS=\
 	"JR_Dependency" \
 	"InsertionSort" \

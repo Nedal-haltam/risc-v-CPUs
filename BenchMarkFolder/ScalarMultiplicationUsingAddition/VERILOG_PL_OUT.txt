@@ -1,6 +1,6 @@
 Register file content : 
 index =          0 , reg_out : signed =           0 , unsigned =          0
-index =          1 , reg_out : signed =           0 , unsigned =          0
+index =          1 , reg_out : signed =           6 , unsigned =          6
 index =          2 , reg_out : signed =           0 , unsigned =          0
 index =          3 , reg_out : signed =           0 , unsigned =          0
 index =          4 , reg_out : signed =           0 , unsigned =          0
@@ -30,7 +30,7 @@ index =         27 , reg_out : signed =           0 , unsigned =          0
 index =         28 , reg_out : signed =           0 , unsigned =          0
 index =         29 , reg_out : signed =           0 , unsigned =          0
 index =         30 , reg_out : signed =           0 , unsigned =          0
-index =         31 , reg_out : signed =           6 , unsigned =          6
+index =         31 , reg_out : signed =           0 , unsigned =          0
 Data Memory Content : 
 Mem[   0] =          10
 Mem[   1] =           6

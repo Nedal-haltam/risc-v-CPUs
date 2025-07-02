@@ -32,7 +32,7 @@ Mul_Loop :
  ADD  $23, $23, $24 # mulOut += num1 
  ADDI $22, $22, -1 # i-- 
  BGEZ $22, Mul_Loop 
- JR $31 
+ JR ra 
 ########### 
  
 Finish : NOP 

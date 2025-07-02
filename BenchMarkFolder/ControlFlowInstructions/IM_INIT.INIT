@@ -1,4 +1,4 @@
-InstMem[ 0] <= 32'h2001FFFB;// addi $1 $0 -5
+InstMem[ 0] <= 32'h201FFFFB;// addi $31 $0 -5
 InstMem[ 1] <= 32'h20020005;// addi $2 $0 5
 InstMem[ 2] <= 32'h20030005;// addi $3 $0 5
 InstMem[ 3] <= 32'h20040017;// addi $4 $0 23
@@ -7,7 +7,7 @@ InstMem[ 5] <= 32'h00000000;// nop
 InstMem[ 6] <= 32'h0C000004;// jal l1
 InstMem[ 7] <= 32'h14430001;// bne $2 $3 1
 InstMem[ 8] <= 32'h00000000;// nop
-InstMem[ 9] <= 32'h0020282A;// slt $at $1 $0
+InstMem[ 9] <= 32'h03E0282A;// slt $at $31 $0
 InstMem[10] <= 32'h14A00003;// bne $at $0 3
 InstMem[11] <= 32'h00000000;// nop
 InstMem[12] <= 32'h0C000009;// jal l4

@@ -2,7 +2,7 @@
 .globl main
 main:
   # Initialize registers with immediate values  
-  ADDI $1, $0, -5         
+  ADDI $31, $0, -5         
   ADDI $2, $0, 5          
   ADDI $3, $0, 5      
   ADDI $4, $0, 23
@@ -19,7 +19,7 @@ L3:
   NOP              
 L4:  
   # Test BLTZ  
-  BLTZ $1, L5      
+  BLTZ $31, L5      
   NOP              
   JAL L4             
 L5:  

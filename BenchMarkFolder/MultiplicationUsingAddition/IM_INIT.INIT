@@ -8,6 +8,6 @@ InstMem[ 6] <= 32'h02F8B820;// add $23 $23 $24
 InstMem[ 7] <= 32'h22D6FFFF;// addi $22 $22 -1
 InstMem[ 8] <= 32'h02C0282A;// slt $at $22 $0
 InstMem[ 9] <= 32'h10A0FFFD;// beq $at $0 -3
-InstMem[10] <= 32'h03E00008;// jr $31
+InstMem[10] <= 32'h00200008;// jr ra
 InstMem[11] <= 32'h00000000;// nop
 InstMem[12] <= 32'hFC000000;// hlt

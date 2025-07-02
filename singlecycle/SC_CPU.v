@@ -36,6 +36,8 @@
 `define ALU_OPCODE_SLL 4'd9
 `define ALU_OPCODE_SRL 4'd10
 
+`define RETURN_ADDRESS_REGISTER 5'd1
+
 `define BIT_WIDTH [31:0]
 
 `ifdef vscode
@@ -333,7 +335,7 @@ module SC_CPU
 	
 	
 	assign opcode  = Instruction[31:26];
-	assign rd      = ((opcode == `OPCODE_JAL) ? 5'd31 : Instruction[15:11]);
+	assign rd      = ((opcode == `OPCODE_JAL) ? `RETURN_ADDRESS_REGISTER : Instruction[15:11]);
 	assign rs      = Instruction[25:21];
 	assign rt      = Instruction[20:16];
 	assign imm     = Instruction[15:0];

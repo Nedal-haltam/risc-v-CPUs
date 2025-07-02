@@ -10,5 +10,5 @@ InstMem[ 8] <= 32'h00E01020;// add $2 $7 $0
 InstMem[ 9] <= 32'h20840001;// addi $4 $4 1
 InstMem[10] <= 32'h10860002;// beq $4 $6 2
 InstMem[11] <= 32'h08000006;// j fib
-InstMem[12] <= 32'h03E00008;// jr $31
+InstMem[12] <= 32'h00200008;// jr ra
 InstMem[13] <= 32'hFC000000;// hlt

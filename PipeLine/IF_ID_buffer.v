@@ -12,7 +12,7 @@ module IF_ID_buffer(IF_PC, IF_INST, IF_FLUSH, if_id_Write, clk,
 
 	
 	`include "opcodes.txt"
-
+`define RETURN_ADDRESS_REGISTER 5'd1
 always @ (posedge clk) begin
 	
 	if (rst || (if_id_Write && IF_FLUSH))
@@ -31,7 +31,7 @@ always @ (posedge clk) begin
 			end
 
 			else if ({IF_INST[31:26], 6'd0} == jal) // else it is an I-format or J-format
-					ID_rd_ind <= 31;  // rd_ind = $ra
+					ID_rd_ind <= `RETURN_ADDRESS_REGISTER;  // rd_ind = $ra
 			else
 				ID_rd_ind <= IF_INST[20:16];  // rd_ind = rt_ind
 		end		
