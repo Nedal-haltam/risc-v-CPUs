@@ -13,8 +13,10 @@ BENCHMARK_DIR=./BenchMarkFolder
 SC_DIR=./singlecycle
 PL_DIR=./PipeLine
 
+SimulateSW=0
+SimulateHW=0
 
-# BENCHMARKS="Fibonacci"
+# BENCHMARKS="1HelloWorld"
 BENCHMARKS=\
 	"JR_Dependency" \
 	"InsertionSort" \
@@ -64,12 +66,20 @@ run_all_serial:
 	done
 
 run_benchmark:
-	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated
+	@mkdir -p $(BENCHMARK_DIR)/$(BENCH)/Generated
+	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt
 	@$(MAKE) run_sw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 	@$(MAKE) run_hw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
-	@echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
-	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
-	@echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+
+	@if [ "$(SimulateSW)" = "1" ] || [ "$(SimulateHW)" = "1" ]; then \
+		echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
+		diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
+		echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
+	else \
+		echo "Skipping benchmark $(BENCH)"; \
+		exit 0; \
+	fi
 
 run_sw:
 	@if [ "$(PARALLEL)" = "0" ]; then \
@@ -77,48 +87,59 @@ run_sw:
 	fi
 	@$(ASSEMBLER) \
 		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
-		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/IM_INIT.INIT \
-		$(BENCHMARK_DIR)/$(BENCH)/DM_INIT.INIT \
-		$(BENCHMARK_DIR)/$(BENCH)/InstMem_MIF.mif \
-		$(BENCHMARK_DIR)/$(BENCH)/DataMem_MIF.mif
-	@if [ "$(PARALLEL)" = "0" ]; then \
-		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
-	fi
-	@$(CAS) sim singlecycle \
-		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt \
-		$(IM_SIZE) \
-		$(DM_SIZE)
-	@if [ "$(PARALLEL)" = "0" ]; then \
-		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"; \
-	fi
-	@$(CAS) sim pipeline \
-		$(BENCHMARK_DIR)/$(BENCH)/MC.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/DM.txt \
-		$(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt \
-		$(IM_SIZE) \
-		$(DM_SIZE)
-	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/CAS_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/CAS_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Software SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
+		$(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
+		$(BENCHMARK_DIR)/$(BENCH)/Generated/IM_INIT.INIT \
+		$(BENCHMARK_DIR)/$(BENCH)/Generated/DM_INIT.INIT \
+		$(BENCHMARK_DIR)/$(BENCH)/Generated/InstMem_MIF.mif \
+		$(BENCHMARK_DIR)/$(BENCH)/Generated/DataMem_MIF.mif; \
 
-# -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/SingleCycle_WaveForm.vcd\"
-# -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/PipeLine_WaveForm.vcd\"
+	@if [ "$(SimulateSW)" = "1" ]; then \
+		if [ "$(PARALLEL)" = "0" ]; then \
+			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
+		fi; \
+		$(CAS) sim singlecycle \
+			$(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
+			$(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
+			$(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt \
+			$(IM_SIZE) \
+			$(DM_SIZE); \
+		if [ "$(PARALLEL)" = "0" ]; then \
+			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline"; \
+		fi; \
+		$(CAS) sim pipeline \
+			$(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
+			$(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
+			$(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_PL_OUT.txt \
+			$(IM_SIZE) \
+			$(DM_SIZE); \
+		diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt 2>&1 || \
+			echo "Software SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
+	else \
+		echo "Skipping software simulation for $(BENCH)"; \
+	fi
+
+# -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/Generated/SingleCycle_WaveForm.vcd\"
+# -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/Generated/PipeLine_WaveForm.vcd\"
 run_hw:
-	@if [ "$(PARALLEL)" = "0" ]; then \
-		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
+	@if [ "$(SimulateHW)" = "1" ]; then \
+		if [ "$(PARALLEL)" = "0" ]; then \
+			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
+		fi; \
+		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
+			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
+			$(SC_DIR)/SingleCycle_sim.v; \
+		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
+		if [ "$(PARALLEL)" = "0" ]; then \
+			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"; \
+		fi; \
+		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_PL.vvp \
+			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
+			$(PL_DIR)/PipeLine_sim.v; \
+		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_PL.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_PL_OUT.txt; \
+		diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt 2>&1 || \
+			echo "Hardware SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
+	else \
+		echo "Skipping hardware simulation for $(BENCH)"; \
 	fi
-	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(SC_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp \
-		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
-		$(SC_DIR)/SingleCycle_sim.v
-	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt
-	@if [ "$(PARALLEL)" = "0" ]; then \
-		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Pipeline Hardware"; \
-	fi
-	@$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH) -I$(PL_DIR) -o $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp \
-		-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
-		$(PL_DIR)/PipeLine_sim.v
-	@$(VVP) $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt
-	@diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/VERILOG_PL_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt 2>&1 || echo "Hardware SC vs PL differs for $(BENCH)" >> $(BENCHMARK_DIR)/$(BENCH)/stats.txt
-
+	
