@@ -12,7 +12,7 @@ ADDI $3, $0, 1
 # if we increased the number of iterations we will see clearly that the prediction works even better
 # it will introduce a number of bubbles (NOPs) but these will be less over large number of iterations
 ADDI $6, $0, 45
-JAL FIB
+JAL ra, FIB
 J END
 
 FIB:

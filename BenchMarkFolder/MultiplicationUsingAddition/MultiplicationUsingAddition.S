@@ -6,7 +6,7 @@ main:
 XORI $24, $0, 0x5  # num1 = 5 
 XORI $25, $0, 0x3  # num2 = 3 
  
-JAL Mul_Fun 
+JAL ra, Mul_Fun 
 J Finish 
  
 ########### 
