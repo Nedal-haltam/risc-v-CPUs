@@ -1,6 +1,7 @@
 
 .section .data 
-value: .word 0x5                    # sample data for loading 
+value: 
+    .word 0x5                    # sample data for loading 
  
 .section .text 
 .globl main

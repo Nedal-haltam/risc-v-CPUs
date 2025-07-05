@@ -1,6 +1,8 @@
 .section .data 
-array:      .word 5, 1, 3, 5, 1, 2, 3, 4, 5, 6, 7, 6, 0, 10   
-result:     .space                                   # Space for the resulting array  
+array:
+    .word 5, 1, 3, 5, 1, 2, 3, 4, 5, 6, 7, 6, 0, 10   
+result:
+    .space 14                             # Space for the resulting array  
  
 .section .text 
 .globl main

@@ -1,5 +1,6 @@
 .section .data 
-matrix:   .word 1, 0, 0, 0, 3, 5, 0, 0, 0, 0, 22, 0   # 4x3 matrix (row-major order) 
+matrix:   
+        .word 1, 0, 0, 0, 3, 5, 0, 0, 0, 0, 22, 0   # 4x3 matrix (row-major order) 
  
 .section .text 
 .globl main

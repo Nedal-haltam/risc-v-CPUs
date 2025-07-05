@@ -17,21 +17,22 @@ SimulateHW=0
 
 # BENCHMARKS="1HelloWorld"
 BENCHMARKS=\
-	"JR_Dependency" \
-	"InsertionSort" \
-	"BubbleSort" \
-	"Fibonacci" \
-	"MaxAndMinArray" \
 	"BinarySearch" \
+	"BubbleSort" \
 	"ControlFlowInstructions" \
 	"DataManipulation" \
-	"SumOfNumbers" \
+	"Fibonacci" \
+	"InsertionSort" \
+	"JR_Dependency" \
+	"MaxAndMinArray" \
+	"MultiplicationUsingAddition" \
 	"RemoveDuplicates" \
+	"ScalarMultiplicationUsingAddition" \
 	"SelectionSort" \
 	"SparseMatrixCount" \
-	"Swapping" \
-	"MultiplicationUsingAddition" \
-	"ScalarMultiplicationUsingAddition"
+	"SumOfNumbers" \
+	"Swapping"
+
 
 # constants
 IM_SIZE=1024

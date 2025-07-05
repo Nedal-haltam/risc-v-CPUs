@@ -1,6 +1,8 @@
 .section .data 
-myArray:   .word 1, 4, 5, 7, 9, 12, 15, 17, 20, 21, 30 
-arraySize: .word 11 
+myArray:  
+    .word 1, 4, 5, 7, 9, 12, 15, 17, 20, 21, 30 
+arraySize: 
+    .word 11 
  
 .section .text 
 .globl main
