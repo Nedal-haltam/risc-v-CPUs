@@ -16,7 +16,8 @@ main:
     SUB  $15, $4, $3                  
     AND  $6, $1, $3                  
     OR   $7, $2, $3                  
-    NOR  $8, $2, $3                  
+    OR   $8, $2, $3                  
+    NOT  $8, $8                  
     XOR  $9, $1, $2                  
  
     # Comparison operations 
