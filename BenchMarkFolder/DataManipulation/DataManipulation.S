@@ -31,3 +31,9 @@ main:
     # Load and store word instructions 
     LW   $14, 0x0($0) 
     SW   $4, 0x0($0)  
+    li a0, 0
+    call exit
+    exit:
+        li a7, 93
+        ecall
+        ret

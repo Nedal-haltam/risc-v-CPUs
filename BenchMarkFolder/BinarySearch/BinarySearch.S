@@ -47,3 +47,9 @@ notFound:
  
 finish: 
     NOP 
+    li a0, 0
+    call exit
+exit:
+    li a7, 93
+    ecall
+    ret

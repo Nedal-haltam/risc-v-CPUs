@@ -10,4 +10,9 @@ JR $1
 ADDI $2 $0 123
 ADDI $3 $0 123
 ADDI $4 $0 123
-HLT
+li a0, 0
+call exit
+exit:
+    li a7, 93
+    ecall
+    ret

@@ -46,3 +46,9 @@ ADDI $19, $19, 1
 J    FOR_LOOP
 
 EXIT:
+li a0, 0
+call exit
+exit:
+    li a7, 93
+    ecall
+    ret

@@ -37,3 +37,9 @@ ENDIF:
   ADDI $11, $11, 1 
   SLT $10, $11, $13  
   BNE $10, $0, LOOP1 
+  li a0, 0
+  call exit
+exit:
+    li a7, 93
+    ecall
+    ret

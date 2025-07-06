@@ -34,3 +34,9 @@ main:
     Sw  $7, 0x6($0)           # Sw  $7, 0x18($0)  
  
     NOP # (NOP equals to SLL $0, $0, 0) 
+    li a0, 0
+    call exit
+exit:
+    li a7, 93
+    ecall
+    ret

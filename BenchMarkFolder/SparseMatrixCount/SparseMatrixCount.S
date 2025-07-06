@@ -26,7 +26,7 @@ Multiply:
         BEQ  $11, $0, endMultiply 
         ADD  $14, $14, $17           # Accumulate: base offset += Cols 
         ADDI $15, $15, 1             # Increment loop counter 
-        JAL  Multiply 
+        JAL  ra, Multiply 
  
 endMultiply: 
         # Choose one of these Insertion based on your memory  
@@ -49,11 +49,17 @@ innerLoop:
  
 notZero: 
         ADDI $10, $10, 1             # Increment colIndex 
-        JAL  innerLoop 
+        JAL  ra, innerLoop 
  
 exitInner:   
         ADDI $9, $9, 1               # Increment rowIndex 
-        JAL  outerLoop 
+        JAL  ra, outerLoop 
  
 exitOuter: 
         NOP 
+        li a0, 0
+        call exit
+exit:
+    li a7, 93
+    ecall
+    ret

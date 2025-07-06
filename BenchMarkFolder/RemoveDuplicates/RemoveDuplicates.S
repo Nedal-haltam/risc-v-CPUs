@@ -33,15 +33,15 @@ innerLoop:
     LW $16, result($25)     # $16 = result[j] 
     BEQ $13, $16, duplicateFound 
     ADDI $14, $14, 1 
-    JAL innerLoop 
+    JAL ra, innerLoop 
  
 duplicateFound: 
     ADDI $15, $0, 1                           # Mark as duplicate 
-    JAL outerContinue 
+    JAL ra, outerContinue 
  
 addToResult: 
     BEQ $15, $0, storeValue            # Only store if not a duplicate 
-    JAL outerContinue 
+    JAL ra, outerContinue 
  
 storeValue: 
     # Choose one of these Insertion based on your memory  
@@ -54,6 +54,12 @@ storeValue:
 outerContinue: 
     # Increment outer loop index i 
     ADDI $9, $9, 1 
-    JAL outerLoop 
+    JAL ra, outerLoop 
  
 finish:
+li a0, 0
+call exit
+exit:
+    li a7, 93
+    ecall
+    ret

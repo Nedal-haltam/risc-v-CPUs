@@ -53,3 +53,9 @@ EXITL2:
 ADDI $3, $3, 1
 BEQ $0, $0, L1
 EXITL1:
+li a0, 0
+call exit
+exit:
+    li a7, 93
+    ecall
+    ret
