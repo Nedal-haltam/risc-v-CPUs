@@ -10,11 +10,11 @@
 !*.sh
 
 !*stats.txt
-!*CAS_PL_OUT.txt 
 !*CAS_SC_OUT.txt 
 !*VERILOG_SC_OUT.txt 
-!*VERILOG_PL_OUT.txt
 !*.INIT
+!MC.txt
+!DM.txt
 
 !*.qdf 
 !*.qip 

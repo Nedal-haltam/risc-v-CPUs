@@ -12,26 +12,28 @@ VVP=vvp
 BENCHMARK_DIR=./BenchMarkFolder
 SC_DIR=./singlecycle
 
-SimulateSW=0
+SimulateSW=1
 SimulateHW=0
 
-# BENCHMARKS="1HelloWorld"
-BENCHMARKS=\
-	"BinarySearch" \
-	"BubbleSort" \
-	"ControlFlowInstructions" \
-	"DataManipulation" \
-	"Fibonacci" \
-	"InsertionSort" \
-	"JR_Dependency" \
-	"MaxAndMinArray" \
-	"MultiplicationUsingAddition" \
-	"RemoveDuplicates" \
-	"ScalarMultiplicationUsingAddition" \
-	"SelectionSort" \
-	"SparseMatrixCount" \
-	"SumOfNumbers" \
-	"Swapping"
+BENCHMARKS="1HelloWorld"
+
+# BENCHMARKS=\
+# 	"1HelloWorld" \
+# 	"BinarySearch" \
+# 	"BubbleSort" \
+# 	"ControlFlowInstructions" \
+# 	"DataManipulation" \
+# 	"Fibonacci" \
+# 	"InsertionSort" \
+# 	"JR_Dependency" \
+# 	"MaxAndMinArray" \
+# 	"MultiplicationUsingAddition" \
+# 	"RemoveDuplicates" \
+# 	"ScalarMultiplicationUsingAddition" \
+# 	"SelectionSort" \
+# 	"SparseMatrixCount" \
+# 	"SumOfNumbers" \
+# 	"Swapping"
 
 
 # constants
@@ -72,7 +74,7 @@ run_benchmark:
 	@$(MAKE) run_sw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 	@$(MAKE) run_hw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 
-	@if [ "$(SimulateSW)" = "1" ] || [ "$(SimulateHW)" = "1" ]; then \
+	@if [ "$(SimulateSW)" = "1" ] && [ "$(SimulateHW)" = "1" ]; then \
 		echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
 		diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
 		echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
@@ -99,11 +101,11 @@ run_sw:
 			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
 		fi; \
 		$(CAS) singlecycle \
-			$(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
-			$(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
-			$(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt \
-			$(IM_SIZE) \
-			$(DM_SIZE); \
+			-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
+			-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
+			-o $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt \
+			--im-size $(IM_SIZE) \
+			--dm-size $(DM_SIZE); \
 	else \
 		echo "Skipping software simulation for $(BENCH)"; \
 	fi
