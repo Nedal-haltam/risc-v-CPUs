@@ -15,6 +15,7 @@
 !*.INIT
 !MC.txt
 !DM.txt
+!*log.txt
 
 !*.qdf 
 !*.qip 

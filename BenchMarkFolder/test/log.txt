@@ -1,0 +1,4548 @@
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001111011
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+lui:
+    opcode : 0110111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01010
+    imm    : 000000000000
+    rd     : 01010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01011
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000001010
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000010011101100
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000001000000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000010011000110
+    rd     : 00001
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000011000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000111
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000001110010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111011000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000001111000
+    rd     : 01010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000110000
+    rd     : 01100
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000001000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+sub:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0110000
+    rs1    : 00010
+    rs2    : 00101
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000001110000
+    rd     : 01101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01110
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000010010010
+    rd     : 00001
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 01110
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 01101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 01100
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+sne:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000010
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000010010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000111110
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111011000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000001111000
+    rd     : 01010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000110000
+    rd     : 01100
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 01101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 01110
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000110010
+    rd     : 00001
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 01110
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 01101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 01100
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 11111111111100110100
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000001011000
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001100100
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000100101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000010000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000001011001010
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000010
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001100011
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000100101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000110110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111111
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00010
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010001
+    rd     : 00110
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+sb:
+    opcode : 0100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01011
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01100
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000001010000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000010
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101001
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000001
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001110011
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000100101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000011000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000101000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000110100010
+    rd     : 00001
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01100
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000110111110
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000010
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000110000
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001100100
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000010
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000100000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000010
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001101100
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000110000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000110000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+slt:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000100101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000111000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+mul:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000001001000
+    rd     : 00110
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 00110
+    rs2    : 00101
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+lb:
+    opcode : 0000011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000000000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+xor:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00110
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+and:
+    opcode : 0110011
+    Funct3 : 111
+    Funct7 : 0000000
+    rs1    : 00101
+    rs2    : 00110
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000010000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000101010
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000011
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+add:
+    opcode : 0110011
+    Funct3 : 000
+    Funct7 : 0000000
+    rs1    : 01011
+    rs2    : 00101
+    rd     : 01011
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01100
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000010010000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000101000
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00101
+seq:
+    opcode : 0110011
+    Funct3 : 010
+    Funct7 : 0000001
+    rs1    : 00101
+    rs2    : 00000
+    rd     : 00101
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000001100
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01010
+lui:
+    opcode : 0110111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000000000
+    rd     : 01011
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01011
+    imm    : 000000000000
+    rd     : 01011
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01100
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000001110000
+    rd     : 00001
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000110000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000001001000
+    rd     : 00001
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01010
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000100110
+    rd     : 00001
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 111111111000
+    rd     : 00010
+sd:
+    opcode : 0100011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000001
+    rd     : 01010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 01011
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 01100
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000001000010
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000010000
+    rd     : 00010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+ld:
+    opcode : 0000011
+    Funct3 : 011
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000000000
+    rd     : 00001
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00010
+    imm    : 000000001000
+    rd     : 00010
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001011101
+    rd     : 10001
+ecall:
+    opcode : 1110011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 00000
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01010
+    imm    : 000000000000
+    rd     : 00101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 01000
+lbu:
+    opcode : 0000011
+    Funct3 : 100
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000000000
+    rd     : 00110
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000001000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01000
+    imm    : 000000000001
+    rd     : 01000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00101
+    imm    : 000000000001
+    rd     : 00101
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 11111111111111111000
+    rd     : 00000
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 01010
+    imm    : 000000000000
+    rd     : 00110
+lui:
+    opcode : 0110111
+    Funct3 : 
+    Funct7 : 
+    imm    : 00000000000000000000
+    rd     : 00111
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00111
+    imm    : 000000000000
+    rd     : 00111
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00111
+    imm    : 000000100000
+    rd     : 00111
+sb:
+    opcode : 0100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00111
+    imm    : 000000000000
+beq:
+    opcode : 1100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00110
+    imm    : 000000010010
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000001010
+    rd     : 11100
+rem:
+    opcode : 0110011
+    Funct3 : 110
+    Funct7 : 0000001
+    rs1    : 00110
+    rs2    : 11100
+    rd     : 11101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 11101
+    imm    : 000000110000
+    rd     : 11101
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00111
+    imm    : 111111111111
+    rd     : 00111
+sb:
+    opcode : 0100011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00111
+    imm    : 000000000000
+div:
+    opcode : 0110011
+    Funct3 : 100
+    Funct7 : 0000001
+    rs1    : 00110
+    rs2    : 11100
+    rd     : 00110
+jal:
+    opcode : 1111111
+    Funct3 : 
+    Funct7 : 
+    imm    : 11111111111111110100
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00111
+    imm    : 000000000000
+    rd     : 01000
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+addi:
+    opcode : 0010011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000001000000
+    rd     : 10001
+ecall:
+    opcode : 1110011
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00000
+    imm    : 000000000000
+    rd     : 00000
+jalr:
+    opcode : 1110111
+    Funct3 : 000
+    Funct7 : 
+    rs1    : 00001
+    imm    : 000000000000
+    rd     : 00000
+[32mINFO: Generated MC in path ./BenchMarkFolder/test/Generated/MC.txt successfully
+[0m[32mINFO: Generated MC in path ./BenchMarkFolder/test/Generated/DM.txt successfully
+[0m

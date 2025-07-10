@@ -124,3 +124,25 @@ run_hw:
 		echo "Skipping hardware simulation for $(BENCH)"; \
 	fi
 	
+test: assemble-test run-test
+
+assemble-test:
+	@rm -rf $(BENCHMARK_DIR)/test/Generated
+	@mkdir -p $(BENCHMARK_DIR)/test/Generated
+	@$(ASSEMBLER) \
+		$(BENCHMARK_DIR)/test/test.S \
+		-mc $(BENCHMARK_DIR)/test/Generated/MC.txt \
+		-dm $(BENCHMARK_DIR)/test/Generated/DM.txt \
+		--im-init $(BENCHMARK_DIR)/test/Generated/IM_INIT.INIT \
+		--dm-init $(BENCHMARK_DIR)/test/Generated/DM_INIT.INIT \
+		--im-mif $(BENCHMARK_DIR)/test/Generated/InstMem_MIF.mif \
+		-log \
+		--dm-mif $(BENCHMARK_DIR)/test/Generated/DataMem_MIF.mif > $(BENCHMARK_DIR)/test/log.txt; \
+
+run-test:
+	@$(CAS) singlecycle \
+		-mc $(BENCHMARK_DIR)/test/Generated/MC.txt \
+		-dm $(BENCHMARK_DIR)/test/Generated/DM.txt \
+		-o $(BENCHMARK_DIR)/test/Generated/CAS_SC_OUT.txt \
+		--im-size $(IM_SIZE) \
+		--dm-size $(DM_SIZE); \
