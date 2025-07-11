@@ -1,3 +1,11 @@
+
+
+# TODO:
+#     - run this program first to be able to print numbers to check and then test the assembler
+
+#     - test the edge case of load immediate `li` and go back to the assembler
+#     - test all instruction in all cases (specially ones that uses immediate)
+#     - test shift instructions and ensure that it uses only 5-bits of the oprand
 .section .text
 .globl main
 main:
