@@ -26,3 +26,4 @@
 !*.sdc
 
 !*.ino
+/BenchMarkFolder/test

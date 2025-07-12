@@ -37,9 +37,9 @@ BENCHMARKS="1HelloWorld"
 
 
 # constants
-IM_SIZE=1024
-DM_SIZE=1024
-DM_BITS=10
+IM_SIZE=4096
+DM_SIZE=8192
+DM_BITS=13
 
 PARALLEL=0
 
@@ -136,8 +136,7 @@ assemble-test:
 		--im-init $(BENCHMARK_DIR)/test/Generated/IM_INIT.INIT \
 		--dm-init $(BENCHMARK_DIR)/test/Generated/DM_INIT.INIT \
 		--im-mif $(BENCHMARK_DIR)/test/Generated/InstMem_MIF.mif \
-		-log \
-		--dm-mif $(BENCHMARK_DIR)/test/Generated/DataMem_MIF.mif > $(BENCHMARK_DIR)/test/log.txt; \
+		--dm-mif $(BENCHMARK_DIR)/test/Generated/DataMem_MIF.mif; \
 
 run-test:
 	@$(CAS) singlecycle \
