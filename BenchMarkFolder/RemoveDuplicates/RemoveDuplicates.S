@@ -16,8 +16,7 @@ outerLoop:
     BEQ $11, $0, finish                      # Exit loop if $9 >= $8 
      
     # Choose one of these Insertion based on your memory  
-    # For Word addressable        # For byte addressable  
-    ADD $12, $9, $0             # SLL $12, $9, 2     
+    SLLI $12, $9, 2     
     LW $13, array($12)                     # $13 = array[i] 
     ADDI $14, $0, 0                          # $14 = inner loop index j 
     ADDI $15, $0, 0                          # $15 = flag (0: no duplicate, 1: duplicate) 
@@ -27,8 +26,7 @@ innerLoop:
     BEQ $24, $0, addToResult   
  
     # Choose one of these Insertion based on your memory  
-    # For Word addressable             # For byte addressable  
-    ADD $25, $14, $0              # SLL $25, $14, 2  
+    SLLI $25, $14, 2  
      
     LW $16, result($25)     # $16 = result[j] 
     BEQ $13, $16, duplicateFound 
@@ -45,8 +43,7 @@ addToResult:
  
 storeValue: 
     # Choose one of these Insertion based on your memory  
-    # For Word addressable        # For byte addressable  
-    ADD $25, $10, $0            # SLL $25, $10, 2  
+    SLLI $25, $10, 2  
      
     SW $13, result($25)                   # Store array[i] in result array 
     ADDI $10, $10, 1                       # Increment write index 

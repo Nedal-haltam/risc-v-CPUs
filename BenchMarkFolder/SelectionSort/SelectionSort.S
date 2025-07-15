@@ -11,13 +11,13 @@ main:
 LOOP1:  
   XOR $21, $11, $0 
   # this line is commented, use it for byte addressing memory 
-  # SLL $21, $11, 2 
+  SLLI $21, $11, 2 
   ADD  $12, $0, $0 
    
 LOOP2:  
   XOR $22, $12, $0 
   # this line is commented, use it for byte addressing memory 
-  # SLL $22, $12, 2 
+  SLLI $22, $12, 2 
   LW $8, 0x0($21) 
   LW $9, 0x0($22) 
    

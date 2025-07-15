@@ -30,8 +30,7 @@ Multiply:
  
 endMultiply: 
         # Choose one of these Insertion based on your memory  
-        # For Word addressable             # For byte addressable  
-        ADD $14, $14, $0                 #     SLL  $14, $14, 2 
+        SLLI  $14, $14, 2 
         ADD  $14, $14, $20           # Base address for current row 
         ADDI $10, $0, 0              # colIndex 
  
@@ -39,8 +38,7 @@ innerLoop:
         SLT  $11, $10, $17           # Check if colIndex < Cols 
         BEQ  $11, $0, exitInner 
         # Choose one of these Insertion based on your memory  
-        # For Word addressable             # For byte addressable  
-        ADD $15, $10, $0                 # SLL  $15, $10, 2      
+        SLLI  $15, $10, 2      
   
         ADD  $24, $14, $15           # Base row address + column offset 
         LW   $24, matrix($24)             # Load element: matrix[rowIndex][colIndex]          

@@ -1,3 +1,4 @@
+Number of cycles consumed :        280
 Register file content : 
 index =          0 , reg_out : signed =          0 , unsigned =          0
 index =          1 , reg_out : signed =         60 , unsigned =         60
@@ -8224,4 +8225,3 @@ Mem[8188] = signed =   0 , unsigned =   0
 Mem[8189] = signed =   0 , unsigned =   0
 Mem[8190] = signed =   0 , unsigned =   0
 Mem[8191] = signed =   0 , unsigned =   0
-Number of cycles consumed :        280

@@ -13,8 +13,7 @@ main:
  
 Outer_Loop: 
     ADD $19, $18, $0 # index = count 
-    # this line is for byte addressing memories only 
-    # SLL $19, $19, 2 # index = index * 4  
+    SLLI $19, $19, 2 # index = index * 4  
     LW $25, Arr($19) # num1 = Arr[count] 
     JAL ra, Mul_Fun  # call Mul_Fun (C, Arr[count]) 
     SW $23, Arr($19) # Arr[count] = mulOut 

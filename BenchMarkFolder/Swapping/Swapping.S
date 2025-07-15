@@ -9,9 +9,8 @@ main:
     ADD  $3 , $0, $2 
     ADD  $2 , $0, $31 
  
-    # For word addressable      # For Byte Addressable 
-    Sw  $2, 0x1($0)         # Sw  $2, 0x4($0)       
-    Sw  $3, 0x2($0)           # Sw  $3, 0x8($0)  
+    Sw  $2, 0x4($0)
+    Sw  $3, 0x8($0)  
  
     ADDI $4 , $0, 15    # $4 = 15  
     ADDI $8 , $0, 20    # $8 = 20 
@@ -19,9 +18,8 @@ main:
     SUB  $4 , $8, $4 
     SUB  $8 , $8, $4 
  
-    # For word addressable      # For Byte Addressable 
-    Sw  $4, 0x3($0)         # Sw  $4, 0xb($0)       
-    Sw  $8, 0x4($0)           # Sw  $8, 0x10($0)  
+    Sw  $4, 0xb($0)
+    Sw  $8, 0x10($0)  
  
     ADDI $6, $0 , 25    # $6 = 25            
     ADDI $7, $0 , 30    # $7 = 30                                                                     
@@ -29,11 +27,10 @@ main:
     XOR  $7, $6 , $7   
     XOR  $6, $6 , $7   
      
-    # For word addressable      # For Byte Addressable 
-    Sw  $6, 0x5($0)         # Sw  $6, 0x14($0)       
-    Sw  $7, 0x6($0)           # Sw  $7, 0x18($0)  
+    Sw  $6, 0x14($0)
+    Sw  $7, 0x18($0)  
  
-    NOP # (NOP equals to SLL $0, $0, 0) 
+    NOP
     li a0, 0
     call exit
 exit:

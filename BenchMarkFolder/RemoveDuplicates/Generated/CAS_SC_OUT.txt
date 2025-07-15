@@ -1,20 +1,20 @@
-Number of cycles consumed :         43
+Number of cycles consumed :        518
 Register file content : 
 index =          0 , reg_out : signed =          0 , unsigned =          0
-index =          1 , reg_out : signed =        100 , unsigned =        100
-index =          2 , reg_out : signed =          4 , unsigned =          4
-index =          3 , reg_out : signed =          7 , unsigned =          7
-index =          4 , reg_out : signed =          7 , unsigned =          7
+index =          1 , reg_out : signed =        108 , unsigned =        108
+index =          2 , reg_out : signed =       8191 , unsigned =       8191
+index =          3 , reg_out : signed =          0 , unsigned =          0
+index =          4 , reg_out : signed =          0 , unsigned =          0
 index =          5 , reg_out : signed =          0 , unsigned =          0
-index =          6 , reg_out : signed =          7 , unsigned =          7
+index =          6 , reg_out : signed =          0 , unsigned =          0
 index =          7 , reg_out : signed =          0 , unsigned =          0
-index =          8 , reg_out : signed =          3 , unsigned =          3
-index =          9 , reg_out : signed =          0 , unsigned =          0
+index =          8 , reg_out : signed =         14 , unsigned =         14
+index =          9 , reg_out : signed =         14 , unsigned =         14
 index =         10 , reg_out : signed =          0 , unsigned =          0
 index =         11 , reg_out : signed =          0 , unsigned =          0
-index =         12 , reg_out : signed =          0 , unsigned =          0
-index =         13 , reg_out : signed =          0 , unsigned =          0
-index =         14 , reg_out : signed =          0 , unsigned =          0
+index =         12 , reg_out : signed =         52 , unsigned =         52
+index =         13 , reg_out : signed =         10 , unsigned =         10
+index =         14 , reg_out : signed =          8 , unsigned =          8
 index =         15 , reg_out : signed =          0 , unsigned =          0
 index =         16 , reg_out : signed =          0 , unsigned =          0
 index =         17 , reg_out : signed =         93 , unsigned =         93
@@ -25,7 +25,7 @@ index =         21 , reg_out : signed =          0 , unsigned =          0
 index =         22 , reg_out : signed =          0 , unsigned =          0
 index =         23 , reg_out : signed =          0 , unsigned =          0
 index =         24 , reg_out : signed =          0 , unsigned =          0
-index =         25 , reg_out : signed =          0 , unsigned =          0
+index =         25 , reg_out : signed =         32 , unsigned =         32
 index =         26 , reg_out : signed =          0 , unsigned =          0
 index =         27 , reg_out : signed =          0 , unsigned =          0
 index =         28 , reg_out : signed =          0 , unsigned =          0
@@ -33,51 +33,51 @@ index =         29 , reg_out : signed =          0 , unsigned =          0
 index =         30 , reg_out : signed =          0 , unsigned =          0
 index =         31 , reg_out : signed =          0 , unsigned =          0
 Data Memory Content : 
-Mem[   0] = signed =   1 , unsigned =   1
+Mem[   0] = signed =   5 , unsigned =   5
 Mem[   1] = signed =   0 , unsigned =   0
 Mem[   2] = signed =   0 , unsigned =   0
 Mem[   3] = signed =   0 , unsigned =   0
-Mem[   4] = signed =   4 , unsigned =   4
+Mem[   4] = signed =   1 , unsigned =   1
 Mem[   5] = signed =   0 , unsigned =   0
 Mem[   6] = signed =   0 , unsigned =   0
 Mem[   7] = signed =   0 , unsigned =   0
-Mem[   8] = signed =   5 , unsigned =   5
+Mem[   8] = signed =   3 , unsigned =   3
 Mem[   9] = signed =   0 , unsigned =   0
 Mem[  10] = signed =   0 , unsigned =   0
 Mem[  11] = signed =   0 , unsigned =   0
-Mem[  12] = signed =   7 , unsigned =   7
+Mem[  12] = signed =   5 , unsigned =   5
 Mem[  13] = signed =   0 , unsigned =   0
 Mem[  14] = signed =   0 , unsigned =   0
 Mem[  15] = signed =   0 , unsigned =   0
-Mem[  16] = signed =   9 , unsigned =   9
+Mem[  16] = signed =   1 , unsigned =   1
 Mem[  17] = signed =   0 , unsigned =   0
 Mem[  18] = signed =   0 , unsigned =   0
 Mem[  19] = signed =   0 , unsigned =   0
-Mem[  20] = signed =  12 , unsigned =  12
+Mem[  20] = signed =   2 , unsigned =   2
 Mem[  21] = signed =   0 , unsigned =   0
 Mem[  22] = signed =   0 , unsigned =   0
 Mem[  23] = signed =   0 , unsigned =   0
-Mem[  24] = signed =  15 , unsigned =  15
+Mem[  24] = signed =   3 , unsigned =   3
 Mem[  25] = signed =   0 , unsigned =   0
 Mem[  26] = signed =   0 , unsigned =   0
 Mem[  27] = signed =   0 , unsigned =   0
-Mem[  28] = signed =  17 , unsigned =  17
+Mem[  28] = signed =   4 , unsigned =   4
 Mem[  29] = signed =   0 , unsigned =   0
 Mem[  30] = signed =   0 , unsigned =   0
 Mem[  31] = signed =   0 , unsigned =   0
-Mem[  32] = signed =  20 , unsigned =  20
+Mem[  32] = signed =   5 , unsigned =   5
 Mem[  33] = signed =   0 , unsigned =   0
 Mem[  34] = signed =   0 , unsigned =   0
 Mem[  35] = signed =   0 , unsigned =   0
-Mem[  36] = signed =  21 , unsigned =  21
+Mem[  36] = signed =   6 , unsigned =   6
 Mem[  37] = signed =   0 , unsigned =   0
 Mem[  38] = signed =   0 , unsigned =   0
 Mem[  39] = signed =   0 , unsigned =   0
-Mem[  40] = signed =  30 , unsigned =  30
+Mem[  40] = signed =   7 , unsigned =   7
 Mem[  41] = signed =   0 , unsigned =   0
 Mem[  42] = signed =   0 , unsigned =   0
 Mem[  43] = signed =   0 , unsigned =   0
-Mem[  44] = signed =  11 , unsigned =  11
+Mem[  44] = signed =   6 , unsigned =   6
 Mem[  45] = signed =   0 , unsigned =   0
 Mem[  46] = signed =   0 , unsigned =   0
 Mem[  47] = signed =   0 , unsigned =   0
@@ -85,35 +85,35 @@ Mem[  48] = signed =   0 , unsigned =   0
 Mem[  49] = signed =   0 , unsigned =   0
 Mem[  50] = signed =   0 , unsigned =   0
 Mem[  51] = signed =   0 , unsigned =   0
-Mem[  52] = signed =   0 , unsigned =   0
+Mem[  52] = signed =  10 , unsigned =  10
 Mem[  53] = signed =   0 , unsigned =   0
 Mem[  54] = signed =   0 , unsigned =   0
 Mem[  55] = signed =   0 , unsigned =   0
-Mem[  56] = signed =   0 , unsigned =   0
+Mem[  56] = signed =   5 , unsigned =   5
 Mem[  57] = signed =   0 , unsigned =   0
 Mem[  58] = signed =   0 , unsigned =   0
 Mem[  59] = signed =   0 , unsigned =   0
-Mem[  60] = signed =   0 , unsigned =   0
+Mem[  60] = signed =   1 , unsigned =   1
 Mem[  61] = signed =   0 , unsigned =   0
 Mem[  62] = signed =   0 , unsigned =   0
 Mem[  63] = signed =   0 , unsigned =   0
-Mem[  64] = signed =   0 , unsigned =   0
+Mem[  64] = signed =   3 , unsigned =   3
 Mem[  65] = signed =   0 , unsigned =   0
 Mem[  66] = signed =   0 , unsigned =   0
 Mem[  67] = signed =   0 , unsigned =   0
-Mem[  68] = signed =   0 , unsigned =   0
+Mem[  68] = signed =   2 , unsigned =   2
 Mem[  69] = signed =   0 , unsigned =   0
 Mem[  70] = signed =   0 , unsigned =   0
 Mem[  71] = signed =   0 , unsigned =   0
-Mem[  72] = signed =   0 , unsigned =   0
+Mem[  72] = signed =   4 , unsigned =   4
 Mem[  73] = signed =   0 , unsigned =   0
 Mem[  74] = signed =   0 , unsigned =   0
 Mem[  75] = signed =   0 , unsigned =   0
-Mem[  76] = signed =   0 , unsigned =   0
+Mem[  76] = signed =   6 , unsigned =   6
 Mem[  77] = signed =   0 , unsigned =   0
 Mem[  78] = signed =   0 , unsigned =   0
 Mem[  79] = signed =   0 , unsigned =   0
-Mem[  80] = signed =   0 , unsigned =   0
+Mem[  80] = signed =   7 , unsigned =   7
 Mem[  81] = signed =   0 , unsigned =   0
 Mem[  82] = signed =   0 , unsigned =   0
 Mem[  83] = signed =   0 , unsigned =   0
@@ -121,7 +121,7 @@ Mem[  84] = signed =   0 , unsigned =   0
 Mem[  85] = signed =   0 , unsigned =   0
 Mem[  86] = signed =   0 , unsigned =   0
 Mem[  87] = signed =   0 , unsigned =   0
-Mem[  88] = signed =   0 , unsigned =   0
+Mem[  88] = signed =  10 , unsigned =  10
 Mem[  89] = signed =   0 , unsigned =   0
 Mem[  90] = signed =   0 , unsigned =   0
 Mem[  91] = signed =   0 , unsigned =   0

@@ -15,23 +15,21 @@ SC_DIR=./singlecycle
 SimulateSW=1
 SimulateHW=0
 
-BENCHMARKS="ControlFlowInstructions"
-# BENCHMARKS=\
-# 	"BinarySearch" \
-# 	"BubbleSort" \
-# 	"ControlFlowInstructions" \
-# 	"DataManipulation" \
-# 	"Fibonacci" \
-# 	"InsertionSort" \
-# 	"JR_Dependency" \
-# 	"MaxAndMinArray" \
-# 	"MultiplicationUsingAddition" \
-# 	"RemoveDuplicates" \
-# 	"ScalarMultiplicationUsingAddition" \
-# 	"SelectionSort" \
-# 	"SparseMatrixCount" \
-# 	"SumOfNumbers" \
-# 	"Swapping"
+BENCHMARKS=\
+	"BinarySearch" \
+	"BubbleSort" \
+	"ControlFlowInstructions" \
+	"DataManipulation" \
+	"Fibonacci" \
+	"InsertionSort" \
+	"JR_Dependency" \
+	"MultiplicationUsingAddition" \
+	"RemoveDuplicates" \
+	"ScalarMultiplicationUsingAddition" \
+	"SelectionSort" \
+	"SparseMatrixCount" \
+	"SumOfNumbers" \
+	"Swapping"
 
 
 # constants
