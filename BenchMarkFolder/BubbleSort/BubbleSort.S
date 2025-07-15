@@ -10,7 +10,7 @@ ADDI $1, $0, 10
 
 # number of elements = 42 (0 -> 41)
 # $11 = 41 = 4 * $1 + 1
-SLL $11, $1, 2
+SLLI $11, $1, 2
 ADDI $11, $11, 1
 
 # index
@@ -20,8 +20,10 @@ ADD $3, $0, $1
 init:
 sub $8, $2, $11
 BGEZ $8, EXITINIT
+slli $2, $2, 2
 SW $3, 0x0($2)
-SW $3, 0x1($2)
+SW $3, 0x4($2)
+srli $2, $2, 2
 ADDI $2, $2, 2
 ADDI $3, $3, -1
 BEQ $0, $0, init
@@ -38,12 +40,17 @@ SUB $7, $7, $3
 L2:
 BEQ $4, $7, EXITL2
 
+slli $4, $4, 2
 LW $9, 0x0($4)
-LW $6, 0x1($4)
+LW $6, 0x4($4)
+srli $4, $4, 2
+
 sub $8, $9, $6
 BLTZ $8, else
-SW $9, 0x1($4)
+slli $4, $4, 2
+SW $9, 0x4($4)
 SW $6, 0x0($4)
+srli $4, $4, 2
 else:
 
 ADDI $4, $4, 1

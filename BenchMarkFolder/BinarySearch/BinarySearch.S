@@ -16,13 +16,12 @@ loop:
     slt $7, $2, $1 
     bne $0, $7, notFound         
     add $4, $2, $1                 
-    srl $10, $4, 1                   
-         
-    #sll $10, $10, 2 For byte addressable memory 
-     
+    srli $10, $4, 1                   
+
+    slli $10, $10, 2 # For byte addressable memory 
     lw  $6, 0x0($10)                   
      
-    #srl $10, $10, 2 For byte addressable memory 
+    srli $10, $10, 2 # For byte addressable memory 
      
     beq $3, $6, found               
     slt $6, $6, $3         

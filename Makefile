@@ -15,10 +15,8 @@ SC_DIR=./singlecycle
 SimulateSW=1
 SimulateHW=0
 
-BENCHMARKS="1HelloWorld"
-
+BENCHMARKS="ControlFlowInstructions"
 # BENCHMARKS=\
-# 	"1HelloWorld" \
 # 	"BinarySearch" \
 # 	"BubbleSort" \
 # 	"ControlFlowInstructions" \

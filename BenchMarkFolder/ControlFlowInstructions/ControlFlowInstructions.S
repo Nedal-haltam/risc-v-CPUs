@@ -5,7 +5,7 @@ main:
   ADDI $31, $0, -5         
   ADDI $2, $0, 5          
   ADDI $3, $0, 5      
-  ADDI $4, $0, 23
+  ADDI $4, $0, 92
    
 L1:  
   #  Test BEQ       
