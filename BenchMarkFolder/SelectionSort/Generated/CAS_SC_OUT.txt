@@ -1,7 +1,7 @@
-Number of cycles consumed :       4126
+Number of cycles consumed :       4140
 Register file content : 
 index =          0 , reg_out : signed =          0 , unsigned =          0
-index =          1 , reg_out : signed =         96 , unsigned =         96
+index =          1 , reg_out : signed =        124 , unsigned =        124
 index =          2 , reg_out : signed =       8191 , unsigned =       8191
 index =          3 , reg_out : signed =        173 , unsigned =        173
 index =          4 , reg_out : signed =          0 , unsigned =          0
