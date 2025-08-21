@@ -33,21 +33,21 @@ module HW_Interface(
 );
 
 `define BUFFER_LEN 6
-`define CLK_BIT 15
+wire [7:0] data [0 : `BUFFER_LEN - 1];
 
 wire reset = ~KEY[0];
 reg [7:0] DataOut;
 wire DataTrigger;
 
-wire [7:0] data [0 : `BUFFER_LEN - 1];
 reg [31:0] index;
-reg [24:0] halfclk;
 
+`define CLK_BIT 15
+reg [24:0] ClockDivider;
 always@(posedge ADC_CLK_10) begin
-	halfclk <= halfclk + 1'b1;
+	ClockDivider <= ClockDivider + 1'b1;
 end
 
-always@(posedge halfclk[`CLK_BIT], posedge reset) begin
+always@(posedge ClockDivider[`CLK_BIT], posedge reset) begin
 	if (reset) begin
 		index = 0;
 		DataOut = 0;
@@ -58,14 +58,20 @@ always@(posedge halfclk[`CLK_BIT], posedge reset) begin
 	end
 end
 
-assign data[0] = "a";
-assign data[1] = "b";
-assign data[2] = "c";
-assign data[3] = "d";
-assign data[4] = "e";
+generate 
+	genvar i;
+	for (i = 0; i < `BUFFER_LEN - 1; i = i + 1) begin : FillData
+		assign data[i] = "a" + i;
+	end
+endgenerate
 assign data[5] = "\n";
+// assign data[0] = "a";
+// assign data[1] = "b";
+// assign data[2] = "c";
+// assign data[3] = "d";
+// assign data[4] = "e";
 
-assign DataTrigger = (index <= `BUFFER_LEN) ? reset | ~halfclk[`CLK_BIT] : 1'b0;
+assign DataTrigger = (index <= `BUFFER_LEN) ? reset | ~ClockDivider[`CLK_BIT] : 1'b0;
 assign ARDUINO_IO[7:0] = DataOut;
 assign ARDUINO_IO[8] = DataTrigger;
 
