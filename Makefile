@@ -1,7 +1,4 @@
 MAKEFLAGS += --no-print-directory
-
-.PHONY: serial run_all_serial parallel run_all_parallel run_benchmark run_sw run_hw
-
 # Tools
 ASSEMBLER=../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.exe
 CAS=../risc-v-CAS/bin/Debug/net8.0/CAS.exe
@@ -31,31 +28,16 @@ BENCHMARKS=\
 	"SumOfNumbers" \
 	"Swapping"
 
+.PHONY: all serial run_benchmark run_sw run_hw test assemble-test run-test
 
 # constants
 IM_SIZE=4096
 DM_SIZE=8192
 DM_BITS=13
 
-PARALLEL=0
+all: serial
 
-all:
-	@if [ "$(PARALLEL)" = "1" ]; then \
-		$(MAKE) parallel -j; \
-	else \
-		$(MAKE) serial; \
-	fi
-
-serial: run_all_serial
-
-parallel: run_all_parallel
-
-run_all_parallel: $(BENCHMARKS)
-
-$(BENCHMARKS):
-	$(MAKE) run_benchmark BENCH=$@
-
-run_all_serial:
+serial: 
 	@i=1; total=`echo $(BENCHMARKS) | wc -w`; \
 	for bench in $(BENCHMARKS); do \
 		echo "[$$i/$$total]: Running benchmark $$bench"; \
@@ -80,10 +62,8 @@ run_benchmark:
 	fi
 
 run_sw:
-	@if [ "$(PARALLEL)" = "0" ]; then \
-		echo "[$(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
-	fi
-	@$(ASSEMBLER) \
+	@echo "[$(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
+	$(ASSEMBLER) \
 		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
 		-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
 		-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
@@ -93,9 +73,7 @@ run_sw:
 		--dm-mif $(BENCHMARK_DIR)/$(BENCH)/Generated/DataMem_MIF.mif; \
 
 	@if [ "$(SimulateSW)" = "1" ]; then \
-		if [ "$(PARALLEL)" = "0" ]; then \
-			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
-		fi; \
+		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
 		$(CAS) singlecycle \
 			-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
 			-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
@@ -109,9 +87,7 @@ run_sw:
 # -D VCD_OUT=\"$(BENCHMARK_DIR)/$(BENCH)/Generated/SingleCycle_WaveForm.vcd\"
 run_hw:
 	@if [ "$(SimulateHW)" = "1" ]; then \
-		if [ "$(PARALLEL)" = "0" ]; then \
-			echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
-		fi; \
+		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
 		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
 			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
 			$(SC_DIR)/Sim.v; \
