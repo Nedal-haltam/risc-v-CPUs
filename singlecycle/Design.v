@@ -312,7 +312,7 @@ module mux2x1 #(parameter size = 32)
 endmodule
 
 
-module SC_CPU
+module CPU
 (
 	input InputClk, rst,
 	output `BIT_WIDTH AddressBus,

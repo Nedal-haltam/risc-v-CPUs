@@ -90,30 +90,8 @@ run_hw:
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
 		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
 			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
-			$(SC_DIR)/Sim.v; \
+			$(SC_DIR)/Sim.v $(SC_DIR)/Design.v; \
 		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
 	else \
 		echo "Skipping hardware simulation for $(BENCH)"; \
 	fi
-	
-test: assemble-test run-test
-
-assemble-test:
-	@rm -rf $(BENCHMARK_DIR)/test/Generated
-	@mkdir -p $(BENCHMARK_DIR)/test/Generated
-	@$(ASSEMBLER) \
-		$(BENCHMARK_DIR)/test/test.S \
-		-mc $(BENCHMARK_DIR)/test/Generated/MC.txt \
-		-dm $(BENCHMARK_DIR)/test/Generated/DM.txt \
-		--im-init $(BENCHMARK_DIR)/test/Generated/IM_INIT.INIT \
-		--dm-init $(BENCHMARK_DIR)/test/Generated/DM_INIT.INIT \
-		--im-mif $(BENCHMARK_DIR)/test/Generated/InstMem_MIF.mif \
-		--dm-mif $(BENCHMARK_DIR)/test/Generated/DataMem_MIF.mif; \
-
-run-test:
-	@$(CAS) singlecycle \
-		-mc $(BENCHMARK_DIR)/test/Generated/MC.txt \
-		-dm $(BENCHMARK_DIR)/test/Generated/DM.txt \
-		-o $(BENCHMARK_DIR)/test/Generated/CAS_SC_OUT.txt \
-		--im-size $(IM_SIZE) \
-		--dm-size $(DM_SIZE); \

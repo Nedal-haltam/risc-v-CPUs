@@ -1,13 +1,7 @@
 
 `define reset 4
 
-`ifndef vscode
 `timescale 1ns/1ps
-`endif
-
-`ifdef vscode
-`include "./Design.v"
-`endif
 
 module SingleCycle_sim;
 
