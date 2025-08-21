@@ -6,7 +6,7 @@
 `endif
 
 `ifdef vscode
-`include "SC_CPU.v"
+`include "./Design.v"
 `endif
 
 module SingleCycle_sim;
