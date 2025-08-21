@@ -10,23 +10,24 @@ BENCHMARK_DIR=./BenchMarkFolder
 SC_DIR=./singlecycle
 
 SimulateSW=1
-SimulateHW=0
+SimulateHW=1
 
-BENCHMARKS=\
-	"BinarySearch" \
-	"BubbleSort" \
-	"ControlFlowInstructions" \
-	"DataManipulation" \
-	"Fibonacci" \
-	"InsertionSort" \
-	"JR_Dependency" \
-	"MultiplicationUsingAddition" \
-	"RemoveDuplicates" \
-	"ScalarMultiplicationUsingAddition" \
-	"SelectionSort" \
-	"SparseMatrixCount" \
-	"SumOfNumbers" \
-	"Swapping"
+BENCHMARKS="BinarySearch"
+# BENCHMARKS=\
+# 	"BinarySearch" \
+# 	"BubbleSort" \
+# 	"ControlFlowInstructions" \
+# 	"DataManipulation" \
+# 	"Fibonacci" \
+# 	"InsertionSort" \
+# 	"JR_Dependency" \
+# 	"MultiplicationUsingAddition" \
+# 	"RemoveDuplicates" \
+# 	"ScalarMultiplicationUsingAddition" \
+# 	"SelectionSort" \
+# 	"SparseMatrixCount" \
+# 	"SumOfNumbers" \
+# 	"Swapping"
 
 .PHONY: all serial run_benchmark run_sw run_hw test assemble-test run-test
 
@@ -49,8 +50,8 @@ run_benchmark:
 	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated
 	@mkdir -p $(BENCHMARK_DIR)/$(BENCH)/Generated
 	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt
-	@$(MAKE) run_sw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
-	@$(MAKE) run_hw BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
+	@$(MAKE) run_sw SimulateSW=$(SimulateSW) SimulateHW=$(SimulateHW) BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
+	@$(MAKE) run_hw SimulateSW=$(SimulateSW) SimulateHW=$(SimulateHW) BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 
 	@if [ "$(SimulateSW)" = "1" ] && [ "$(SimulateHW)" = "1" ]; then \
 		echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
@@ -89,8 +90,8 @@ run_hw:
 	@if [ "$(SimulateHW)" = "1" ]; then \
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
 		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
-			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D vscode -D MAX_CLOCKS=1000000 \
-			$(SC_DIR)/Sim.v $(SC_DIR)/Design.v; \
+			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
+			$(SC_DIR)/Design.v $(SC_DIR)/DataMemory.v $(SC_DIR)/Sim.v; \
 		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
 	else \
 		echo "Skipping hardware simulation for $(BENCH)"; \

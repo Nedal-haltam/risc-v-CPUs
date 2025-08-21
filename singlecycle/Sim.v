@@ -1,7 +1,7 @@
 
-`define reset 4
+// `timescale 1ns/1ps
 
-`timescale 1ns/1ps
+`include "./singlecycle/defs.h"
 
 module SingleCycle_sim;
 
@@ -10,7 +10,7 @@ wire `BIT_WIDTH AddressBus, DataBusIn, DataBusOut;
 wire [2:0] ControlBus;
 wire [31:0] CyclesConsumed;
 
-SC_CPU dut
+CPU dut
 (
 	.InputClk(InputClk), 
     .rst(rst),
@@ -48,10 +48,12 @@ $dumpvars;
 
 rst = 1; #(`reset) rst = 0;
 
-#(`MAX_CLOCKS + 1);
+#(`MAX_CLOCKS);
 
-$display("Number of cycles consumed : ", CyclesConsumed);
+$display("Number of cycles consumed : %d", CyclesConsumed);
+#1;
 $finish;
+
 
 end
 	

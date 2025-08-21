@@ -1,3 +1,6 @@
+
+`include "./singlecycle/defs.h"
+
 `define OPCODE_RTYPE 6'h0
 `define OPCODE_HLT 6'b111111
 `define OPCODE_ADD 6'h20
@@ -40,9 +43,6 @@
 
 `define BIT_WIDTH [31:0]
 
-`ifdef vscode
-`include "DataMemory.v"
-`endif
 
 module programCounter 
 (
@@ -75,7 +75,7 @@ module IM
 		for (i = 0; i <= 1023; i = i + 1)
 			InstMem[i] <= 0;
 		`include "IM_INIT.INIT"
-	end      
+	end
 endmodule
 
 module controlUnit
@@ -261,10 +261,10 @@ module registerFile
 			registers[writeRegister] <= writeData;
 		end
 	end
-`ifdef vscode
+`ifdef simulate
 	integer i;
 	initial begin
-		#(`MAX_CLOCKS + `reset);
+		#(`MAX_CLOCKS + `reset+1);
 		$display("Register file content : ");
 		for (i = 0; i <= 31; i = i + 1) begin
 			$display("index = %d , reg_out : signed = %d , unsigned = %d",i`BIT_WIDTH, $signed(registers[i]), $unsigned(registers[i]));
