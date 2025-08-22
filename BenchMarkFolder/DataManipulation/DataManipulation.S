@@ -27,13 +27,15 @@ main:
     # Shift operations 
     SLLI  $12, $1, 2 
     SRLI  $13, $2, 1 
- 
+    addi a0, zero, 0
+    addi a7, zero, 93
+    ecall
     # Load and store word instructions 
-    LW   $14, 0x0($0) 
-    SW   $4, 0x0($0)  
-    li a0, 0
-    call exit
-    exit:
-        li a7, 93
-        ecall
-        ret
+    # # LW   $14, 0x0($0) 
+    # # SW   $4, 0x0($0)  
+    # li a0, 0
+    # call exit
+    # exit:
+    #     li a7, 93
+    #     ecall
+    #     ret

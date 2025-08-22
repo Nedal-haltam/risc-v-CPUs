@@ -1,48 +1,22 @@
-
 `include "./singlecycle/defs.h"
 
-`define OPCODE_RTYPE 6'h0
-`define OPCODE_HLT 6'b111111
-`define OPCODE_ADD 6'h20
-`define OPCODE_ADDU 6'h21
-`define OPCODE_SUB 6'h22
-`define OPCODE_SUBU 6'h23
-`define OPCODE_AND 6'h24
-`define OPCODE_OR 6'h25
-`define OPCODE_XOR 6'h26
-`define OPCODE_NOR 6'h27
-`define OPCODE_SLT 6'h2a
-`define OPCODE_SGT 6'h2b
-`define OPCODE_SLL 6'h00
-`define OPCODE_SRL 6'h02
-`define OPCODE_JR 6'h08
-`define OPCODE_ADDI  6'h08
-`define OPCODE_ANDI  6'h0C
-`define OPCODE_ORI  6'h0D
-`define OPCODE_XORI  6'h0E
-`define OPCODE_SLTI  6'h2A
-`define OPCODE_LW  6'h23
-`define OPCODE_SW  6'h2B
-`define OPCODE_BEQ  6'h04
-`define OPCODE_BNE  6'h05
-`define OPCODE_J  6'h02
-`define OPCODE_JAL  6'h03
-
-`define ALU_OPCODE_ADD 4'd1 
-`define ALU_OPCODE_SUB 4'd2 
-`define ALU_OPCODE_AND 4'd3 
-`define ALU_OPCODE_OR 4'd4 
-`define ALU_OPCODE_XOR 4'd5 
-`define ALU_OPCODE_NOR 4'd6 
-`define ALU_OPCODE_SLT 4'd7 
-`define ALU_OPCODE_SGT 4'd8 
-`define ALU_OPCODE_SLL 4'd9
-`define ALU_OPCODE_SRL 4'd10
-
-`define RETURN_ADDRESS_REGISTER 5'd1
-
-`define BIT_WIDTH [31:0]
-
+`define ALU_OPCODE_ADD 6'd1
+`define ALU_OPCODE_SUB 6'd2
+`define ALU_OPCODE_MUL 6'd3
+`define ALU_OPCODE_SLL 6'd4
+`define ALU_OPCODE_SLT 6'd5
+`define ALU_OPCODE_SEQ 6'd6
+`define ALU_OPCODE_SNE 6'd7
+`define ALU_OPCODE_SLTU 6'd8
+`define ALU_OPCODE_XOR 6'd9
+`define ALU_OPCODE_DIV 6'd10
+`define ALU_OPCODE_SRL 6'd11
+`define ALU_OPCODE_SRA 6'd12
+`define ALU_OPCODE_DIVU 6'd13
+`define ALU_OPCODE_OR 6'd14
+`define ALU_OPCODE_REM 6'd15
+`define ALU_OPCODE_AND 6'd16
+`define ALU_OPCODE_REMU 6'd17
 
 module programCounter 
 (
@@ -50,7 +24,7 @@ module programCounter
 	input `BIT_WIDTH PCin, 
 	output reg `BIT_WIDTH PCout
 );
-	parameter initialaddr = -1;
+	parameter initialaddr = -4;
 	always@(posedge clk, posedge rst) begin
 		if(rst) begin
 			PCout <= initialaddr;
@@ -65,14 +39,17 @@ endmodule
 module IM
 (
 	input `BIT_WIDTH addr,
-	output `BIT_WIDTH Data_Out
+	output [31:0] Data_Out
 );
-	reg `BIT_WIDTH InstMem [0 : 1023];
-	assign Data_Out = InstMem[addr[9:0]];
+	reg [7:0] InstMem [0 : 4096];
+	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[11:0] + 0];
+	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[11:0] + 1];
+	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[11:0] + 2];
+	assign Data_Out[(8 * 4) - 1: 8 * 3] = InstMem[addr[11:0] + 3];
 
 	integer i;
 	initial begin
-		for (i = 0; i <= 1023; i = i + 1)
+		for (i = 0; i <= 4095; i = i + 1)
 			InstMem[i] <= 0;
 		`include "IM_INIT.INIT"
 	end
@@ -80,185 +57,386 @@ endmodule
 
 module controlUnit
 (
+	input `BIT_WIDTH PC,
+	input [6:0] opcode,
+	input [2:0] funct3,
+	input [6:0] funct7,
 	input rst,
-	input wire [5:0] opcode, funct,
-	output reg [3:0] ALUOp,
-	output reg RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, hlt
+	input [4:0] rs1, rs2, rd,
+	input `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3,
+	input [11:0] imm12_itype, imm12_stype,
+	input [19:0] imm20,
+
+	output reg [4:0] WriteRegister,
+	output reg IsPFC,
+	output reg `BIT_WIDTH PFC_PC,
+	output reg RegWriteEn,
+	output reg MemReadEn,
+	output reg MemWriteEn,
+	output reg `BIT_WIDTH alu_in_1,
+	output reg `BIT_WIDTH alu_in_2,
+	output reg [5:0] aluop,
+	output reg hlt
 );
 	always @(*) begin
-		if(rst) begin 
-			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUOp, ALUSrc, hlt} <= 0;
+		if(rst) begin
+			WriteRegister <= 0;
+			IsPFC <= 0;
+			PFC_PC <= 0;
+			RegWriteEn <= 0;
+			MemReadEn <= 0;
+			MemWriteEn <= 0;
+			alu_in_1 <= 0;
+			alu_in_2 <= 0;
+			aluop <= 0;
+			hlt <= 0;
 		end
 		else begin
-			{RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUOp, ALUSrc, hlt} = 0;
 			case(opcode)
-				`OPCODE_HLT: begin
-					hlt <= 1'b1;
-				end
-				`OPCODE_RTYPE : begin
-					case (funct) 
-						`OPCODE_JR : begin
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+				// start of R-TYPE instructions
+				7'b0110011: begin
+					IsPFC <= 0;
+					hlt <= 0;
+					PFC_PC <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+
+					WriteRegister <= rd;
+					RegWriteEn <= 1'b1;
+					alu_in_1 <= RegFileDataOut_1;
+					alu_in_2 <= RegFileDataOut_2;
+					case(funct3)
+						3'b000: begin
+							case(funct7)
+								7'b0000000: begin // "add"
+									aluop <= `ALU_OPCODE_ADD;
+								end
+								7'b0110000: begin // "sub"
+									aluop <= `ALU_OPCODE_SUB;
+								end
+								7'b0000001: begin // "mul"
+									aluop <= `ALU_OPCODE_MUL;
+								end
+							endcase
 						end
-						`OPCODE_ADD, `OPCODE_ADDU : begin
-							ALUOp <= `ALU_OPCODE_ADD;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+						3'b001: begin
+							case(funct7)
+								7'b0000000: begin // "sll"
+									aluop <= `ALU_OPCODE_SLL;
+								end
+							endcase
 						end
-						`OPCODE_SUB, `OPCODE_SUBU : begin
-							ALUOp <= `ALU_OPCODE_SUB;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+						3'b010: begin
+							case(funct7)
+								7'b0000000: begin // "slt"
+									aluop <= `ALU_OPCODE_SLT;
+								end
+								7'b0000001: begin // "seq"
+									aluop <= `ALU_OPCODE_SEQ;
+								end
+								7'b0000010: begin // "sne"
+									aluop <= `ALU_OPCODE_SNE;
+								end
+							endcase
 						end
-						`OPCODE_AND : begin
-							ALUOp <= `ALU_OPCODE_AND;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+						3'b011: begin
+							case(funct7)
+								7'b0000000: begin // "sltu"
+									aluop <= `ALU_OPCODE_SLTU;
+								end
+							endcase
 						end
-						`OPCODE_OR : begin 
-							ALUOp <= `ALU_OPCODE_OR;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+						3'b100: begin
+							case(funct7)
+								7'b0000000: begin // "xor"
+									aluop <= `ALU_OPCODE_XOR;
+								end
+								7'b0000001: begin // "div"
+									aluop <= `ALU_OPCODE_DIV;
+								end
+							endcase
 						end
-						`OPCODE_XOR : begin 
-							ALUOp <= `ALU_OPCODE_XOR;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+						3'b101: begin
+							case(funct7)
+								7'b0000000: begin // "srl"
+									aluop <= `ALU_OPCODE_SRL;
+								end
+								7'b0100000: begin // "sra"
+									aluop <= `ALU_OPCODE_SRA;
+								end
+								7'b0000001: begin // "divu"
+									aluop <= `ALU_OPCODE_DIVU;
+								end
+							endcase
 						end
-						`OPCODE_NOR : begin 
-							ALUOp <= `ALU_OPCODE_NOR;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
+						3'b110: begin
+							case(funct7)
+								7'b0000000: begin // "or"
+									aluop <= `ALU_OPCODE_OR;
+								end
+								7'b0000001: begin // "rem"
+									aluop <= `ALU_OPCODE_REM;
+								end
+							endcase
 						end
-						`OPCODE_SLT : begin 
-							ALUOp <= `ALU_OPCODE_SLT;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
-						end
-						`OPCODE_SGT : begin 
-							ALUOp <= `ALU_OPCODE_SGT;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
-						end
-						`OPCODE_SLL : begin 
-							ALUSrc <= 1'b1;
-							ALUOp <= `ALU_OPCODE_SLL;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
-						end
-						`OPCODE_SRL : begin
-							ALUSrc <= 1'b1;
-							ALUOp <= `ALU_OPCODE_SRL;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
-						end
-						`OPCODE_JR : begin
-							ALUOp <= `ALU_OPCODE_ADD;
-							RegDst <= 1'b1; 
-							RegWriteEn <= 1'b1; 
-						end
-						default : begin
-							RegWriteEn <= 1'b0;
+						3'b111: begin
+							case(funct7)
+								7'b0000000: begin // "and"
+									aluop <= `ALU_OPCODE_AND;
+								end
+								7'b0000001: begin // "remu"
+									aluop <= `ALU_OPCODE_REMU;
+								end
+							endcase
 						end
 					endcase
 				end
-				`OPCODE_J : begin
-				end
-				`OPCODE_JAL : begin
+				// end of R-TYPE instructions
+				// start of I-TYPE instructions
+				7'b0010011: begin
+					hlt <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+					IsPFC <= 0;
+					PFC_PC <= 0;
+
 					RegWriteEn <= 1'b1;
-					RegDst <= 1'b1;
-					ALUSrc <= 1'b1;
-					ALUOp <= `ALU_OPCODE_ADD;
+					WriteRegister <= rd;
+					alu_in_1 <= RegFileDataOut_1;
+					alu_in_2 <= {{52{imm12_itype[11]}}, imm12_itype};
+					case(funct3)
+						3'b000: begin // "addi"
+							aluop <= `ALU_OPCODE_ADD;
+						end
+						3'b010: begin // "slti"
+							aluop <= `ALU_OPCODE_SLT;
+						end
+						3'b011: begin // "sltiu"
+							aluop <= `ALU_OPCODE_SLTU;
+						end
+						3'b100: begin // "xori"
+							aluop <= `ALU_OPCODE_XOR;
+						end
+						3'b110: begin // "ori"
+							aluop <= `ALU_OPCODE_OR;
+						end
+						3'b111: begin // "andi"
+							aluop <= `ALU_OPCODE_AND;
+						end
+						3'b001: begin // "slli"
+							aluop <= `ALU_OPCODE_SLL;
+						end
+						3'b101: begin
+							case(funct7)
+								7'b0000000: begin // "srli"
+									aluop <= `ALU_OPCODE_SRL;
+								end
+								7'b0100000: begin // "srai"
+									aluop <= `ALU_OPCODE_SRA;
+								end
+							endcase
+						end
+					endcase
 				end
-				`OPCODE_SLTI : begin
+				// TODO: establish a formal way, for now we will do exit ecall directly
+				7'b1110011: begin
+					WriteRegister <= 0;
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					RegWriteEn <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+					alu_in_1 <= 0;
+					alu_in_2 <= 0;
+					aluop <= 0;
+					case(funct3)
+						3'b000: begin // "ecall"
+							hlt <= 1'b1;
+						end
+					endcase
+				end
+				// TODO: modify the data memory to support various load instructions
+				7'b0000011: begin 
+					hlt <= 0;
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					MemWriteEn <= 0;
+
+					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
-					RegDst <= 1'b0;
-					ALUSrc <= 1'b1;
-					ALUOp <= `ALU_OPCODE_SLT;
-				end
-				`OPCODE_ADDI : begin
-					RegWriteEn <= 1'b1;
-					ALUSrc <= 1'b1;
-					ALUOp <= `ALU_OPCODE_ADD;
-				end
-				`OPCODE_ANDI : begin
-					ALUOp <= `ALU_OPCODE_AND;
-					RegWriteEn <= 1'b1;
-					ALUSrc <= 1'b1;
-				end
-				`OPCODE_ORI : begin
-					ALUOp <= `ALU_OPCODE_OR;
-					RegWriteEn <= 1'b1;
-					ALUSrc <= 1'b1;
-				end
-				`OPCODE_XORI : begin
-					ALUOp <= `ALU_OPCODE_XOR;
-					RegWriteEn <= 1'b1;
-					ALUSrc <= 1'b1;
-				end
-				`OPCODE_LW : begin
 					MemReadEn <= 1'b1;
+					alu_in_1 <= RegFileDataOut_1;
+					alu_in_2 <= alu_in_2 <= {{52{imm12_itype[11]}}, imm12_itype};
+					aluop <= `ALU_OPCODE_ADD;
+					case(funct3)
+						3'b000: begin // "lb"
+						end
+						3'b001: begin // "lh"
+						end
+						3'b010: begin // "lw"
+						end
+						3'b011: begin // "ld"
+						end
+						3'b100: begin // "lbu"
+						end
+						3'b101: begin // "lhu"
+						end
+					endcase
+				end
+				7'b1110111: begin // "jalr"
+					hlt <= 0;
+					MemWriteEn <= 0;
+					MemReadEn <= 0;
+
+					WriteRegister <= rd;
+					IsPFC <= 1'b1;
+					PFC_PC <= (RegFileDataOut_1 + {{52{imm12_itype[11]}}, imm12_itype}) & ~1;
 					RegWriteEn <= 1'b1;
-					ALUSrc <= 1'b1;
-					MemtoReg <= 1'b1;
-					ALUOp <= `ALU_OPCODE_ADD;
+					alu_in_1 <= PC;
+					alu_in_2 <= 64'd4;
+					aluop <= `ALU_OPCODE_ADD;
+					case(funct3)
+						3'b000: begin
+						end
+					endcase
 				end
-				`OPCODE_SW : begin
+				// end of I-TYPE instructions
+				// start of S-TYPE instructions
+				// TODO: modify the data memory to support various store instructions
+				7'b0100011: begin
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					hlt <= 0;
+					WriteRegister <= 0;
+					RegWriteEn <= 0;
+					MemReadEn <= 0;
+
 					MemWriteEn <= 1'b1;
-					ALUSrc <= 1'b1;
-					ALUOp <= `ALU_OPCODE_ADD;
+					alu_in_1 <= RegFileDataOut_1;
+					alu_in_2 <= {{52{imm12_stype[11]}}, imm12_stype};
+					aluop <= `ALU_OPCODE_ADD;
+					case(funct3)
+						3'b000: begin // "sb"
+						end
+						3'b001: begin // "sh"
+						end
+						3'b010: begin // "sw"
+						end
+						3'b011: begin // "sd"
+						end
+					endcase
 				end
-				`OPCODE_BEQ, `OPCODE_BNE : begin
-					ALUOp <= `ALU_OPCODE_SUB;
+				7'b1100011: begin
+					WriteRegister <= 0;
+					hlt <= 0;
+					RegWriteEn <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+					alu_in_1 <= 0;
+					alu_in_2 <= 0;
+					aluop <= 0;
+
+					PFC_PC <= PC + ({{52{imm12_stype[11]}}, imm12_stype} << 1);
+					case(funct3)
+						3'b000: begin // "beq"
+							IsPFC <= RegFileDataOut_1 == RegFileDataOut_2;
+						end
+						3'b001: begin // "bne"
+							IsPFC <= RegFileDataOut_1 != RegFileDataOut_2;
+						end
+						3'b100: begin // "blt"
+							IsPFC <= $signed(RegFileDataOut_1) < $signed(RegFileDataOut_2);
+						end
+						3'b101: begin // "bge"
+							IsPFC <= $signed(RegFileDataOut_1) >= $signed(RegFileDataOut_2);
+						end
+						3'b110: begin // "bltu"
+							IsPFC <= $unsigned(RegFileDataOut_1) < $unsigned(RegFileDataOut_2);
+						end
+						3'b111: begin // "bgeu"
+							IsPFC <= $unsigned(RegFileDataOut_1) >= $unsigned(RegFileDataOut_2);
+						end
+					endcase
 				end
-				default : begin
-					MemWriteEn <= 1'b0; 
-					RegWriteEn <= 1'b0;
+				// end of S-TYPE instructions
+				// start of U-TYPE instructions
+				7'b0110111: begin // "lui"
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					hlt <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+
+					WriteRegister <= rd;
+					RegWriteEn <= 1'b1;
+					alu_in_1 <= 0;
+					alu_in_2 <= {32'd0, {imm20, 12'd0}};
+					aluop <= `ALU_OPCODE_ADD;
 				end
+				7'b0010111: begin // "auipc"
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					hlt <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+
+					WriteRegister <= rd;
+					RegWriteEn <= 1'b1;
+					alu_in_1 <= PC;
+					alu_in_2 <= {32'd0, {imm20, 12'd0}};
+					aluop <= `ALU_OPCODE_ADD;
+				end
+				7'b1111111: begin // "jal"
+					hlt <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+
+					IsPFC <= 1'b1;
+					PFC_PC <= {{32{imm20[19]}}, imm20} << 1;
+					WriteRegister <= rd;
+					RegWriteEn <= 1'b1;
+					alu_in_1 <= PC;
+					alu_in_2 <= 64'd4;
+					aluop <= `ALU_OPCODE_ADD;
+				end
+				7'b1111110: begin // "addi20u"
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					hlt <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+
+					WriteRegister <= rd;
+					RegWriteEn <= 1'b1;
+					alu_in_1 <= RegFileDataOut_3;
+					alu_in_2 <= {48'd0, imm20};
+					aluop <= `ALU_OPCODE_ADD;
+				end
+				// end of U-TYPE instructions
 			endcase
 		end	
-	end
-endmodule
-
-module BranchController(
-	input rst,
-	input [5:0] opcode, funct,
-	input `BIT_WIDTH operand1, operand2,
-	output reg PCsrc
-);
-
-	always@(*) begin
-		if (rst)
-			PCsrc <= 0;
-		else begin
-			PCsrc <= (
-						opcode == `OPCODE_BEQ && operand1 == operand2 || 
-						opcode == `OPCODE_BNE && operand1 != operand2 ||
-						opcode == `OPCODE_J || opcode == `OPCODE_JAL || (opcode == 0 && funct == `OPCODE_JR)
-					);
-		end
 	end
 endmodule
 
 module registerFile 
 (
 	input clk, rst, we,
-	input [4:0] readRegister1, readRegister2, writeRegister,
+	input [4:0] readRegister1, readRegister2, readRegister3, WriteRegister,
 	input `BIT_WIDTH writeData,
-	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2
+	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3
 );
 
 	reg `BIT_WIDTH registers [0:31];
 	assign RegFileDataOut_1 = registers[readRegister1];
 	assign RegFileDataOut_2 = registers[readRegister2];
+	assign RegFileDataOut_3 = registers[readRegister3];
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(rst) begin
 			for(i=0; i<32; i = i + 1) registers[i] <= 0;
 		end
-		else if(we && writeRegister != 0) begin
-			registers[writeRegister] <= writeData;
+		else if(we && WriteRegister != 0) begin
+			registers[WriteRegister] <= writeData;
 		end
 	end
 `ifdef simulate
@@ -267,7 +445,7 @@ module registerFile
 		#(`MAX_CLOCKS + `reset+1);
 		$display("Register file content : ");
 		for (i = 0; i <= 31; i = i + 1) begin
-			$display("index = %d , reg_out : signed = %d , unsigned = %d",i`BIT_WIDTH, $signed(registers[i]), $unsigned(registers[i]));
+			$display("index = %d , reg_out : signed = %d , unsigned = %d", i[31:0], $signed(registers[i]), $unsigned(registers[i]));
 		end
 	end 
 `endif
@@ -277,40 +455,34 @@ endmodule
 module ALU 
 (
 	input `BIT_WIDTH operand1, operand2, 
-	input [3:0] opSel, 
-	output reg `BIT_WIDTH result, 
-	output zero
+	input [5:0] opSel, 
+	output reg `BIT_WIDTH result
 );
 
 always @ (*) begin
-  case(opSel)
-    `ALU_OPCODE_ADD: result <= operand1 + operand2;
-    `ALU_OPCODE_SUB: result <= operand1 - operand2;
-    `ALU_OPCODE_AND: result <= operand1 & operand2;
-    `ALU_OPCODE_OR : result <= operand1 | operand2;
-    `ALU_OPCODE_XOR: result <= operand1 ^ operand2; 
-    `ALU_OPCODE_NOR: result <= ~(operand1 | operand2);
-    `ALU_OPCODE_SLT: result <= ($signed(operand1) < $signed(operand2)) ? 32'b1 : 32'b0; 
-    `ALU_OPCODE_SGT: result <= ($signed(operand1) > $signed(operand2)) ? 32'b1 : 32'b0; 
-    `ALU_OPCODE_SLL: result <= operand1 << operand2;
-    `ALU_OPCODE_SRL: result <= operand1 >> operand2;
-
-    default: result <= -1;
-  endcase
+	case(opSel)
+		`ALU_OPCODE_ADD:  result <= operand1 + operand2;
+		`ALU_OPCODE_SUB:  result <= operand1 - operand2;
+		`ALU_OPCODE_MUL:  result <= operand1 * operand2;
+		`ALU_OPCODE_SLL:  result <= operand1 << operand2;
+		`ALU_OPCODE_SLT:  result <= ($signed(operand1) < $signed(operand2)) ? 64'b1 : 64'b0;
+		`ALU_OPCODE_SEQ:  result <= (operand1 == operand2) ? 64'b1 : 64'b0;
+		`ALU_OPCODE_SNE:  result <= (operand1 != operand2) ? 64'b1 : 64'b0;
+		`ALU_OPCODE_SLTU: result <= ($unsigned(operand1) < $unsigned(operand2)) ? 64'b1 : 64'b0;
+		`ALU_OPCODE_XOR:  result <= operand1 ^ operand2;
+		`ALU_OPCODE_DIV:  result <= ($signed(operand2) == 0) ? 64'd0 : $signed(operand1) / $signed(operand2);
+		`ALU_OPCODE_SRL:  result <= operand1 >> operand2;
+		`ALU_OPCODE_SRA:  result <= operand1 >>> operand2;
+		`ALU_OPCODE_DIVU: result <= ($unsigned(operand2) == 0) ? 64'd0 : $unsigned(operand1) / $unsigned(operand2);
+		`ALU_OPCODE_OR:   result <= operand1 | operand2;
+		`ALU_OPCODE_REM:  result <= $signed(operand1) % $signed(operand2);
+		`ALU_OPCODE_AND:  result <= operand1 & operand2;
+		`ALU_OPCODE_REMU: result <= $unsigned(operand1) % $unsigned(operand2);
+		default: result <= 12121212;
+	endcase
 end
-assign zero = (result == 32'b0);
 
 endmodule
-
-module mux2x1 #(parameter size = 32) 
-(
-	input [size-1:0] in1, in2, 
-	input s, 
-	output [size-1:0]out
-);
-	assign out = (~s) ? in1 : in2;
-endmodule
-
 
 module CPU
 (
@@ -321,31 +493,23 @@ module CPU
 	output [2:0] ControlBus,
 	output reg `BIT_WIDTH CyclesConsumed
 );
-	wire `BIT_WIDTH PC;
-	
-	wire `BIT_WIDTH Instruction, InstructionMemoryOut, RegFileDataOut_1, RegFileDataOut_2, 
-	RegFileDataOut_1_w, extImm, ALUin2, DataBus, ALUResult, immediate, shamt, address, nextPC, PCPlus1, adderResult;
 
-	wire [15:0] imm;
-	wire [5:0] opcode, funct;
-	wire [4:0] rs, rt, rd, WriteRegister;
-	wire [3:0] ALUOp;
-	wire RegDst, MemReadEn, MemtoReg, MemWriteEn, RegWriteEn, ALUSrc, zero, hlt;
-	wire PCsrc;
+	wire [31:0] Instruction, InstructionMemoryOut;
+	wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3;
+	wire `BIT_WIDTH DataBus, ALUResult, alu_in_1, alu_in_2;
+	wire `BIT_WIDTH PC, nextPC, PFC_PC;
+	wire [6:0] opcode;
+	wire [2:0] funct3;
+	wire [5:0] aluop;
+	wire [6:0] funct7;
+	wire [4:0] rs1, rs2, rd, WriteRegister;
+	wire [11:0] imm12_itype, imm12_stype;
+	wire [19:0] imm20;
+	wire clk = InputClk;
+	wire IsPFC, RegWriteEn, MemReadEn, MemWriteEn;
 	
-	
-	assign opcode  = Instruction[31:26];
-	assign rd      = ((opcode == `OPCODE_JAL) ? `RETURN_ADDRESS_REGISTER : Instruction[15:11]);
-	assign rs      = Instruction[25:21];
-	assign rt      = Instruction[20:16];
-	assign imm     = Instruction[15:0];
-	assign shamt   = {32'd0, Instruction[10:6]};
-	assign funct   = Instruction[5:0];
-	assign address = {32'd0, Instruction[25:0]};
-
-
 	or hlt_logic(clk, InputClk, hlt);
-		
+
 	always@(posedge clk , posedge rst) begin
 		if (rst)
 			CyclesConsumed <= 32'd0;
@@ -367,28 +531,32 @@ module CPU
 		.Data_Out(InstructionMemoryOut)
 	);
 
-	BranchController branchcontroller
-	(
-		.opcode(opcode), 
-		.funct(funct), 
-		.operand1(RegFileDataOut_1), 
-		.operand2(ALUin2), 
-		.PCsrc(PCsrc), 
-		.rst(rst)
-	);
-
 	controlUnit CU
 	(
+		.PC(PC),
 		.opcode(opcode), 
-		.funct(funct), 
+		.funct3(funct3), 
+		.funct7(funct7), 
 		.rst(rst), 
-		.RegDst(RegDst), 
-		.MemReadEn(MemReadEn), 
-		.MemtoReg(MemtoReg), 
-		.ALUOp(ALUOp), 
-		.MemWriteEn(MemWriteEn), 
+		.rs1(rs1),
+		.rs2(rs2),
+		.rd(rd),
+		.RegFileDataOut_1(RegFileDataOut_1),
+		.RegFileDataOut_2(RegFileDataOut_2),
+		.RegFileDataOut_3(RegFileDataOut_3),
+		.imm12_itype(imm12_itype),
+		.imm12_stype(imm12_stype),
+		.imm20(imm20),
+
+		.WriteRegister(WriteRegister),
+		.IsPFC(IsPFC),
+		.PFC_PC(PFC_PC),
 		.RegWriteEn(RegWriteEn), 
-		.ALUSrc(ALUSrc), 
+		.MemReadEn(MemReadEn), 
+		.MemWriteEn(MemWriteEn), 
+		.alu_in_1(alu_in_1),
+		.alu_in_2(alu_in_2),
+		.aluop(aluop), 
 		.hlt(hlt)
 	);
 
@@ -397,52 +565,37 @@ module CPU
 		.clk(clk), 
 		.rst(rst), 
 		.we(RegWriteEn), 
-		.readRegister1(rs), 
-		.readRegister2(rt), 
-		.writeRegister(WriteRegister), 
+		.readRegister1(rs1), 
+		.readRegister2(rs2), 
+		.readRegister3(rd), 
+		.WriteRegister(WriteRegister), 
 		.writeData(DataBus), 
 		.RegFileDataOut_1(RegFileDataOut_1), 
-		.RegFileDataOut_2(RegFileDataOut_2)
+		.RegFileDataOut_2(RegFileDataOut_2),
+		.RegFileDataOut_3(RegFileDataOut_3)
 	);
 		
 	ALU alu
 	(
-		.operand1(RegFileDataOut_1_w), 
-		.operand2(ALUin2), 
-		.opSel(ALUOp), 
-		.result(ALUResult), 
-		.zero(zero)
+		.operand1(alu_in_1), 
+		.operand2(alu_in_2), 
+		.opSel(aluop), 
+		.result(ALUResult)
 	);
 
-	mux2x1 #(5) RFMux
-	(
-		.in1(rt), 
-		.in2(rd), 
-		.s(RegDst), 
-		.out(WriteRegister)
-	);
-
-	mux2x1 #(32) ALUMux
-	(
-		.in1(RegFileDataOut_2), 
-		.in2(immediate), 
-		.s(ALUSrc), 
-		.out(ALUin2)
-	);
-
-	assign PCPlus1 = PC + 32'd1;
-	assign adderResult = (opcode == `OPCODE_JAL || opcode == `OPCODE_J) ? address : 
-	(
-		(opcode == 0 && funct == `OPCODE_JR) ? RegFileDataOut_1 : ( PC + {{32{imm[15]}}, imm})
-	);
-	assign nextPC = (PCsrc) ? adderResult : PCPlus1;
-	assign extImm = (opcode == `OPCODE_ANDI || opcode == `OPCODE_ORI || opcode == `OPCODE_XORI) ? {16'd0, imm} : {{16{imm[15]}}, imm};
-	assign immediate = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? shamt : (
-		(opcode == `OPCODE_JAL) ? 32'd1 : extImm
-	);
-	assign RegFileDataOut_1_w = (opcode == 0 && (funct == `OPCODE_SLL || funct == `OPCODE_SRL)) ? RegFileDataOut_2 : ((opcode == `OPCODE_JAL) ? PC : RegFileDataOut_1);
-	assign Instruction = (rst) ? 0 : InstructionMemoryOut;
+	assign opcode       = Instruction[6:0];
+	assign funct3       = Instruction[14:12];
+	assign funct7       = Instruction[31:25];
+	assign rs1          = Instruction[19:15];
+	assign rs2          = Instruction[24:20];
+	assign rd           = Instruction[11:7];
+	assign imm12_itype  = Instruction[31:20];
+	assign imm12_stype  = {Instruction[31:25], Instruction[11:7]};
+	assign imm20        = Instruction[31:12];
 	
+	assign nextPC = (IsPFC) ? (PFC_PC) : PC + 64'd4;
+	assign Instruction = (rst) ? 0 : InstructionMemoryOut;
+
 	assign AddressBus = ALUResult;
 	assign DataBusOut = RegFileDataOut_2;
 	assign DataBus = (MemReadEn) ? DataBusIn : ALUResult;

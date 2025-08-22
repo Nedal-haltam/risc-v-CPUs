@@ -17,6 +17,10 @@ always @(posedge clock) begin
         DataMemoryOutput[(8 * 2) - 1:8 * 1] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 1];
         DataMemoryOutput[(8 * 3) - 1:8 * 2] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 2];
         DataMemoryOutput[(8 * 4) - 1:8 * 3] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 3];
+		DataMemoryOutput[63:32] <= {32{DataMem[AddressBus[(`MEMORY_BITS-1):0] + 3][7]}};
+	end
+	else begin
+		DataMemoryOutput <= 0;
 	end
     if (MemWriteEn) begin
         DataMem[AddressBus + 0] <= DataMemoryInput[(8 * 1) - 1:8 * 0];
@@ -38,7 +42,7 @@ end
 		#(`MAX_CLOCKS + `reset+1);
 		$display("Data Memory Content : ");
 		for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1) begin
-			$display("Mem[%d] = %d",i[(`MEMORY_BITS-1):0],$signed(DataMem[i]));
+			$display("Mem[%d] = signed =  %d , unsigned = %d", i[(`MEMORY_BITS-1):0], $signed(DataMem[i]), $unsigned(DataMem[i]));
 		end
 	end 
 `endif

@@ -3,12 +3,15 @@
 
 `include "./singlecycle/defs.h"
 
+`include "./singlecycle/Design.v"
+`include "./singlecycle/DataMemory.v"
+
 module SingleCycle_sim;
 
 reg InputClk = 1, rst = 0;
 wire `BIT_WIDTH AddressBus, DataBusIn, DataBusOut;
 wire [2:0] ControlBus;
-wire [31:0] CyclesConsumed;
+wire `BIT_WIDTH CyclesConsumed;
 
 CPU dut
 (

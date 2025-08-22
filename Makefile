@@ -12,7 +12,7 @@ SC_DIR=./singlecycle
 SimulateSW=1
 SimulateHW=1
 
-BENCHMARKS="BinarySearch"
+BENCHMARKS="DataManipulation"
 # BENCHMARKS=\
 # 	"BinarySearch" \
 # 	"BubbleSort" \
@@ -29,7 +29,7 @@ BENCHMARKS="BinarySearch"
 # 	"SumOfNumbers" \
 # 	"Swapping"
 
-.PHONY: all serial run_benchmark run_sw run_hw test assemble-test run-test
+.PHONY: all serial run_benchmark run_sw run_hw test
 
 # constants
 IM_SIZE=4096
@@ -91,7 +91,7 @@ run_hw:
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
 		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
 			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
-			$(SC_DIR)/Design.v $(SC_DIR)/DataMemory.v $(SC_DIR)/Sim.v; \
+			$(SC_DIR)/Sim.v; \
 		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
 	else \
 		echo "Skipping hardware simulation for $(BENCH)"; \

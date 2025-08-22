@@ -1,0 +1,4 @@
+DataMem[0] <= 8'd5;
+DataMem[1] <= 8'd0;
+DataMem[2] <= 8'd0;
+DataMem[3] <= 8'd0;
