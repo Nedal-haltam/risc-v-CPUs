@@ -23,7 +23,7 @@ CPU dut
 
 DataMemory MemoryModule
 (
-	.clock(InputClk), 
+	.clock(~InputClk), 
     .MemReadEn(ControlBus[1]), 
     .MemWriteEn(ControlBus[2]),
 	.AddressBus(AddressBus),

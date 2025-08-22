@@ -11,7 +11,7 @@ module DataMemory
 
 
 reg [7 : 0] DataMem [0 : (`MEMORY_SIZE-1)];
-always @(negedge clock) begin
+always @(posedge clock) begin
     if (MemReadEn) begin
         DataMemoryOutput[(8 * 1) - 1:8 * 0] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 0];
         DataMemoryOutput[(8 * 2) - 1:8 * 1] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 1];
