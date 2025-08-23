@@ -31,51 +31,57 @@ module HW_Interface(
 	inout 		    [15:0]		ARDUINO_IO,
 	inout 		          		ARDUINO_RESET_N
 );
-
-`define BUFFER_LEN 6
-wire [7:0] data [0 : `BUFFER_LEN - 1];
-
-wire reset = ~KEY[0];
-reg [7:0] DataOut;
-wire DataTrigger;
-
-reg [31:0] index;
-
 `define CLK_BIT 15
 reg [24:0] ClockDivider;
 always@(posedge ADC_CLK_10) begin
 	ClockDivider <= ClockDivider + 1'b1;
 end
+wire clk;
+`define BUFFER_LEN 1025
+reg [7:0] databuff [0 : `BUFFER_LEN - 1];
 
-always@(posedge ClockDivider[`CLK_BIT], posedge reset) begin
+reg [31:0] index;
+reg [7:0] DataOut;
+reg done;
+
+wire reset;
+wire fillbuf;
+wire datatrigger;
+
+`define STR_LEN 10
+integer i;
+always@(posedge clk, posedge fillbuf) begin
+	if (fillbuf) begin
+		for (i = 0; i < `STR_LEN - 2; i = i + 1) begin : FillData
+			databuff[i] = "a" + i;
+		end
+		databuff[`STR_LEN - 2] = "\n";
+		databuff[`STR_LEN - 1] = 0;
+	end
+end
+
+always@(posedge clk, posedge reset) begin
 	if (reset) begin
 		index = 0;
 		DataOut = 0;
+		done = 0;
 	end
-	else if (index <= `BUFFER_LEN) begin
-		DataOut = data[index];
+	else if (!done) begin
+		done = (index >= `BUFFER_LEN) || (databuff[index] == 0);
+		DataOut = databuff[index];
 		index = index + 1'b1;
 	end
 end
 
-generate 
-	genvar i;
-	for (i = 0; i < `BUFFER_LEN - 1; i = i + 1) begin : FillData
-		assign data[i] = "a" + i;
-	end
-endgenerate
-assign data[5] = "\n";
-// assign data[0] = "a";
-// assign data[1] = "b";
-// assign data[2] = "c";
-// assign data[3] = "d";
-// assign data[4] = "e";
-
-assign DataTrigger = (index <= `BUFFER_LEN) ? reset | ~ClockDivider[`CLK_BIT] : 1'b0;
+assign datatrigger = (!done) ? reset | ~clk : 1'b0;
 assign ARDUINO_IO[7:0] = DataOut;
-assign ARDUINO_IO[8] = DataTrigger;
-
+assign ARDUINO_IO[8] = datatrigger;
 assign ARDUINO_RESET_N = 1'b1;
+
+assign clk = ClockDivider[`CLK_BIT];
+assign reset = ~KEY[0];
+assign fillbuf = ~KEY[1];
+
 
 endmodule
 
