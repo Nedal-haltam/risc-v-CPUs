@@ -61,6 +61,7 @@ module controlUnit
 	input [6:0] opcode,
 	input [2:0] funct3,
 	input [6:0] funct7,
+	input [11:0] funct12,
 	input rst,
 	input [4:0] rs1, rs2, rd,
 	input `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3,
@@ -76,7 +77,7 @@ module controlUnit
 	output reg `BIT_WIDTH alu_in_1,
 	output reg `BIT_WIDTH alu_in_2,
 	output reg [5:0] aluop,
-	output reg hlt
+	output reg ecall
 );
 	always @(*) begin
 		if(rst) begin
@@ -89,14 +90,12 @@ module controlUnit
 			alu_in_1 <= 0;
 			alu_in_2 <= 0;
 			aluop <= 0;
-			hlt <= 0;
 		end
 		else begin
 			case(opcode)
 				// start of R-TYPE instructions
 				7'b0110011: begin
 					IsPFC <= 0;
-					hlt <= 0;
 					PFC_PC <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
@@ -194,7 +193,6 @@ module controlUnit
 				// end of R-TYPE instructions
 				// start of I-TYPE instructions
 				7'b0010011: begin
-					hlt <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
 					IsPFC <= 0;
@@ -238,7 +236,6 @@ module controlUnit
 						end
 					endcase
 				end
-				// TODO: establish a formal way, for now we will do exit ecall directly
 				7'b1110011: begin
 					WriteRegister <= 0;
 					IsPFC <= 0;
@@ -250,14 +247,18 @@ module controlUnit
 					alu_in_2 <= 0;
 					aluop <= 0;
 					case(funct3)
-						3'b000: begin // "ecall"
-							hlt <= 1'b1;
+						3'b000: begin
+							case(funct12)
+								12'b000000000000: begin // "ecall"
+									// TODO: we have to get the a7 for the ecall number from regfile, a7/x17
+									ecall <= 1'b1;
+								end
+							endcase
 						end
 					endcase
 				end
 				// TODO: modify the data memory to support various load instructions
 				7'b0000011: begin 
-					hlt <= 0;
 					IsPFC <= 0;
 					PFC_PC <= 0;
 					MemWriteEn <= 0;
@@ -284,7 +285,6 @@ module controlUnit
 					endcase
 				end
 				7'b1110111: begin // "jalr"
-					hlt <= 0;
 					MemWriteEn <= 0;
 					MemReadEn <= 0;
 
@@ -306,7 +306,6 @@ module controlUnit
 				7'b0100011: begin
 					IsPFC <= 0;
 					PFC_PC <= 0;
-					hlt <= 0;
 					WriteRegister <= 0;
 					RegWriteEn <= 0;
 					MemReadEn <= 0;
@@ -328,7 +327,6 @@ module controlUnit
 				end
 				7'b1100011: begin
 					WriteRegister <= 0;
-					hlt <= 0;
 					RegWriteEn <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
@@ -363,7 +361,6 @@ module controlUnit
 				7'b0110111: begin // "lui"
 					IsPFC <= 0;
 					PFC_PC <= 0;
-					hlt <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
 
@@ -376,7 +373,6 @@ module controlUnit
 				7'b0010111: begin // "auipc"
 					IsPFC <= 0;
 					PFC_PC <= 0;
-					hlt <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
 
@@ -387,7 +383,6 @@ module controlUnit
 					aluop <= `ALU_OPCODE_ADD;
 				end
 				7'b1111111: begin // "jal"
-					hlt <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
 
@@ -402,7 +397,6 @@ module controlUnit
 				7'b1111110: begin // "addi20u"
 					IsPFC <= 0;
 					PFC_PC <= 0;
-					hlt <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
 
@@ -423,13 +417,14 @@ module registerFile
 	input clk, rst, we,
 	input [4:0] readRegister1, readRegister2, readRegister3, WriteRegister,
 	input `BIT_WIDTH writeData,
-	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3
+	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, syscall
 );
 
 	reg `BIT_WIDTH registers [0:31];
 	assign RegFileDataOut_1 = registers[readRegister1];
 	assign RegFileDataOut_2 = registers[readRegister2];
 	assign RegFileDataOut_3 = registers[readRegister3];
+	assign syscall = registers[17];
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(rst) begin
@@ -500,18 +495,18 @@ module CPU
 );
 
 	wire [31:0] Instruction, InstructionMemoryOut;
-	wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3;
+	wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, syscall;
 	wire `BIT_WIDTH DataBus, ALUResult, alu_in_1, alu_in_2;
 	wire `BIT_WIDTH PC, nextPC, PFC_PC;
 	wire [6:0] opcode;
 	wire [2:0] funct3;
 	wire [5:0] aluop;
 	wire [6:0] funct7;
+	wire [11:0] funct12;
 	wire [4:0] rs1, rs2, rd, WriteRegister;
 	wire [11:0] imm12_itype, imm12_stype;
 	wire [19:0] imm20;
-	wire clk;
-	wire IsPFC, RegWriteEn, MemReadEn, MemWriteEn;
+	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall, hlt;
 	
 	or hlt_logic(clk, InputClk, hlt);
 
@@ -542,6 +537,7 @@ module CPU
 		.opcode(opcode), 
 		.funct3(funct3), 
 		.funct7(funct7), 
+		.funct12(funct12),
 		.rst(rst), 
 		.rs1(rs1),
 		.rs2(rs2),
@@ -562,7 +558,7 @@ module CPU
 		.alu_in_1(alu_in_1),
 		.alu_in_2(alu_in_2),
 		.aluop(aluop), 
-		.hlt(hlt)
+		.ecall(ecall)
 	);
 
 	registerFile RF
@@ -577,7 +573,9 @@ module CPU
 		.writeData(DataBus), 
 		.RegFileDataOut_1(RegFileDataOut_1), 
 		.RegFileDataOut_2(RegFileDataOut_2),
-		.RegFileDataOut_3(RegFileDataOut_3)
+		.RegFileDataOut_3(RegFileDataOut_3),
+
+		.syscall(syscall)
 	);
 		
 	ALU alu
@@ -591,6 +589,7 @@ module CPU
 	assign opcode       = Instruction[6:0];
 	assign funct3       = Instruction[14:12];
 	assign funct7       = Instruction[31:25];
+	assign funct12      = Instruction[31:20];
 	assign rs1          = Instruction[19:15];
 	assign rs2          = Instruction[24:20];
 	assign rd           = Instruction[11:7];
@@ -605,5 +604,10 @@ module CPU
 	assign DataBusOut = RegFileDataOut_2;
 	assign DataBus = (MemReadEn) ? DataBusIn : ALUResult;
 	assign ControlBus = {MemWriteEn, MemReadEn, RegWriteEn};
+
+	assign hlt = (ecall) ? 
+	(
+		syscall == 64'd93
+	) : 1'b0;
 
 endmodule
