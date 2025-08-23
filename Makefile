@@ -101,3 +101,8 @@ run_hw:
 	else \
 		echo "Skipping hardware simulation for $(BENCH)"; \
 	fi
+
+syntax:
+	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -o /dev/null \
+	-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
+	$(SC_DIR)/Sim.v; \
