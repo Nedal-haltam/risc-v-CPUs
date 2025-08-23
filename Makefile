@@ -28,7 +28,7 @@ BENCHMARKS=\
 	"SumOfNumbers" \
 	"Swapping"
 
-.PHONY: all serial run_benchmark run_sw run_hw test
+.PHONY: all serial parallel parallel-inside run_benchmark run_sw run_hw test
 
 # constants
 IM_SIZE=4096
@@ -36,6 +36,12 @@ DM_SIZE=8192
 DM_BITS=13
 
 all: serial
+
+parallel:
+	@$(MAKE) parallel-inside -j > /dev/null 2>&1
+parallel-inside: $(BENCHMARKS)
+$(BENCHMARKS):
+	@$(MAKE) run_benchmark BENCH=$@
 
 serial: 
 	@i=1; total=`echo $(BENCHMARKS) | wc -w`; \
