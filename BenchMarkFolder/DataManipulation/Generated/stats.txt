@@ -1,7 +1,0 @@
-Comparing Software output with Hardware output
-1c1
-< Number of cycles consumed :               500000
----
-> Number of cycles consumed :         17
-Difference detected
--------------------------------------------------------------------------------------------------------------------------------------

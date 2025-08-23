@@ -266,7 +266,7 @@ module controlUnit
 					RegWriteEn <= 1'b1;
 					MemReadEn <= 1'b1;
 					alu_in_1 <= RegFileDataOut_1;
-					alu_in_2 <= alu_in_2 <= {{52{imm12_itype[11]}}, imm12_itype};
+					alu_in_2 <= {{52{imm12_itype[11]}}, imm12_itype};
 					aluop <= `ALU_OPCODE_ADD;
 					case(funct3)
 						3'b000: begin // "lb"
@@ -433,7 +433,7 @@ module registerFile
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(rst) begin
-			for(i=0; i<32; i = i + 1) registers[i] <= 0;
+			for(i = 0; i < 32; i = i + 1) registers[i] <= 0;
 		end
 		else if(we && WriteRegister != 0) begin
 			registers[WriteRegister] <= writeData;
@@ -465,10 +465,10 @@ always @ (*) begin
 		`ALU_OPCODE_SUB:  result <= operand1 - operand2;
 		`ALU_OPCODE_MUL:  result <= operand1 * operand2;
 		`ALU_OPCODE_SLL:  result <= operand1 << operand2;
-		`ALU_OPCODE_SLT:  result <= ($signed(operand1) < $signed(operand2)) ? 64'b1 : 64'b0;
-		`ALU_OPCODE_SEQ:  result <= (operand1 == operand2) ? 64'b1 : 64'b0;
-		`ALU_OPCODE_SNE:  result <= (operand1 != operand2) ? 64'b1 : 64'b0;
-		`ALU_OPCODE_SLTU: result <= ($unsigned(operand1) < $unsigned(operand2)) ? 64'b1 : 64'b0;
+		`ALU_OPCODE_SLT:  result <= ($signed(operand1) < $signed(operand2)) ? 64'd1 : 64'd0;
+		`ALU_OPCODE_SEQ:  result <= (operand1 == operand2) ? 64'd1 : 64'd0;
+		`ALU_OPCODE_SNE:  result <= (operand1 != operand2) ? 64'd1 : 64'd0;
+		`ALU_OPCODE_SLTU: result <= ($unsigned(operand1) < $unsigned(operand2)) ? 64'd1 : 64'd0;
 		`ALU_OPCODE_XOR:  result <= operand1 ^ operand2;
 		`ALU_OPCODE_DIV:  result <= ($signed(operand2) == 0) ? 64'd0 : $signed(operand1) / $signed(operand2);
 		`ALU_OPCODE_SRL:  result <= operand1 >> operand2;
@@ -505,16 +505,16 @@ module CPU
 	wire [4:0] rs1, rs2, rd, WriteRegister;
 	wire [11:0] imm12_itype, imm12_stype;
 	wire [19:0] imm20;
-	wire clk = InputClk;
+	wire clk;
 	wire IsPFC, RegWriteEn, MemReadEn, MemWriteEn;
 	
 	or hlt_logic(clk, InputClk, hlt);
 
 	always@(posedge clk , posedge rst) begin
 		if (rst)
-			CyclesConsumed <= 32'd0;
+			CyclesConsumed <= 64'd0;
 		else
-			CyclesConsumed <= CyclesConsumed + 32'd1;
+			CyclesConsumed <= CyclesConsumed + 64'd1;
 	end
 
 	programCounter pc
