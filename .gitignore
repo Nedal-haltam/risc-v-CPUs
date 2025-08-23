@@ -9,7 +9,7 @@
 !*.v
 !*.sh
 
-!*stats.txt
+!*diff.txt
 !*CAS_SC_OUT.txt 
 !*VERILOG_SC_OUT.txt 
 !*.INIT

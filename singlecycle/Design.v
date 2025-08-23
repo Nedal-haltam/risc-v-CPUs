@@ -433,7 +433,12 @@ module registerFile
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(rst) begin
-			for(i = 0; i < 32; i = i + 1) registers[i] <= 0;
+			for(i = 0; i < 32; i = i + 1) begin
+				if (i == 2)
+					registers[i] = `MEMORY_SIZE - 1;
+				else
+					registers[i] = 0;
+			end
 		end
 		else if(we && WriteRegister != 0) begin
 			registers[WriteRegister] <= writeData;

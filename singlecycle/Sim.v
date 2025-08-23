@@ -53,7 +53,7 @@ rst = 1; #(`reset) rst = 0;
 
 #(`MAX_CLOCKS);
 
-$display("Number of cycles consumed : %d", CyclesConsumed);
+$display("Number of cycles consumed : %d", CyclesConsumed[31:0]);
 #1;
 $finish;
 

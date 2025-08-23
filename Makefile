@@ -12,22 +12,21 @@ SC_DIR=./singlecycle
 SimulateSW=1
 SimulateHW=1
 
-BENCHMARKS="DataManipulation"
-# BENCHMARKS=\
-# 	"BinarySearch" \
-# 	"BubbleSort" \
-# 	"ControlFlowInstructions" \
-# 	"DataManipulation" \
-# 	"Fibonacci" \
-# 	"InsertionSort" \
-# 	"JR_Dependency" \
-# 	"MultiplicationUsingAddition" \
-# 	"RemoveDuplicates" \
-# 	"ScalarMultiplicationUsingAddition" \
-# 	"SelectionSort" \
-# 	"SparseMatrixCount" \
-# 	"SumOfNumbers" \
-# 	"Swapping"
+BENCHMARKS=\
+	"BinarySearch" \
+	"BubbleSort" \
+	"ControlFlowInstructions" \
+	"DataManipulation" \
+	"Fibonacci" \
+	"InsertionSort" \
+	"JR_Dependency" \
+	"MultiplicationUsingAddition" \
+	"RemoveDuplicates" \
+	"ScalarMultiplicationUsingAddition" \
+	"SelectionSort" \
+	"SparseMatrixCount" \
+	"SumOfNumbers" \
+	"Swapping"
 
 .PHONY: all serial run_benchmark run_sw run_hw test
 
@@ -49,14 +48,14 @@ serial:
 run_benchmark:
 	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated
 	@mkdir -p $(BENCHMARK_DIR)/$(BENCH)/Generated
-	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt
+	@rm -rf $(BENCHMARK_DIR)/$(BENCH)/Generated/diff.txt
 	@$(MAKE) run_sw SimulateSW=$(SimulateSW) SimulateHW=$(SimulateHW) BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 	@$(MAKE) run_hw SimulateSW=$(SimulateSW) SimulateHW=$(SimulateHW) BENCH="$(BENCH)" INDEX=$(INDEX) TOTAL=$(TOTAL)
 
 	@if [ "$(SimulateSW)" = "1" ] && [ "$(SimulateHW)" = "1" ]; then \
-		echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
-		diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
-		echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/stats.txt; \
+		echo "Comparing Software output with Hardware output" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/diff.txt; \
+		diff -a --color=never $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt >> $(BENCHMARK_DIR)/$(BENCH)/Generated/diff.txt 2>&1 || echo "Difference detected" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/diff.txt; \
+		echo "-------------------------------------------------------------------------------------------------------------------------------------" >> $(BENCHMARK_DIR)/$(BENCH)/Generated/diff.txt; \
 	else \
 		echo "Skipping benchmark $(BENCH)"; \
 		exit 0; \
