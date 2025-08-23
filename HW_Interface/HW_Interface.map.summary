@@ -1,0 +1,16 @@
+Analysis & Synthesis Status : Successful - Sun Jul 27 15:59:03 2025
+Quartus Prime Version : 23.1std.1 Build 993 05/14/2024 SC Lite Edition
+Revision Name : HW_Interface
+Top-level Entity Name : HW_Interface
+Family : MAX 10
+Total logic elements : 62
+    Total combinational functions : 62
+    Dedicated logic registers : 51
+Total registers : 51
+Total pins : 90
+Total virtual pins : 0
+Total memory bits : 0
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 0
+UFM blocks : 0
+ADC blocks : 0
