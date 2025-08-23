@@ -392,7 +392,7 @@ module controlUnit
 					MemWriteEn <= 0;
 
 					IsPFC <= 1'b1;
-					PFC_PC <= {{32{imm20[19]}}, imm20} << 1;
+					PFC_PC <= PC + ({{44{imm20[19]}}, imm20} << 1);
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
 					alu_in_1 <= PC;
