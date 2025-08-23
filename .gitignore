@@ -4,3 +4,10 @@
 /PipeLine/.qsys_edit
 /PipeLine
 *.vcd
+*.rpt
+*.summary
+*.sof
+*.pof
+*.cdf
+*.jdi
+*.done
