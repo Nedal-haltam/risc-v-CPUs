@@ -10,22 +10,21 @@ SC_DIR=./singlecycle
 SimulateSW=1
 SimulateHW=1
 
-BENCHMARKS="BinarySearch"
-# BENCHMARKS=\
-# 	"BinarySearch" \
-# 	"BubbleSort" \
-# 	"ControlFlowInstructions" \
-# 	"DataManipulation" \
-# 	"Fibonacci" \
-# 	"InsertionSort" \
-# 	"JR_Dependency" \
-# 	"MultiplicationUsingAddition" \
-# 	"RemoveDuplicates" \
-# 	"ScalarMultiplicationUsingAddition" \
-# 	"SelectionSort" \
-# 	"SparseMatrixCount" \
-# 	"SumOfNumbers" \
-# 	"Swapping"
+BENCHMARKS=\
+	"BinarySearch" \
+	"BubbleSort" \
+	"ControlFlowInstructions" \
+	"DataManipulation" \
+	"Fibonacci" \
+	"InsertionSort" \
+	"JR_Dependency" \
+	"MultiplicationUsingAddition" \
+	"RemoveDuplicates" \
+	"ScalarMultiplicationUsingAddition" \
+	"SelectionSort" \
+	"SparseMatrixCount" \
+	"SumOfNumbers" \
+	"Swapping"
 
 .PHONY: all serial parallel parallel-inside run_benchmark run_sw run_hw test
 
