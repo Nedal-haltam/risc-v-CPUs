@@ -45,16 +45,21 @@ reg done;
 wire rst;
 wire fillbuf;
 wire datatrigger;
+wire `BIT_WIDTH AddressBus, DataBusIn1, DataBusOut1, DataBusOut2, AddressBus2;
+wire [2:0] ControlBus;
 
 `define STR_LEN 10
-integer i;
-always@(posedge clk, posedge fillbuf) begin
-	if (fillbuf) begin
-		for (i = 0; i < `STR_LEN - 2; i = i + 1) begin : FillData
-			databuff[i] = "a" + i;
-		end
-		databuff[`STR_LEN - 2] = "\n";
-		databuff[`STR_LEN - 1] = 0;
+reg [31:0] i;
+always@(posedge clk, posedge fillbuf, posedge rst) begin
+	if (rst) begin
+		i = 0;
+	end
+	else if (fillbuf) begin
+		databuff[i] = DataBusOut2[7:0];
+		i = i + 32'd1;
+	end
+	else begin
+		databuff[i] = 0;
 	end
 end
 
@@ -80,30 +85,37 @@ assign clk = ClockDivider[`CLK_BIT];
 assign rst = ~KEY[0];
 assign fillbuf = ~KEY[1];
 
-wire `BIT_WIDTH AddressBus, DataBusIn, DataBusOut;
-wire [2:0] ControlBus;
-
+wire `BIT_WIDTH CyclesConsumed;
 CPU cpu_dut
 (
-	.InputClk(clk), 
+	.InputClk(clk),
 	.rst(rst),
-	.AddressBus(AddressBus),
-	.DataBusIn(DataBusIn),
-	.DataBusOut(DataBusOut),
+	.AddressBus(AddressBus1),
+	.DataBusIn(DataBusIn1),
+	.DataBusOut(DataBusOut1),
 	.ControlBus(ControlBus),
-	.CyclesConsumed()
+	.CyclesConsumed(CyclesConsumed)
 );
 
+// TODO: use real altera dual port ram 2 read / 2 write
 DataMemory MemoryModule
 (
-	.clock(~clk), 
-    .MemReadEn(ControlBus[1]), 
-    .MemWriteEn(ControlBus[2]),
-	.AddressBus(AddressBus),
-	.DataMemoryInput(DataBusOut),
-	.DataMemoryOutput(DataBusIn)
+	.clock1(~clk),
+    .MemReadEn1(ControlBus[1]),
+    .MemWriteEn1(ControlBus[2]),
+	.AddressBus1(AddressBus1),
+	.DataMemoryInput1(DataBusOut1),
+	.DataMemoryOutput1(DataBusIn1),
+
+	.clock2(~clk),
+    .MemReadEn2(fillbuf),
+    .MemWriteEn2(1'b0),
+	.AddressBus2(AddressBus2), // TODO: drive that AddressBus2, take the initial address from the CPU, potentially the addressbus of the cpu
+	.DataMemoryInput2(DataBusOut2),
+	.DataMemoryOutput2()
 );
 
+assign HEX0 = CyclesConsumed[7:0];
 
 endmodule
 
