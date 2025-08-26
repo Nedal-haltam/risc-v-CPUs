@@ -1,7 +1,5 @@
 MAKEFLAGS += --no-print-directory
 # Tools
-ASSEMBLER=../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.exe
-CAS=../risc-v-CAS/bin/Debug/net8.0/CAS.exe
 IVERILOG=iverilog
 VVP=vvp
 
@@ -12,21 +10,22 @@ SC_DIR=./singlecycle
 SimulateSW=1
 SimulateHW=1
 
-BENCHMARKS=\
-	"BinarySearch" \
-	"BubbleSort" \
-	"ControlFlowInstructions" \
-	"DataManipulation" \
-	"Fibonacci" \
-	"InsertionSort" \
-	"JR_Dependency" \
-	"MultiplicationUsingAddition" \
-	"RemoveDuplicates" \
-	"ScalarMultiplicationUsingAddition" \
-	"SelectionSort" \
-	"SparseMatrixCount" \
-	"SumOfNumbers" \
-	"Swapping"
+BENCHMARKS="BinarySearch"
+# BENCHMARKS=\
+# 	"BinarySearch" \
+# 	"BubbleSort" \
+# 	"ControlFlowInstructions" \
+# 	"DataManipulation" \
+# 	"Fibonacci" \
+# 	"InsertionSort" \
+# 	"JR_Dependency" \
+# 	"MultiplicationUsingAddition" \
+# 	"RemoveDuplicates" \
+# 	"ScalarMultiplicationUsingAddition" \
+# 	"SelectionSort" \
+# 	"SparseMatrixCount" \
+# 	"SumOfNumbers" \
+# 	"Swapping"
 
 .PHONY: all serial parallel parallel-inside run_benchmark run_sw run_hw test
 
@@ -69,7 +68,7 @@ run_benchmark:
 
 run_sw:
 	@echo "[$(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
-	$(ASSEMBLER) \
+	dotnet ../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll \
 		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
 		-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
 		-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
@@ -80,7 +79,7 @@ run_sw:
 
 	@if [ "$(SimulateSW)" = "1" ]; then \
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle"; \
-		$(CAS) singlecycle \
+		dotnet ../risc-v-CAS/bin/Debug/net8.0/CAS.dll singlecycle \
 			-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
 			-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
 			-o $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt \
@@ -94,15 +93,15 @@ run_sw:
 run_hw:
 	@if [ "$(SimulateHW)" = "1" ]; then \
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
-		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
+		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -I./singlecycle -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
 			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
-			$(SC_DIR)/Sim.v; \
+			./Sim.v; \
 		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
 	else \
 		echo "Skipping hardware simulation for $(BENCH)"; \
 	fi
 
 syntax:
-	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -o /dev/null \
+	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -I./singlecycle -o /dev/null \
 	-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
-	$(SC_DIR)/Sim.v; \
+	./Sim.v; \

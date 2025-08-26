@@ -3,7 +3,7 @@
 
 `include "./singlecycle/defs.h"
 
-`include "./singlecycle/Design.v"
+`include "./singlecycle/CPU.v"
 `include "./singlecycle/DataMemory.v"
 
 module SingleCycle_sim;

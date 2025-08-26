@@ -83,5 +83,15 @@ assign reset = ~KEY[0];
 assign fillbuf = ~KEY[1];
 
 
+CPU cpu_dut
+(
+	// input InputClk, rst,
+	// output `BIT_WIDTH AddressBus,
+	// input `BIT_WIDTH DataBusIn,
+	// output `BIT_WIDTH DataBusOut,
+	// output [2:0] ControlBus,
+	// output reg `BIT_WIDTH CyclesConsumed
+);
+
 endmodule
 
