@@ -26,12 +26,12 @@ CPU dut
 
 DataMemory MemoryModule
 (
-	.clock(~InputClk), 
-    .MemReadEn(ControlBus[1]), 
-    .MemWriteEn(ControlBus[2]),
-	.AddressBus(AddressBus),
-	.DataMemoryInput(DataBusOut),
-	.DataMemoryOutput(DataBusIn)
+	.clock1(~InputClk), 
+    .MemReadEn1(ControlBus[1]), 
+    .MemWriteEn1(ControlBus[2]),
+	.AddressBus1(AddressBus),
+	.DataMemoryInput1(DataBusOut),
+	.DataMemoryOutput1(DataBusIn)
 );
 
 always #1 InputClk <= ~InputClk;
