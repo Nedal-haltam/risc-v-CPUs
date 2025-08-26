@@ -59,7 +59,7 @@ for (i = 0; i <= `MEMORY_SIZE/2; i = i + 1)
 for (i = `MEMORY_SIZE/2+1; i <= (`MEMORY_SIZE-1); i = i + 1)
     DataMem[i] <= 0;
 
-`include "DM_INIT.INIT"
+`include `DM_INIT_FILE_PATH
 end
 
 `ifdef simulate

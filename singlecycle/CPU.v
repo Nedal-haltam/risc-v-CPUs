@@ -51,7 +51,7 @@ module IM
 	initial begin
 		for (i = 0; i <= 4095; i = i + 1)
 			InstMem[i] <= 0;
-		`include "IM_INIT.INIT"
+		`include `IM_INIT_FILE_PATH
 	end
 endmodule
 
