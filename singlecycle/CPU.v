@@ -41,7 +41,7 @@ module IM
 	input `BIT_WIDTH addr,
 	output [31:0] Data_Out
 );
-	reg [7:0] InstMem [0 : 4096];
+	reg [7:0] InstMem [0 : 4095];
 	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[11:0] + 0];
 	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[11:0] + 1];
 	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[11:0] + 2];
