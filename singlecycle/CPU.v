@@ -1,23 +1,5 @@
 `include "defs.h"
 
-`define ALU_OPCODE_ADD 6'd1
-`define ALU_OPCODE_SUB 6'd2
-`define ALU_OPCODE_MUL 6'd3
-`define ALU_OPCODE_SLL 6'd4
-`define ALU_OPCODE_SLT 6'd5
-`define ALU_OPCODE_SEQ 6'd6
-`define ALU_OPCODE_SNE 6'd7
-`define ALU_OPCODE_SLTU 6'd8
-`define ALU_OPCODE_XOR 6'd9
-`define ALU_OPCODE_DIV 6'd10
-`define ALU_OPCODE_SRL 6'd11
-`define ALU_OPCODE_SRA 6'd12
-`define ALU_OPCODE_DIVU 6'd13
-`define ALU_OPCODE_OR 6'd14
-`define ALU_OPCODE_REM 6'd15
-`define ALU_OPCODE_AND 6'd16
-`define ALU_OPCODE_REMU 6'd17
-
 module programCounter 
 (
 	input clk, rst, 
@@ -79,6 +61,8 @@ module controlUnit
 	output reg `BIT_WIDTH alu_in_1,
 	output reg `BIT_WIDTH alu_in_2,
 	output reg [5:0] aluop,
+	output reg [3:0] loadtype,
+	output reg [3:0] storetype,
 	output reg ecall
 );
 	always @(*) begin
@@ -92,6 +76,9 @@ module controlUnit
 			alu_in_1 <= 0;
 			alu_in_2 <= 0;
 			aluop <= 0;
+			loadtype <= 0;
+			storetype <= 0;
+			ecall <= 0;
 		end
 		else begin
 			case(opcode)
@@ -101,6 +88,9 @@ module controlUnit
 					PFC_PC <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -199,6 +189,9 @@ module controlUnit
 					MemWriteEn <= 0;
 					IsPFC <= 0;
 					PFC_PC <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					RegWriteEn <= 1'b1;
 					WriteRegister <= rd;
@@ -248,22 +241,25 @@ module controlUnit
 					alu_in_1 <= 0;
 					alu_in_2 <= 0;
 					aluop <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+
 					case(funct3)
 						3'b000: begin
 							case(funct12)
 								12'b000000000000: begin // "ecall"
-									// TODO: we have to get the a7 for the ecall number from regfile, a7/x17
 									ecall <= 1'b1;
 								end
 							endcase
 						end
 					endcase
 				end
-				// TODO: modify the data memory to support various load instructions
 				7'b0000011: begin 
 					IsPFC <= 0;
 					PFC_PC <= 0;
 					MemWriteEn <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -273,22 +269,31 @@ module controlUnit
 					aluop <= `ALU_OPCODE_ADD;
 					case(funct3)
 						3'b000: begin // "lb"
+							loadtype <= `LOAD_BYTE;
 						end
 						3'b001: begin // "lh"
+							loadtype <= `LOAD_HALFWORD;
 						end
 						3'b010: begin // "lw"
+							loadtype <= `LOAD_WORD;
 						end
 						3'b011: begin // "ld"
+							loadtype <= `LOAD_DOUBLEWORD;
 						end
 						3'b100: begin // "lbu"
+							loadtype <= `LOAD_BYTE_UNSIGNED;
 						end
 						3'b101: begin // "lhu"
+							loadtype <= `LOAD_HALFWORD_UNSIGNED;
 						end
 					endcase
 				end
 				7'b1110111: begin // "jalr"
 					MemWriteEn <= 0;
 					MemReadEn <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					WriteRegister <= rd;
 					IsPFC <= 1'b1;
@@ -304,13 +309,14 @@ module controlUnit
 				end
 				// end of I-TYPE instructions
 				// start of S-TYPE instructions
-				// TODO: modify the data memory to support various store instructions
 				7'b0100011: begin
 					IsPFC <= 0;
 					PFC_PC <= 0;
 					WriteRegister <= 0;
 					RegWriteEn <= 0;
 					MemReadEn <= 0;
+					loadtype <= 0;
+					ecall <= 0;
 
 					MemWriteEn <= 1'b1;
 					alu_in_1 <= RegFileDataOut_1;
@@ -318,12 +324,16 @@ module controlUnit
 					aluop <= `ALU_OPCODE_ADD;
 					case(funct3)
 						3'b000: begin // "sb"
+							storetype <= `STORE_BYTE;
 						end
 						3'b001: begin // "sh"
+							storetype <= `STORE_HALFWORD;
 						end
 						3'b010: begin // "sw"
+							storetype <= `STORE_WORD;
 						end
 						3'b011: begin // "sd"
+							storetype <= `STORE_DOUBLEWORD;
 						end
 					endcase
 				end
@@ -335,6 +345,9 @@ module controlUnit
 					alu_in_1 <= 0;
 					alu_in_2 <= 0;
 					aluop <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					PFC_PC <= PC + ({{52{imm12_stype[11]}}, imm12_stype} << 1);
 					case(funct3)
@@ -365,6 +378,9 @@ module controlUnit
 					PFC_PC <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -377,6 +393,9 @@ module controlUnit
 					PFC_PC <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -387,6 +406,9 @@ module controlUnit
 				7'b1111111: begin // "jal"
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					IsPFC <= 1'b1;
 					PFC_PC <= PC + ({{44{imm20[19]}}, imm20} << 1);
@@ -401,6 +423,9 @@ module controlUnit
 					PFC_PC <= 0;
 					MemReadEn <= 0;
 					MemWriteEn <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -492,7 +517,7 @@ module CPU
 	output `BIT_WIDTH AddressBus,
 	input `BIT_WIDTH DataBusIn,
 	output `BIT_WIDTH DataBusOut,
-	output [2:0] ControlBus,
+	output [10:0] ControlBus,
 	output reg `BIT_WIDTH CyclesConsumed
 );
 
@@ -508,9 +533,10 @@ module CPU
 	wire [4:0] rs1, rs2, rd, WriteRegister;
 	wire [11:0] imm12_itype, imm12_stype;
 	wire [19:0] imm20;
-	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall, hlt;
+	wire [3:0] loadtype, storetype;
+	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall, exit;
 	
-	or hlt_logic(clk, InputClk, hlt);
+	or exit_logic(clk, InputClk, exit);
 
 	always@(posedge clk , posedge rst) begin
 		if (rst)
@@ -560,6 +586,8 @@ module CPU
 		.alu_in_1(alu_in_1),
 		.alu_in_2(alu_in_2),
 		.aluop(aluop), 
+		.loadtype(loadtype),
+		.storetype(storetype),
 		.ecall(ecall)
 	);
 
@@ -605,11 +633,8 @@ module CPU
 	assign AddressBus = ALUResult;
 	assign DataBusOut = RegFileDataOut_2;
 	assign DataBus = (MemReadEn) ? DataBusIn : ALUResult;
-	assign ControlBus = {MemWriteEn, MemReadEn, RegWriteEn};
+	assign ControlBus = {storetype, loadtype, MemWriteEn, MemReadEn, RegWriteEn};
 
-	assign hlt = (ecall) ? 
-	(
-		syscall == 64'd93
-	) : 1'b0;
+	assign exit = ecall && syscall == 64'd93;
 
 endmodule

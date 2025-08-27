@@ -46,7 +46,7 @@ wire rst;
 wire fillbuf;
 wire datatrigger;
 wire `BIT_WIDTH AddressBus, DataBusIn1, DataBusOut1, DataBusOut2, AddressBus2;
-wire [2:0] ControlBus;
+wire [10:0] ControlBus;
 
 `define STR_LEN 10
 reg [31:0] i;
@@ -101,6 +101,8 @@ CPU cpu_dut
 DataMemory MemoryModule
 (
 	.clock1(~clk),
+	.loadtype1(ControlBus[6:3]),
+	.storetype1(ControlBus[10:7]),
     .MemReadEn1(ControlBus[1]),
     .MemWriteEn1(ControlBus[2]),
 	.AddressBus1(AddressBus1),
@@ -108,6 +110,7 @@ DataMemory MemoryModule
 	.DataMemoryOutput1(DataBusIn1),
 
 	.clock2(~clk),
+	.loadtype2(`LOAD_BYTE), // TODO: drive the loadtype2, potentially always byte
     .MemReadEn2(fillbuf),
     .MemWriteEn2(1'b0),
 	.AddressBus2(AddressBus2), // TODO: drive the AddressBus2, take the initial address from the CPU, potentially the addressbus of the cpu

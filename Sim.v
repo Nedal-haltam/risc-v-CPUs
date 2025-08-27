@@ -10,7 +10,7 @@ module SingleCycle_sim;
 
 reg InputClk = 1, rst = 0;
 wire `BIT_WIDTH AddressBus, DataBusIn, DataBusOut;
-wire [2:0] ControlBus;
+wire [10:0] ControlBus;
 wire `BIT_WIDTH CyclesConsumed;
 
 CPU dut
@@ -27,6 +27,8 @@ CPU dut
 DataMemory MemoryModule
 (
 	.clock1(~InputClk), 
+	.loadtype1(ControlBus[6:3]),
+	.storetype1(ControlBus[10:7]),
     .MemReadEn1(ControlBus[1]), 
     .MemWriteEn1(ControlBus[2]),
 	.AddressBus1(AddressBus),
