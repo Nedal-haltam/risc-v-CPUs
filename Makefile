@@ -108,7 +108,7 @@ TEST_DIR=./singlecycle/test
 test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	dotnet ../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll \
+	@dotnet ../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll \
 		$(TEST_DIR)/test.S \
 		-mc $(TEST_DIR)/Generated/MC.txt \
 		-dm $(TEST_DIR)/Generated/DM.txt \
