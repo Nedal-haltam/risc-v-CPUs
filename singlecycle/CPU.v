@@ -1,4 +1,4 @@
-`include "./defs.h"
+`include "defs.h"
 
 `define ALU_OPCODE_ADD 6'd1
 `define ALU_OPCODE_SUB 6'd2

@@ -97,7 +97,7 @@ CPU cpu_dut
 	.CyclesConsumed(CyclesConsumed)
 );
 
-// TODO: use real altera dual port ram 2 read / 2 write
+// TODO: use real altera dual-port ram 2 read / 2 write
 DataMemory MemoryModule
 (
 	.clock1(~clk),
@@ -110,7 +110,7 @@ DataMemory MemoryModule
 	.clock2(~clk),
     .MemReadEn2(fillbuf),
     .MemWriteEn2(1'b0),
-	.AddressBus2(AddressBus2), // TODO: drive that AddressBus2, take the initial address from the CPU, potentially the addressbus of the cpu
+	.AddressBus2(AddressBus2), // TODO: drive the AddressBus2, take the initial address from the CPU, potentially the addressbus of the cpu
 	.DataMemoryInput2(DataBusOut2),
 	.DataMemoryOutput2()
 );
