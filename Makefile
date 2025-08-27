@@ -29,8 +29,7 @@ BENCHMARKS=\
 .PHONY: all serial parallel parallel-inside run_benchmark run_sw run_hw test
 
 # constants
-IM_SIZE=4096
-DM_SIZE=8192
+MEM_SIZE=8192
 DM_BITS=13
 
 all: serial
@@ -82,8 +81,8 @@ run_sw:
 			-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
 			-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
 			-o $(BENCHMARK_DIR)/$(BENCH)/Generated/CAS_SC_OUT.txt \
-			--im-size $(IM_SIZE) \
-			--dm-size $(DM_SIZE); \
+			--im-size $(MEM_SIZE) \
+			--dm-size $(MEM_SIZE); \
 	else \
 		echo "Skipping software simulation for $(BENCH)"; \
 	fi
@@ -93,7 +92,7 @@ run_hw:
 	@if [ "$(SimulateHW)" = "1" ]; then \
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
 		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -I./singlecycle -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
-			-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
+			-D MEMORY_SIZE=$(MEM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
 			./Sim.v; \
 		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
 	else \
@@ -102,5 +101,5 @@ run_hw:
 
 syntax:
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -I./singlecycle -o /dev/null \
-	-D MEMORY_SIZE=$(DM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
+	-D MEMORY_SIZE=$(MEM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
 	./Sim.v; \

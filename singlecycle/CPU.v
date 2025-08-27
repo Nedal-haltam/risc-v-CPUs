@@ -41,7 +41,7 @@ module IM
 	input `BIT_WIDTH addr,
 	output [31:0] Data_Out
 );
-	reg [7:0] InstMem [0 : 4095];
+	reg [7 : 0] InstMem [0 : (`MEMORY_SIZE-1)];
 	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[11:0] + 0];
 	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[11:0] + 1];
 	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[11:0] + 2];
@@ -49,7 +49,9 @@ module IM
 
 	integer i;
 	initial begin
-		for (i = 0; i <= 4095; i = i + 1)
+		for (i = 0; i <= `MEMORY_SIZE/2; i = i + 1)
+			InstMem[i] <= 0;
+		for (i = `MEMORY_SIZE/2+1; i <= (`MEMORY_SIZE-1); i = i + 1)
 			InstMem[i] <= 0;
 		`include `IM_INIT_FILE_PATH
 	end
