@@ -103,3 +103,16 @@ syntax:
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -I./singlecycle -o /dev/null \
 	-D MEMORY_SIZE=$(MEM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
 	./Sim.v; \
+
+TEST_DIR=./singlecycle/test
+test:
+	@rm -rf $(TEST_DIR)/Generated
+	@mkdir -p $(TEST_DIR)/Generated
+	dotnet ../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll \
+		$(TEST_DIR)/test.S \
+		-mc $(TEST_DIR)/Generated/MC.txt \
+		-dm $(TEST_DIR)/Generated/DM.txt \
+		--im-init $(TEST_DIR)/Generated/IM_INIT.INIT \
+		--dm-init $(TEST_DIR)/Generated/DM_INIT.INIT \
+		--im-mif $(TEST_DIR)/Generated/InstMem_MIF.mif \
+		--dm-mif $(TEST_DIR)/Generated/DataMem_MIF.mif; \
