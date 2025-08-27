@@ -1,5 +1,6 @@
 MAKEFLAGS += --no-print-directory
 # Tools
+ASSEMBLER_DLL=../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll
 IVERILOG=iverilog
 VVP=vvp
 
@@ -66,7 +67,7 @@ run_benchmark:
 
 run_sw:
 	@echo "[$(INDEX)/$(TOTAL)]: Assembling $(BENCH)..."; \
-	dotnet ../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll \
+	dotnet $(ASSEMBLER_DLL) \
 		$(BENCHMARK_DIR)/$(BENCH)/$(BENCH).S \
 		-mc $(BENCHMARK_DIR)/$(BENCH)/Generated/MC.txt \
 		-dm $(BENCHMARK_DIR)/$(BENCH)/Generated/DM.txt \
@@ -108,7 +109,7 @@ TEST_DIR=./singlecycle/test
 test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	@dotnet ../risc-v-Assembler/bin/Debug/net8.0/risc-v-Assembler.dll \
+	@dotnet $(ASSEMBLER_DLL) \
 		$(TEST_DIR)/test.S \
 		-mc $(TEST_DIR)/Generated/MC.txt \
 		-dm $(TEST_DIR)/Generated/DM.txt \
