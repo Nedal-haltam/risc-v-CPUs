@@ -110,7 +110,7 @@ DataMemory MemoryModule
 	.DataMemoryOutput1(DataBusIn1),
 
 	.clock2(~clk),
-	.loadtype2(`LOAD_BYTE), // TODO: drive the loadtype2, potentially always byte
+	.loadtype2(`LOAD_BYTE), // TODO: drive the loadtype2, for now always byte
     .MemReadEn2(fillbuf),
     .MemWriteEn2(1'b0),
 	.AddressBus2(AddressBus2), // TODO: drive the AddressBus2, take the initial address from the CPU, potentially the addressbus of the cpu

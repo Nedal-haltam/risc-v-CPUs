@@ -63,7 +63,7 @@ module controlUnit
 	output reg [5:0] aluop,
 	output reg [3:0] loadtype,
 	output reg [3:0] storetype,
-	output reg ecall
+	output reg ecall_enable
 );
 	always @(*) begin
 		if(rst) begin
@@ -78,7 +78,7 @@ module controlUnit
 			aluop <= 0;
 			loadtype <= 0;
 			storetype <= 0;
-			ecall <= 0;
+			ecall_enable <= 0;
 		end
 		else begin
 			case(opcode)
@@ -90,7 +90,7 @@ module controlUnit
 					MemWriteEn <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -191,7 +191,7 @@ module controlUnit
 					PFC_PC <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					RegWriteEn <= 1'b1;
 					WriteRegister <= rd;
@@ -247,8 +247,8 @@ module controlUnit
 					case(funct3)
 						3'b000: begin
 							case(funct12)
-								12'b000000000000: begin // "ecall"
-									ecall <= 1'b1;
+								12'b000000000000: begin // "ecall_enable"
+									ecall_enable <= 1'b1;
 								end
 							endcase
 						end
@@ -259,7 +259,7 @@ module controlUnit
 					PFC_PC <= 0;
 					MemWriteEn <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -293,7 +293,7 @@ module controlUnit
 					MemReadEn <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					WriteRegister <= rd;
 					IsPFC <= 1'b1;
@@ -316,7 +316,7 @@ module controlUnit
 					RegWriteEn <= 0;
 					MemReadEn <= 0;
 					loadtype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					MemWriteEn <= 1'b1;
 					alu_in_1 <= RegFileDataOut_1;
@@ -347,7 +347,7 @@ module controlUnit
 					aluop <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					PFC_PC <= PC + ({{52{imm12_stype[11]}}, imm12_stype} << 1);
 					case(funct3)
@@ -380,7 +380,7 @@ module controlUnit
 					MemWriteEn <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -395,7 +395,7 @@ module controlUnit
 					MemWriteEn <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -408,7 +408,7 @@ module controlUnit
 					MemWriteEn <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					IsPFC <= 1'b1;
 					PFC_PC <= PC + ({{44{imm20[19]}}, imm20} << 1);
@@ -425,7 +425,7 @@ module controlUnit
 					MemWriteEn <= 0;
 					loadtype <= 0;
 					storetype <= 0;
-					ecall <= 0;
+					ecall_enable <= 0;
 
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
@@ -444,14 +444,14 @@ module registerFile
 	input clk, rst, we,
 	input [4:0] readRegister1, readRegister2, readRegister3, WriteRegister,
 	input `BIT_WIDTH writeData,
-	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, syscall
+	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, ecall_code
 );
 
 	reg `BIT_WIDTH registers [0:31];
 	assign RegFileDataOut_1 = registers[readRegister1];
 	assign RegFileDataOut_2 = registers[readRegister2];
 	assign RegFileDataOut_3 = registers[readRegister3];
-	assign syscall = registers[17];
+	assign ecall_code = registers[17];
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
 		integer i;
 		if(rst) begin
@@ -522,7 +522,7 @@ module CPU
 );
 
 	wire [31:0] Instruction, InstructionMemoryOut;
-	wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, syscall;
+	wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, ecall_code;
 	wire `BIT_WIDTH DataBus, ALUResult, alu_in_1, alu_in_2;
 	wire `BIT_WIDTH PC, nextPC, PFC_PC;
 	wire [6:0] opcode;
@@ -534,9 +534,9 @@ module CPU
 	wire [11:0] imm12_itype, imm12_stype;
 	wire [19:0] imm20;
 	wire [3:0] loadtype, storetype;
-	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall, exit;
+	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall_enable, exit_ecall;
 	
-	or exit_logic(clk, InputClk, exit);
+	or exit_ecall_logic(clk, InputClk, exit_ecall);
 
 	always@(posedge clk , posedge rst) begin
 		if (rst)
@@ -588,7 +588,7 @@ module CPU
 		.aluop(aluop), 
 		.loadtype(loadtype),
 		.storetype(storetype),
-		.ecall(ecall)
+		.ecall_enable(ecall_enable)
 	);
 
 	registerFile RF
@@ -605,7 +605,7 @@ module CPU
 		.RegFileDataOut_2(RegFileDataOut_2),
 		.RegFileDataOut_3(RegFileDataOut_3),
 
-		.syscall(syscall)
+		.ecall_code(ecall_code)
 	);
 		
 	ALU alu
@@ -627,14 +627,14 @@ module CPU
 	assign imm12_stype  = {Instruction[31:25], Instruction[11:7]};
 	assign imm20        = Instruction[31:12];
 	
-	assign nextPC = (IsPFC) ? (PFC_PC) : PC + 64'd4;
-	assign Instruction = (rst) ? 0 : InstructionMemoryOut;
+	assign nextPC       = (IsPFC) ? (PFC_PC) : PC + 64'd4;
+	assign Instruction  = (rst) ? 0 : InstructionMemoryOut;
 
-	assign AddressBus = ALUResult;
-	assign DataBusOut = RegFileDataOut_2;
-	assign DataBus = (MemReadEn) ? DataBusIn : ALUResult;
-	assign ControlBus = {storetype, loadtype, MemWriteEn, MemReadEn, RegWriteEn};
+	assign AddressBus   = ALUResult;
+	assign DataBusOut   = RegFileDataOut_2;
+	assign DataBus      = (MemReadEn) ? DataBusIn : ALUResult;
+	assign ControlBus   = {storetype, loadtype, MemWriteEn, MemReadEn, RegWriteEn};
 
-	assign exit = ecall && syscall == 64'd93;
+	assign exit_ecall   = ecall_enable && ecall_code == `EXIT_ECALL;
 
 endmodule
