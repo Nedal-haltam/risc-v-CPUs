@@ -50,7 +50,7 @@ wire `BIT_WIDTH write_ecall_address;
 wire `BIT_WIDTH write_ecall_len;
 wire datatrigger;
 
-wire `BIT_WIDTH AddressBus1, DataBusIn1, DataBusOut1, DataBusOut2, AddressBus2;
+wire `BIT_WIDTH AddressBus1, DataBusIn1, DataBusOut1, DataBusOut2;
 wire [10:0] ControlBus;
 wire `BIT_WIDTH CyclesConsumed;
 
