@@ -444,25 +444,25 @@ module registerFile
 	input clk, rst, we,
 	input [4:0] readRegister1, readRegister2, readRegister3, WriteRegister,
 	input `BIT_WIDTH writeData,
-	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, ecall_code
+	output wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3,
+	output wire `BIT_WIDTH ecall_code,
+	output wire `BIT_WIDTH write_ecall_fd, write_ecall_address, write_ecall_len
 );
 
 	reg `BIT_WIDTH registers [0:31];
-	assign RegFileDataOut_1 = registers[readRegister1];
-	assign RegFileDataOut_2 = registers[readRegister2];
-	assign RegFileDataOut_3 = registers[readRegister3];
-	assign ecall_code = registers[17];
+	assign RegFileDataOut_1    = registers[readRegister1];
+	assign RegFileDataOut_2    = registers[readRegister2];
+	assign RegFileDataOut_3    = registers[readRegister3];
+	assign ecall_code          = registers[17];
+	assign write_ecall_fd      = registers[10];
+	assign write_ecall_address = registers[11];
+	assign write_ecall_len     = registers[12];
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
-		integer i;
-		if(rst) begin
-			for(i = 0; i < 32; i = i + 1) begin
-				if (i == 2)
-					registers[i] = `MEMORY_SIZE - 1;
-				else
-					registers[i] = 0;
-			end
+		if (rst) begin
+			registers[0] <= 0;
+			registers[2] <= `MEMORY_SIZE - 1;
 		end
-		else if(we && WriteRegister != 0) begin
+		else if (we && WriteRegister != 0) begin
 			registers[WriteRegister] <= writeData;
 		end
 	end
@@ -514,12 +514,20 @@ endmodule
 module CPU
 (
 	input InputClk, rst,
+	output cpu_clk,
 	output `BIT_WIDTH AddressBus,
 	input `BIT_WIDTH DataBusIn,
 	output `BIT_WIDTH DataBusOut,
 	output [10:0] ControlBus,
 	output reg `BIT_WIDTH CyclesConsumed
-);
+
+	,output exit_ecall
+	,input write_ecall_finished
+	,output reg write_ecall
+	,output `BIT_WIDTH write_ecall_fd
+	,output `BIT_WIDTH write_ecall_address
+	,output `BIT_WIDTH write_ecall_len
+	);
 
 	wire [31:0] Instruction, InstructionMemoryOut;
 	wire `BIT_WIDTH RegFileDataOut_1, RegFileDataOut_2, RegFileDataOut_3, ecall_code;
@@ -534,9 +542,21 @@ module CPU
 	wire [11:0] imm12_itype, imm12_stype;
 	wire [19:0] imm20;
 	wire [3:0] loadtype, storetype;
-	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall_enable, exit_ecall;
-	
-	or exit_ecall_logic(clk, InputClk, exit_ecall);
+	wire clk, IsPFC, RegWriteEn, MemReadEn, MemWriteEn, ecall_enable;
+
+	or exit_ecall_logic(clk, InputClk, exit_ecall | write_ecall);
+
+	always@(posedge InputClk, posedge rst) begin
+		if (rst) begin
+			write_ecall <= 1'b0;
+		end
+		else if (write_ecall) begin
+			write_ecall <= ~write_ecall_finished;
+		end
+		else begin
+			write_ecall <= ecall_enable && ecall_code == `WRITE_ECALL;
+		end
+	end
 
 	always@(posedge clk , posedge rst) begin
 		if (rst)
@@ -605,7 +625,10 @@ module CPU
 		.RegFileDataOut_2(RegFileDataOut_2),
 		.RegFileDataOut_3(RegFileDataOut_3),
 
-		.ecall_code(ecall_code)
+		.ecall_code(ecall_code),
+		.write_ecall_fd(write_ecall_fd),
+		.write_ecall_address(write_ecall_address),
+		.write_ecall_len(write_ecall_len)
 	);
 		
 	ALU alu
@@ -636,5 +659,6 @@ module CPU
 	assign ControlBus   = {storetype, loadtype, MemWriteEn, MemReadEn, RegWriteEn};
 
 	assign exit_ecall   = ecall_enable && ecall_code == `EXIT_ECALL;
+	assign cpu_clk      = clk;
 
 endmodule

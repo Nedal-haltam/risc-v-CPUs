@@ -52,5 +52,6 @@
     `define STORE_DOUBLEWORD  (3'd4)
 
     `define EXIT_ECALL  (64'd93)
+    `define WRITE_ECALL (64'd64)
 
 `endif // DEFS_H

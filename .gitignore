@@ -13,3 +13,4 @@
 *.done
 *.qws
 *.smsg
+/singlecycle/test/Generated

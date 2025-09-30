@@ -152,15 +152,15 @@ void loop() {
     }
     if (DataIn != 0)
     {
-        if (DataIn == 0x0A)
-        {
-            Serial.print('\n');
-            Serial.print((char)0x0D);
-        }
-        else
-        {
-            Serial.print((char)DataIn);
-        }
+      if (DataIn == 0x0A)
+      {
+        Serial.print('\n');
+        Serial.print((char)0x0D);
+      }
+      else
+      {
+        Serial.print((char)DataIn);
+      }
     }
   }
 

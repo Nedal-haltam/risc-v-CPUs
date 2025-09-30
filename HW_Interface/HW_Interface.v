@@ -29,77 +29,101 @@ module HW_Interface(
 	inout 		    [15:0]		ARDUINO_IO,
 	inout 		          		ARDUINO_RESET_N
 );
-`define CLK_BIT 15
+
 reg [24:0] ClockDivider;
 always@(posedge ADC_CLK_10) begin
 	ClockDivider <= ClockDivider + 1'b1;
 end
-wire clk;
-`define BUFFER_LEN 1025
-reg [7:0] databuff [0 : `BUFFER_LEN - 1];
 
-reg [31:0] index;
+reg `BIT_WIDTH offset;
 reg [7:0] DataOut;
 reg done;
 
+wire clk;
 wire rst;
-wire fillbuf;
+
+wire exit_ecall;
+wire write_ecall_finished;
+wire write_ecall;
+wire `BIT_WIDTH write_ecall_fd;
+wire `BIT_WIDTH write_ecall_address;
+wire `BIT_WIDTH write_ecall_len;
 wire datatrigger;
-wire `BIT_WIDTH AddressBus, DataBusIn1, DataBusOut1, DataBusOut2, AddressBus2;
+
+wire `BIT_WIDTH AddressBus1, DataBusIn1, DataBusOut1, DataBusOut2, AddressBus2;
 wire [10:0] ControlBus;
-
-`define STR_LEN 10
-reg [31:0] i;
-always@(posedge clk, posedge fillbuf, posedge rst) begin
-	if (rst) begin
-		i = 0;
-	end
-	else if (fillbuf) begin
-		databuff[i] = DataBusOut2[7:0];
-		i = i + 32'd1;
-	end
-	else begin
-		databuff[i] = 0;
-	end
-end
-
-always@(posedge clk, posedge rst) begin
-	if (rst) begin
-		index = 0;
-		DataOut = 0;
-		done = 0;
-	end
-	else if (!done) begin
-		done = (index >= `BUFFER_LEN) || (databuff[index] == 0);
-		DataOut = databuff[index];
-		index = index + 1'b1;
-	end
-end
-
-assign datatrigger = (!done) ? rst | ~clk : 1'b0;
-assign ARDUINO_IO[7:0] = DataOut;
-assign ARDUINO_IO[8] = datatrigger;
-assign ARDUINO_RESET_N = 1'b1;
-
-assign clk = ClockDivider[`CLK_BIT];
-assign rst = ~KEY[0];
-assign fillbuf = ~KEY[1];
-
 wire `BIT_WIDTH CyclesConsumed;
+
+// FSM states
+localparam IDLE    = 4'd0;
+localparam SENDING = 4'd1;
+
+reg [3:0] state;
+always @(negedge clk or posedge rst) begin
+    if (rst) begin
+		done    <= 1'b1;
+        offset  <= 0;
+        DataOut <= 0;
+        state   <= IDLE;
+    end
+	else begin
+        case (state)
+
+        IDLE: begin
+			if (write_ecall) begin
+				done    <= 1'b0;
+				offset  <= 0;
+				DataOut <= 0;
+                state <= SENDING;
+            end
+			else begin
+				done    <= 1'b1;
+				offset  <= 0;
+				DataOut <= 0;
+				state <= IDLE;
+			end
+        end
+
+        SENDING: begin
+            if (offset < write_ecall_len) begin
+				done <= 0;
+                offset  <= offset + 1'b1;
+                DataOut <= DataBusOut2[7:0];
+            end
+			else begin
+				done <= 1'b1;
+                offset  <= 0;
+                DataOut <= 0;
+				state <= IDLE;
+            end
+        end
+        endcase
+    end
+end
+
 CPU cpu_dut
 (
 	.InputClk(clk),
+	.cpu_clk(cpu_clk),
 	.rst(rst),
 	.AddressBus(AddressBus1),
 	.DataBusIn(DataBusIn1),
 	.DataBusOut(DataBusOut1),
 	.ControlBus(ControlBus),
-	.CyclesConsumed(CyclesConsumed)
+	.CyclesConsumed(CyclesConsumed),
+
+	.exit_ecall(exit_ecall),
+	.write_ecall_finished(write_ecall_finished),
+	.write_ecall(write_ecall),
+	.write_ecall_fd(write_ecall_fd), // TODO: we should handle it, for now it is ignored
+	.write_ecall_address(write_ecall_address),
+	.write_ecall_len(write_ecall_len)
 );
 
 // TODO: use real altera dual-port ram 2 read / 2 write
 DataMemory MemoryModule
 (
+	.rst(rst),
 	.clock1(~clk),
 	.loadtype1(ControlBus[6:3]),
 	.storetype1(ControlBus[10:7]),
@@ -109,16 +133,34 @@ DataMemory MemoryModule
 	.DataMemoryInput1(DataBusOut1),
 	.DataMemoryOutput1(DataBusIn1),
 
-	.clock2(~clk),
+	.clock2(clk),
 	.loadtype2(`LOAD_BYTE), // TODO: drive the loadtype2, for now always byte
-    .MemReadEn2(fillbuf),
+    .MemReadEn2(write_ecall),
     .MemWriteEn2(1'b0),
-	.AddressBus2(AddressBus2), // TODO: drive the AddressBus2, take the initial address from the CPU, potentially the addressbus of the cpu
-	.DataMemoryInput2(DataBusOut2),
-	.DataMemoryOutput2()
+	.AddressBus2(write_ecall_address + offset),
+	.DataMemoryInput2(),
+	.DataMemoryOutput2(DataBusOut2)
 );
 
-assign HEX0 = CyclesConsumed[7:0];
+assign datatrigger = (!done) ? (rst | clk) : (1'b0);
+assign ARDUINO_IO[7:0] = DataOut;
+assign ARDUINO_IO[8] = datatrigger;
+assign ARDUINO_RESET_N = 1'b1;
+
+assign write_ecall_finished = done;
+
+assign clk = ClockDivider[17];
+assign rst = ~KEY[0];
+
+assign LEDR[0] = clk;
+assign LEDR[1] = cpu_clk;
+assign LEDR[2] = rst;
+assign LEDR[3] = datatrigger;
+assign LEDR[4] = done;
+assign LEDR[5] = write_ecall_finished;
+assign LEDR[6] = write_ecall;
+assign LEDR[7] = exit_ecall;
+
 
 endmodule
 
