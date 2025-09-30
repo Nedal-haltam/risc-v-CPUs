@@ -22,10 +22,15 @@ module DataMemory
 reg [7 : 0] DataMem [0 : (`MEMORY_SIZE-1)];
 
 initial begin
-`include `DM_INIT_FILE_PATH
+	for (i = 0; i <= `MEMORY_SIZE/2; i = i + 1)
+		DataMem[i] <= 0;
+	for (i = `MEMORY_SIZE/2+1; i <= (`MEMORY_SIZE-1); i = i + 1)
+		DataMem[i] <= 0;
+
+	`include `DM_INIT_FILE_PATH
 end
 
-always @(posedge clock1, posedge rst) begin
+always @(posedge clock1) begin
 	if (MemReadEn1) begin
 		if (loadtype1 == `LOAD_BYTE) begin
 			DataMemoryOutput1[(8 * 1) - 1:8 * 0] <= DataMem[AddressBus1[(`MEMORY_BITS-1):0] + 0];

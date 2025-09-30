@@ -458,9 +458,16 @@ module registerFile
 	assign write_ecall_address = registers[11];
 	assign write_ecall_len     = registers[12];
 	always@(posedge clk,  posedge rst) begin : Write_on_register_file_block
+		integer i;
 		if (rst) begin
-			registers[0] <= 0;
-			registers[2] <= `MEMORY_SIZE - 1;
+			for (i = 0; i < 32; i = i + 1) begin
+				if (i == 2) begin
+					registers[i] <= `MEMORY_SIZE - 1;
+				end
+				else begin
+					registers[i] <= 0;
+				end
+			end
 		end
 		else if (we && WriteRegister != 0) begin
 			registers[WriteRegister] <= writeData;
