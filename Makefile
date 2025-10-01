@@ -115,5 +115,5 @@ test:
 		-dm $(TEST_DIR)/Generated/DM.txt \
 		--im-init $(TEST_DIR)/Generated/IM_INIT.INIT \
 		--dm-init $(TEST_DIR)/Generated/DM_INIT.INIT \
-		--im-mif $(TEST_DIR)/Generated/InstMem_MIF.mif \
-		--dm-mif $(TEST_DIR)/Generated/DataMem_MIF.mif; \
+		--im-mif $(TEST_DIR)/Generated/IM_INIT.mif \
+		--dm-mif $(TEST_DIR)/Generated/DM_INIT.mif; \

@@ -60,7 +60,7 @@ localparam IDLE    = 4'd0;
 localparam SENDING = 4'd1;
 
 reg [3:0] state;
-always @(posedge clk or posedge rst) begin
+always @(negedge clk or posedge rst) begin
     if (rst) begin
 		done    <= 1'b1;
         offset  <= 0;
@@ -122,17 +122,54 @@ CPU cpu_dut
 );
 
 // TODO: use real altera dual-port ram 2 read / 2 write
-DataMemory MemoryModule
+// DataMemory MemoryModule
+// (
+// 	.rst(rst),
+// 	.clock(~clk),
+// 	.storetype       (write_ecall ? (`STORE_BYTE) : (ControlBus[10:7])),
+//     .MemReadEn       (write_ecall ? (1'b1) : (ControlBus[1])),
+//     .MemWriteEn      (write_ecall ? (1'b0) : (ControlBus[2])),
+// 	.AddressBus      (write_ecall ? (write_ecall_address + offset) : (AddressBus1)),
+// 	.DataMemoryInput (write_ecall ? (0) : (DataBusOut1)),
+// 	.DataMemoryOutput(DMDataBus)
+// );
+
+dualpram dualpram_inst
 (
-	.rst(rst),
-	.clock(~clk),
-	.storetype       (write_ecall ? (`STORE_BYTE) : (ControlBus[10:7])),
-    .MemReadEn       (write_ecall ? (1'b1) : (ControlBus[1])),
-    .MemWriteEn      (write_ecall ? (1'b0) : (ControlBus[2])),
-	.AddressBus      (write_ecall ? (write_ecall_address + offset) : (AddressBus1)),
-	.DataMemoryInput (write_ecall ? (0) : (DataBusOut1)),
-	.DataMemoryOutput(DMDataBus)
+	.clock_a(clk),
+	.rden_a(write_ecall | ControlBus[1]),
+	.wren_a(~write_ecall & ControlBus[2]),
+	.address_a(write_ecall ? 
+	(write_ecall_address[(`MEMORY_BITS-1):0] + offset[(`MEMORY_BITS-1):0]) : 
+	(AddressBus1[(`MEMORY_BITS-1):0])),
+	.data_a(write_ecall ? (0) : (DataBusOut1)),
+	.q_a(DMDataBus),
+
+	.clock_b(0),
+	.rden_b(0),
+	.wren_b(0),
+	.address_b(0),
+	.data_b(0),
+	.q_b()
 );
+
+// bcd7seg HEX0_DISP
+// (
+// 	.num(offset[3:0]),
+// 	.display(HEX0)
+// );
+
+// bcd7seg HEX1_DISP
+// (
+// 	.num(DMDataBus[3:0]),
+// 	.display(HEX1)
+// );
+
+// bcd7seg HEX2_DISP
+// (
+// 	.num(DMDataBus[7:4]),
+// 	.display(HEX2)
+// );
 
 assign datatrigger = (!done) ? (rst | clk) : (1'b0);
 assign ARDUINO_IO[7:0] = DataOut;
@@ -141,7 +178,7 @@ assign ARDUINO_RESET_N = 1'b1;
 
 assign write_ecall_finished = done;
 
-assign clk = ClockDivider[17];
+assign clk = ClockDivider[16];
 assign rst = ~KEY[0];
 
 assign LEDR[0] = clk;

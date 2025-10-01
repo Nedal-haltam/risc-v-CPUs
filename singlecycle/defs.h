@@ -8,6 +8,7 @@
     `ifndef simulate
         `define IM_INIT_FILE_PATH "./test/Generated/IM_INIT.INIT"
         `define DM_INIT_FILE_PATH "./test/Generated/DM_INIT.INIT"
+        `define DM_MIF_FILE_PATH "./test/Generated/DM_INIT.mif"
     `else
         `define IM_INIT_FILE_PATH "IM_INIT.INIT"
         `define DM_INIT_FILE_PATH "DM_INIT.INIT"
