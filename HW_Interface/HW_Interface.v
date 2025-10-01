@@ -41,6 +41,7 @@ reg done;
 
 wire clk;
 wire rst;
+wire cpu_clk;
 
 wire exit_ecall;
 wire write_ecall_finished;
@@ -50,7 +51,7 @@ wire `BIT_WIDTH write_ecall_address;
 wire `BIT_WIDTH write_ecall_len;
 wire datatrigger;
 
-wire `BIT_WIDTH AddressBus1, DataBusIn1, DataBusOut1, DataBusOut2;
+wire `BIT_WIDTH AddressBus1, DMDataBus, DataBusOut1;
 wire [10:0] ControlBus;
 wire `BIT_WIDTH CyclesConsumed;
 
@@ -59,7 +60,7 @@ localparam IDLE    = 4'd0;
 localparam SENDING = 4'd1;
 
 reg [3:0] state;
-always @(negedge clk or posedge rst) begin
+always @(posedge clk or posedge rst) begin
     if (rst) begin
 		done    <= 1'b1;
         offset  <= 0;
@@ -88,7 +89,7 @@ always @(negedge clk or posedge rst) begin
             if (offset < write_ecall_len) begin
 				done <= 0;
                 offset  <= offset + 1'b1;
-                DataOut <= DataBusOut2[7:0];
+                DataOut <= DMDataBus[7:0];
             end
 			else begin
 				done <= 1'b1;
@@ -107,7 +108,7 @@ CPU cpu_dut
 	.cpu_clk(cpu_clk),
 	.rst(rst),
 	.AddressBus(AddressBus1),
-	.DataBusIn(DataBusIn1),
+	.DataBusIn(DMDataBus),
 	.DataBusOut(DataBusOut1),
 	.ControlBus(ControlBus),
 	.CyclesConsumed(CyclesConsumed),
@@ -124,22 +125,13 @@ CPU cpu_dut
 DataMemory MemoryModule
 (
 	.rst(rst),
-	.clock1(~clk),
-	.loadtype1(ControlBus[6:3]),
-	.storetype1(ControlBus[10:7]),
-    .MemReadEn1(ControlBus[1]),
-    .MemWriteEn1(ControlBus[2]),
-	.AddressBus1(AddressBus1),
-	.DataMemoryInput1(DataBusOut1),
-	.DataMemoryOutput1(DataBusIn1),
-
-	.clock2(clk),
-	.loadtype2(`LOAD_BYTE), // TODO: drive the loadtype2, for now always byte
-    .MemReadEn2(write_ecall),
-    .MemWriteEn2(1'b0),
-	.AddressBus2(write_ecall_address + offset),
-	.DataMemoryInput2(),
-	.DataMemoryOutput2(DataBusOut2)
+	.clock(~clk),
+	.storetype       (write_ecall ? (`STORE_BYTE) : (ControlBus[10:7])),
+    .MemReadEn       (write_ecall ? (1'b1) : (ControlBus[1])),
+    .MemWriteEn      (write_ecall ? (1'b0) : (ControlBus[2])),
+	.AddressBus      (write_ecall ? (write_ecall_address + offset) : (AddressBus1)),
+	.DataMemoryInput (write_ecall ? (0) : (DataBusOut1)),
+	.DataMemoryOutput(DMDataBus)
 );
 
 assign datatrigger = (!done) ? (rst | clk) : (1'b0);

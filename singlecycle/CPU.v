@@ -24,10 +24,10 @@ module IM
 	output [31:0] Data_Out
 );
 	reg [7 : 0] InstMem [0 : (`MEMORY_SIZE-1)];
-	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[11:0] + 0];
-	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[11:0] + 1];
-	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[11:0] + 2];
-	assign Data_Out[(8 * 4) - 1: 8 * 3] = InstMem[addr[11:0] + 3];
+	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[(`MEMORY_BITS-1):0] + 0];
+	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[(`MEMORY_BITS-1):0] + 1];
+	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[(`MEMORY_BITS-1):0] + 2];
+	assign Data_Out[(8 * 4) - 1: 8 * 3] = InstMem[addr[(`MEMORY_BITS-1):0] + 3];
 
 	integer i;
 	initial begin
@@ -108,6 +108,7 @@ module controlUnit
 								7'b0000001: begin // "mul"
 									aluop <= `ALU_OPCODE_MUL;
 								end
+								default: begin end
 							endcase
 						end
 						3'b001: begin
@@ -115,6 +116,7 @@ module controlUnit
 								7'b0000000: begin // "sll"
 									aluop <= `ALU_OPCODE_SLL;
 								end
+								default: begin end
 							endcase
 						end
 						3'b010: begin
@@ -128,6 +130,7 @@ module controlUnit
 								7'b0000010: begin // "sne"
 									aluop <= `ALU_OPCODE_SNE;
 								end
+								default: begin end
 							endcase
 						end
 						3'b011: begin
@@ -135,6 +138,7 @@ module controlUnit
 								7'b0000000: begin // "sltu"
 									aluop <= `ALU_OPCODE_SLTU;
 								end
+								default: begin end
 							endcase
 						end
 						3'b100: begin
@@ -145,6 +149,7 @@ module controlUnit
 								7'b0000001: begin // "div"
 									aluop <= `ALU_OPCODE_DIV;
 								end
+								default: begin end
 							endcase
 						end
 						3'b101: begin
@@ -158,6 +163,7 @@ module controlUnit
 								7'b0000001: begin // "divu"
 									aluop <= `ALU_OPCODE_DIVU;
 								end
+								default: begin end
 							endcase
 						end
 						3'b110: begin
@@ -168,6 +174,7 @@ module controlUnit
 								7'b0000001: begin // "rem"
 									aluop <= `ALU_OPCODE_REM;
 								end
+								default: begin end
 							endcase
 						end
 						3'b111: begin
@@ -178,8 +185,10 @@ module controlUnit
 								7'b0000001: begin // "remu"
 									aluop <= `ALU_OPCODE_REMU;
 								end
+								default: begin end
 							endcase
 						end
+						default: begin end
 					endcase
 				end
 				// end of R-TYPE instructions
@@ -227,8 +236,10 @@ module controlUnit
 								7'b0100000: begin // "srai"
 									aluop <= `ALU_OPCODE_SRA;
 								end
+								default: begin end
 							endcase
 						end
+						default: begin end
 					endcase
 				end
 				7'b1110011: begin
@@ -250,8 +261,10 @@ module controlUnit
 								12'b000000000000: begin // "ecall_enable"
 									ecall_enable <= 1'b1;
 								end
+								default: begin end
 							endcase
 						end
+						default: begin end
 					endcase
 				end
 				7'b0000011: begin 
@@ -286,6 +299,7 @@ module controlUnit
 						3'b101: begin // "lhu"
 							loadtype <= `LOAD_HALFWORD_UNSIGNED;
 						end
+						default: begin end
 					endcase
 				end
 				7'b1110111: begin // "jalr"
@@ -305,6 +319,7 @@ module controlUnit
 					case(funct3)
 						3'b000: begin
 						end
+						default: begin end
 					endcase
 				end
 				// end of I-TYPE instructions
@@ -335,6 +350,7 @@ module controlUnit
 						3'b011: begin // "sd"
 							storetype <= `STORE_DOUBLEWORD;
 						end
+						default: begin end
 					endcase
 				end
 				7'b1100011: begin
@@ -369,6 +385,7 @@ module controlUnit
 						3'b111: begin // "bgeu"
 							IsPFC <= $unsigned(RegFileDataOut_1) >= $unsigned(RegFileDataOut_2);
 						end
+						default: begin end
 					endcase
 				end
 				// end of S-TYPE instructions
@@ -430,10 +447,11 @@ module controlUnit
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
 					alu_in_1 <= RegFileDataOut_3;
-					alu_in_2 <= {48'd0, imm20};
+					alu_in_2 <= {44'd0, imm20};
 					aluop <= `ALU_OPCODE_ADD;
 				end
 				// end of U-TYPE instructions
+				default: begin end
 			endcase
 		end	
 	end
@@ -515,7 +533,6 @@ always @ (*) begin
 		default: result <= 12121212;
 	endcase
 end
-
 endmodule
 
 module CPU
@@ -662,7 +679,15 @@ module CPU
 
 	assign AddressBus   = ALUResult;
 	assign DataBusOut   = RegFileDataOut_2;
-	assign DataBus      = (MemReadEn) ? DataBusIn : ALUResult;
+	assign DataBus      = (MemReadEn) ? (
+		loadtype == `LOAD_BYTE ? {{56{DataBusIn[7]}}, DataBusIn[7:0]} : (
+			loadtype == `LOAD_HALFWORD ? {{48{DataBusIn[15]}}, DataBusIn[15:0]} : (
+				loadtype == `LOAD_WORD ? {{32{DataBusIn[31]}}, DataBusIn[31:0]} : (
+					loadtype == `LOAD_DOUBLEWORD ? DataBusIn : 0
+				)
+			)
+		)
+	) : ALUResult;
 	assign ControlBus   = {storetype, loadtype, MemWriteEn, MemReadEn, RegWriteEn};
 
 	assign exit_ecall   = ecall_enable && ecall_code == `EXIT_ECALL;
