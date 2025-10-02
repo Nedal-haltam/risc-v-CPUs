@@ -9,6 +9,7 @@
         `define IM_INIT_FILE_PATH "./test/Generated/test_IM_INIT.INIT"
         `define DM_INIT_FILE_PATH "./test/Generated/test_DM_INIT.INIT"
         `define DM_MIF_FILE_PATH "./test/Generated/test_DM_MIF.mif"
+        `define IM_MIF_FILE_PATH "./test/Generated/test_IM_MIF.mif"
     `else
         `define IM_INIT_FILE_PATH "IM_INIT.INIT"
         `define DM_INIT_FILE_PATH "DM_INIT.INIT"

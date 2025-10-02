@@ -20,9 +20,11 @@ endmodule
 
 module IM
 (
+	input clk,
 	input `BIT_WIDTH addr,
 	output [31:0] Data_Out
 );
+`ifdef simulate
 	reg [7 : 0] InstMem [0 : (`MEMORY_SIZE-1)];
 	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[(`MEMORY_BITS-1):0] + 0];
 	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[(`MEMORY_BITS-1):0] + 1];
@@ -37,6 +39,14 @@ module IM
 			InstMem[i] <= 0;
 		`include `IM_INIT_FILE_PATH
 	end
+`else
+singleprom singleprom_inst
+(
+	.address(addr[(`MEMORY_BITS-1):0]), // it's word addressable
+	.clock( clk ),
+	.q(Data_Out)
+);
+`endif
 endmodule
 
 module controlUnit
@@ -600,7 +610,12 @@ module CPU
 
 	IM InstMem
 	(
+		.clk(clk),
+`ifdef simulate
 		.addr(PC), 
+`else
+		.addr(nextPC >> 2), 
+`endif
 		.Data_Out(InstructionMemoryOut)
 	);
 
