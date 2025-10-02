@@ -6,9 +6,9 @@
     `define BIT_WIDTH [63:0]
     `define RA 5'd1
     `ifndef simulate
-        `define IM_INIT_FILE_PATH "./test/Generated/IM_INIT.INIT"
-        `define DM_INIT_FILE_PATH "./test/Generated/DM_INIT.INIT"
-        `define DM_MIF_FILE_PATH "./test/Generated/DM_INIT.mif"
+        `define IM_INIT_FILE_PATH "./test/Generated/test_IM_INIT.INIT"
+        `define DM_INIT_FILE_PATH "./test/Generated/test_DM_INIT.INIT"
+        `define DM_MIF_FILE_PATH "./test/Generated/test_DM_MIF.mif"
     `else
         `define IM_INIT_FILE_PATH "IM_INIT.INIT"
         `define DM_INIT_FILE_PATH "DM_INIT.INIT"

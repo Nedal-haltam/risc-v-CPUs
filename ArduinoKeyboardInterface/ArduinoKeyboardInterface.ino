@@ -162,6 +162,10 @@ void loop() {
         Serial.print((char)DataIn);
       }
     }
+    else
+    {
+//      Serial.print('*');
+    }
   }
 
   lastTriggerState = currentTrigger;

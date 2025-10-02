@@ -109,11 +109,4 @@ TEST_DIR=./singlecycle/test
 test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	@dotnet $(ASSEMBLER_DLL) \
-		$(TEST_DIR)/test.S \
-		-mc $(TEST_DIR)/Generated/MC.txt \
-		-dm $(TEST_DIR)/Generated/DM.txt \
-		--im-init $(TEST_DIR)/Generated/IM_INIT.INIT \
-		--dm-init $(TEST_DIR)/Generated/DM_INIT.INIT \
-		--im-mif $(TEST_DIR)/Generated/IM_INIT.mif \
-		--dm-mif $(TEST_DIR)/Generated/DM_INIT.mif; \
+	@dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -dump -o ./singlecycle/test/Generated/test ./singlecycle/test/test.e -sim

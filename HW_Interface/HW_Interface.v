@@ -36,7 +36,6 @@ always@(posedge ADC_CLK_10) begin
 end
 
 reg `BIT_WIDTH offset;
-reg [7:0] DataOut;
 reg done;
 
 wire clk;
@@ -50,60 +49,36 @@ wire `BIT_WIDTH write_ecall_fd;
 wire `BIT_WIDTH write_ecall_address;
 wire `BIT_WIDTH write_ecall_len;
 wire datatrigger;
+wire [(`MEMORY_BITS-1):0] write_ecall_mem_addr;
 
-wire `BIT_WIDTH AddressBus1, DMDataBus, DataBusOut1;
+wire `BIT_WIDTH AddressBus1, DMDataBus, write_DMDataBus, DataBusOut1;
 wire [10:0] ControlBus;
 wire `BIT_WIDTH CyclesConsumed;
 
-// FSM states
-localparam IDLE    = 4'd0;
-localparam SENDING = 4'd1;
-
-reg [3:0] state;
 always @(negedge clk or posedge rst) begin
     if (rst) begin
 		done    <= 1'b1;
         offset  <= 0;
-        DataOut <= 0;
-        state   <= IDLE;
     end
 	else begin
-        case (state)
-
-        IDLE: begin
-			if (write_ecall) begin
-				done    <= 1'b0;
-				offset  <= 0;
-				DataOut <= 0;
-                state <= SENDING;
-            end
-			else begin
-				done    <= 1'b1;
-				offset  <= 0;
-				DataOut <= 0;
-				state <= IDLE;
-			end
-        end
-
-        SENDING: begin
-            if (offset < write_ecall_len) begin
-				done <= 0;
-                offset  <= offset + 1'b1;
-                DataOut <= DMDataBus[7:0];
-            end
-			else begin
-				done <= 1'b1;
-                offset  <= 0;
-                DataOut <= 0;
-				state <= IDLE;
-            end
-        end
-        endcase
+		if (write_ecall) begin
+			done    <= (offset) >= (write_ecall_len);
+		end
+		else begin
+			done    <= 1'b1;
+		end
+		if (!done) begin
+			offset  <= offset + 64'd1;
+		end
+		else begin
+			offset  <= 0;
+		end
     end
 end
-
+reg `BIT_WIDTH pc;
 CPU cpu_dut
 (
+	.pc(pc),
 	.InputClk(clk),
 	.cpu_clk(cpu_clk),
 	.rst(rst),
@@ -121,64 +96,49 @@ CPU cpu_dut
 	.write_ecall_len(write_ecall_len)
 );
 
-// TODO: use real altera dual-port ram 2 read / 2 write
-// DataMemory MemoryModule
-// (
-// 	.rst(rst),
-// 	.clock(~clk),
-// 	.storetype       (write_ecall ? (`STORE_BYTE) : (ControlBus[10:7])),
-//     .MemReadEn       (write_ecall ? (1'b1) : (ControlBus[1])),
-//     .MemWriteEn      (write_ecall ? (1'b0) : (ControlBus[2])),
-// 	.AddressBus      (write_ecall ? (write_ecall_address + offset) : (AddressBus1)),
-// 	.DataMemoryInput (write_ecall ? (0) : (DataBusOut1)),
-// 	.DataMemoryOutput(DMDataBus)
-// );
-
 dualpram dualpram_inst
 (
-	.clock_a(clk),
-	.rden_a(write_ecall | ControlBus[1]),
-	.wren_a(~write_ecall & ControlBus[2]),
-	.address_a(write_ecall ? 
-	(write_ecall_address[(`MEMORY_BITS-1):0] + offset[(`MEMORY_BITS-1):0]) : 
-	(AddressBus1[(`MEMORY_BITS-1):0])),
-	.data_a(write_ecall ? (0) : (DataBusOut1)),
+	.clock_a(~clk),
+	.rden_a(ControlBus[1]),
+	.wren_a(ControlBus[2]),
+	.address_a(AddressBus1[(`MEMORY_BITS-1):0]),
+	.data_a(DataBusOut1),
 	.q_a(DMDataBus),
 
-	.clock_b(0),
-	.rden_b(0),
-	.wren_b(0),
-	.address_b(0),
+	.clock_b(clk),
+	.rden_b(!done),
+	.wren_b(1'b0),
+	.address_b(write_ecall_mem_addr),
 	.data_b(0),
-	.q_b()
+	.q_b(write_DMDataBus)
 );
 
 // bcd7seg HEX0_DISP
 // (
-// 	.num(offset[3:0]),
+// 	.num(write_ecall_len[3:0]),
 // 	.display(HEX0)
 // );
 
 // bcd7seg HEX1_DISP
 // (
-// 	.num(DMDataBus[3:0]),
+// 	.num(write_ecall_len[7:4]),
 // 	.display(HEX1)
 // );
 
 // bcd7seg HEX2_DISP
 // (
-// 	.num(DMDataBus[7:4]),
+// 	.num(pc[11:8]),
 // 	.display(HEX2)
 // );
 
-assign datatrigger = (!done) ? (rst | clk) : (1'b0);
-assign ARDUINO_IO[7:0] = DataOut;
+assign datatrigger = (!done) ? (rst | ~clk) : (datatrigger);
+assign ARDUINO_IO[7:0] = (!done && (offset) <= (write_ecall_len)) ? write_DMDataBus[7:0] : 8'd0;
 assign ARDUINO_IO[8] = datatrigger;
 assign ARDUINO_RESET_N = 1'b1;
-
+assign write_ecall_mem_addr = write_ecall_address[(`MEMORY_BITS-1):0] + offset[(`MEMORY_BITS-1):0];
 assign write_ecall_finished = done;
 
-assign clk = ClockDivider[16];
+assign clk = ClockDivider[10];
 assign rst = ~KEY[0];
 
 assign LEDR[0] = clk;

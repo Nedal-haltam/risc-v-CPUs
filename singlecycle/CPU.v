@@ -365,7 +365,7 @@ module controlUnit
 					storetype <= 0;
 					ecall_enable <= 0;
 
-					PFC_PC <= PC + ({{52{imm12_stype[11]}}, imm12_stype} << 1);
+					PFC_PC <= PC + ({{51{imm12_stype[11]}}, imm12_stype, 1'b0});
 					case(funct3)
 						3'b000: begin // "beq"
 							IsPFC <= RegFileDataOut_1 == RegFileDataOut_2;
@@ -428,7 +428,7 @@ module controlUnit
 					ecall_enable <= 0;
 
 					IsPFC <= 1'b1;
-					PFC_PC <= PC + ({{44{imm20[19]}}, imm20} << 1);
+					PFC_PC <= PC + {{43{imm20[19]}}, imm20, 1'b0};
 					WriteRegister <= rd;
 					RegWriteEn <= 1'b1;
 					alu_in_1 <= PC;
@@ -480,7 +480,7 @@ module registerFile
 		if (rst) begin
 			for (i = 0; i < 32; i = i + 1) begin
 				if (i == 2) begin
-					registers[i] <= `MEMORY_SIZE - 1;
+					registers[i] <= `MEMORY_SIZE;
 				end
 				else begin
 					registers[i] <= 0;
@@ -537,6 +537,7 @@ endmodule
 
 module CPU
 (
+	output `BIT_WIDTH pc,
 	input InputClk, rst,
 	output cpu_clk,
 	output `BIT_WIDTH AddressBus,
@@ -589,7 +590,7 @@ module CPU
 			CyclesConsumed <= CyclesConsumed + 64'd1;
 	end
 
-	programCounter pc
+	programCounter programCounter_u0
 	(
 		.clk(clk), 
 		.rst(rst), 
@@ -678,12 +679,24 @@ module CPU
 	assign Instruction  = (rst) ? 0 : InstructionMemoryOut;
 
 	assign AddressBus   = ALUResult;
-	assign DataBusOut   = RegFileDataOut_2;
+	assign DataBusOut   = (
+		storetype == `STORE_BYTE ? {8{RegFileDataOut_2[7:0]}} : (
+			storetype == `STORE_HALFWORD ? {4{RegFileDataOut_2[15:0]}} : (
+				storetype == `STORE_WORD ? {2{RegFileDataOut_2[31:0]}} : (
+					storetype == `STORE_DOUBLEWORD ? RegFileDataOut_2 : 64'd0
+				)
+			)
+		)
+	);
 	assign DataBus      = (MemReadEn) ? (
 		loadtype == `LOAD_BYTE ? {{56{DataBusIn[7]}}, DataBusIn[7:0]} : (
 			loadtype == `LOAD_HALFWORD ? {{48{DataBusIn[15]}}, DataBusIn[15:0]} : (
 				loadtype == `LOAD_WORD ? {{32{DataBusIn[31]}}, DataBusIn[31:0]} : (
-					loadtype == `LOAD_DOUBLEWORD ? DataBusIn : 0
+					loadtype == `LOAD_DOUBLEWORD ? DataBusIn : (
+						loadtype == `LOAD_BYTE_UNSIGNED ? {{56{1'b0}}, DataBusIn[7:0]} : (
+							loadtype == `LOAD_HALFWORD_UNSIGNED ? {{48{1'b0}}, DataBusIn[15:0]} : 64'd0
+						)
+					)
 				)
 			)
 		)
@@ -692,5 +705,6 @@ module CPU
 
 	assign exit_ecall   = ecall_enable && ecall_code == `EXIT_ECALL;
 	assign cpu_clk      = clk;
+	assign pc = PC;
 
 endmodule
