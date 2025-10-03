@@ -143,13 +143,15 @@ void loop() {
   bool currentTrigger = digitalRead(PIN_CURSOR);
 
   // Detect rising edge: LOW → HIGH
-  if (currentTrigger == HIGH && lastTriggerState == LOW) {
+  if (currentTrigger == HIGH && lastTriggerState == LOW) 
+  {
     byte DataIn = 0;
 
     for (int i = 0; i < 8; i++) {
       int bitVal = digitalRead(DataPins[i]);
       DataIn |= (bitVal << i);  // LSB on D4, MSB on D11
     }
+
     if (DataIn != 0)
     {
       if (DataIn == 0x0A)

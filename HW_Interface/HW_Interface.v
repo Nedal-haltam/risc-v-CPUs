@@ -137,8 +137,8 @@ assign ARDUINO_IO[8] = datatrigger;
 assign ARDUINO_RESET_N = 1'b1;
 assign write_ecall_mem_addr = write_ecall_address[(`MEMORY_BITS-1):0] + offset[(`MEMORY_BITS-1):0];
 assign write_ecall_finished = done;
-
-assign clk = ClockDivider[10];
+// TODO: show an idnication that the FPGA finished correctly through the 7seg, leds, exit code, ...
+assign clk = ClockDivider[9];
 assign rst = ~KEY[0];
 
 assign LEDR[0] = clk;
