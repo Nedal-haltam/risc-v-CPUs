@@ -109,4 +109,4 @@ TEST_DIR=./singlecycle/test
 test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	@dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -dump -o ./singlecycle/test/Generated/test ./singlecycle/test/test.e -sim
+	@dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./singlecycle/test/Generated/test -dump ./singlecycle/test/test.e
