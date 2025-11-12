@@ -52,8 +52,8 @@ module dualpram (
 	q_a,
 	q_b);
 
-	input	[12:0]  address_a;
-	input	[12:0]  address_b;
+	input	[(`DM_BITS - 1):0]  address_a;
+	input	[(`DM_BITS - 1):0]  address_b;
 	input	  clock_a;
 	input	  clock_b;
 	input	[63:0]  data_a;
@@ -115,8 +115,8 @@ module dualpram (
 		altsyncram_component.init_file = `DM_MIF_FILE_PATH,
 		altsyncram_component.intended_device_family = "MAX 10",
 		altsyncram_component.lpm_type = "altsyncram",
-		altsyncram_component.numwords_a = `MEMORY_SIZE,
-		altsyncram_component.numwords_b = `MEMORY_SIZE,
+		altsyncram_component.numwords_a = `DM_SIZE,
+		altsyncram_component.numwords_b = `DM_SIZE,
 		altsyncram_component.operation_mode = "BIDIR_DUAL_PORT",
 		altsyncram_component.outdata_aclr_a = "NONE",
 		altsyncram_component.outdata_aclr_b = "NONE",
@@ -125,8 +125,8 @@ module dualpram (
 		altsyncram_component.power_up_uninitialized = "FALSE",
 		altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_WITH_NBE_READ",
 		altsyncram_component.read_during_write_mode_port_b = "NEW_DATA_WITH_NBE_READ",
-		altsyncram_component.widthad_a = `MEMORY_BITS,
-		altsyncram_component.widthad_b = `MEMORY_BITS,
+		altsyncram_component.widthad_a = `DM_BITS,
+		altsyncram_component.widthad_b = `DM_BITS,
 		altsyncram_component.width_a = 64,
 		altsyncram_component.width_b = 64,
 		altsyncram_component.width_byteena_a = 1,

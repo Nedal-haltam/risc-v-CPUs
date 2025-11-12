@@ -43,7 +43,7 @@ module singleprom (
 	clock,
 	q);
 
-	input	[12:0]  address;
+	input	[(`IM_BITS - 1):0]  address;
 	input	  clock;
 	output	[31:0]  q;
 `ifndef ALTERA_RESERVED_QIS
@@ -89,11 +89,11 @@ module singleprom (
 		altsyncram_component.intended_device_family = "MAX 10",
 		altsyncram_component.lpm_hint = "ENABLE_RUNTIME_MOD=NO",
 		altsyncram_component.lpm_type = "altsyncram",
-		altsyncram_component.numwords_a = `MEMORY_SIZE,
+		altsyncram_component.numwords_a = `IM_SIZE,
 		altsyncram_component.operation_mode = "ROM",
 		altsyncram_component.outdata_aclr_a = "NONE",
 		altsyncram_component.outdata_reg_a = "UNREGISTERED",
-		altsyncram_component.widthad_a = `MEMORY_BITS,
+		altsyncram_component.widthad_a = `IM_BITS,
 		altsyncram_component.width_a = 32,
 		altsyncram_component.width_byteena_a = 1;
 

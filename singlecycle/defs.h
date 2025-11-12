@@ -15,13 +15,13 @@
         `define DM_INIT_FILE_PATH "DM_INIT.INIT"
     `endif // simulate
 
-    `ifndef MEMORY_SIZE
-        `define MEMORY_SIZE (8192)
-    `endif // MEMORY_SIZE
+    `define IM_BITS (13)
+    `define IM_SIZE (1 << `IM_BITS)
 
-    `ifndef MEMORY_BITS
-        `define MEMORY_BITS (13)
-    `endif // MEMORY_BITS
+    `define DM_BITS (14)
+    `define DM_SIZE (1 << `DM_BITS)
+
+    `define SP_INITIAL_VALUE (`DM_SIZE - 1024)
 
     `define ALU_OPCODE_ADD   (6'd1)
     `define ALU_OPCODE_SUB   (6'd2)

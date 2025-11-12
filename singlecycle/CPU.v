@@ -25,24 +25,24 @@ module IM
 	output [31:0] Data_Out
 );
 `ifdef simulate
-	reg [7 : 0] InstMem [0 : (`MEMORY_SIZE-1)];
-	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[(`MEMORY_BITS-1):0] + 0];
-	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[(`MEMORY_BITS-1):0] + 1];
-	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[(`MEMORY_BITS-1):0] + 2];
-	assign Data_Out[(8 * 4) - 1: 8 * 3] = InstMem[addr[(`MEMORY_BITS-1):0] + 3];
+	reg [7 : 0] InstMem [0 : (`IM_SIZE-1)];
+	assign Data_Out[(8 * 1) - 1: 8 * 0] = InstMem[addr[(`IM_BITS-1):0] + 0];
+	assign Data_Out[(8 * 2) - 1: 8 * 1] = InstMem[addr[(`IM_BITS-1):0] + 1];
+	assign Data_Out[(8 * 3) - 1: 8 * 2] = InstMem[addr[(`IM_BITS-1):0] + 2];
+	assign Data_Out[(8 * 4) - 1: 8 * 3] = InstMem[addr[(`IM_BITS-1):0] + 3];
 
 	integer i;
 	initial begin
-		for (i = 0; i <= `MEMORY_SIZE/2; i = i + 1)
+		for (i = 0; i <= `IM_SIZE/2; i = i + 1)
 			InstMem[i] <= 0;
-		for (i = `MEMORY_SIZE/2+1; i <= (`MEMORY_SIZE-1); i = i + 1)
+		for (i = `IM_SIZE/2+1; i <= (`IM_SIZE-1); i = i + 1)
 			InstMem[i] <= 0;
 		`include `IM_INIT_FILE_PATH
 	end
 `else
 singleprom singleprom_inst
 (
-	.address(addr[(`MEMORY_BITS-1):0]), // it's word addressable
+	.address(addr[(`IM_BITS-1):0]), // it's word addressable
 	.clock( clk ),
 	.q(Data_Out)
 );
@@ -490,7 +490,7 @@ module registerFile
 		if (rst) begin
 			for (i = 0; i < 32; i = i + 1) begin
 				if (i == 2) begin
-					registers[i] <= `MEMORY_SIZE;
+					registers[i] <= `SP_INITIAL_VALUE;
 				end
 				else begin
 					registers[i] <= 0;

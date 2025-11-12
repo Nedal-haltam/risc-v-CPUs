@@ -10,14 +10,14 @@ module DataMemory
 );
 
 
-reg [7 : 0] DataMem [0 : (`MEMORY_SIZE-1)];
+reg [7 : 0] DataMem [0 : (`DM_SIZE-1)];
 always @(posedge clock) begin
     if (MemReadEn) begin
-        DataMemoryOutput[(8 * 1) - 1:8 * 0] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 0];
-        DataMemoryOutput[(8 * 2) - 1:8 * 1] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 1];
-        DataMemoryOutput[(8 * 3) - 1:8 * 2] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 2];
-        DataMemoryOutput[(8 * 4) - 1:8 * 3] <= DataMem[AddressBus[(`MEMORY_BITS-1):0] + 3];
-		DataMemoryOutput[63:32] <= {32{DataMem[AddressBus[(`MEMORY_BITS-1):0] + 3][7]}};
+        DataMemoryOutput[(8 * 1) - 1:8 * 0] <= DataMem[AddressBus[(`DM_BITS-1):0] + 0];
+        DataMemoryOutput[(8 * 2) - 1:8 * 1] <= DataMem[AddressBus[(`DM_BITS-1):0] + 1];
+        DataMemoryOutput[(8 * 3) - 1:8 * 2] <= DataMem[AddressBus[(`DM_BITS-1):0] + 2];
+        DataMemoryOutput[(8 * 4) - 1:8 * 3] <= DataMem[AddressBus[(`DM_BITS-1):0] + 3];
+		DataMemoryOutput[63:32] <= {32{DataMem[AddressBus[(`DM_BITS-1):0] + 3][7]}};
 	end
 	else begin
 		DataMemoryOutput <= 0;
@@ -31,7 +31,7 @@ always @(posedge clock) begin
 end
 integer i;
 initial begin
-for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1)
+for (i = 0; i <= (`DM_SIZE-1); i = i + 1)
     DataMem[i] <= 0;
 
 `include "DM_INIT.INIT"
@@ -41,8 +41,8 @@ end
 	initial begin
 		#(`MAX_CLOCKS + `reset+1);
 		$display("Data Memory Content : ");
-		for (i = 0; i <= (`MEMORY_SIZE-1); i = i + 1) begin
-			$display("Mem[%d] = signed =  %d , unsigned = %d", i[(`MEMORY_BITS-1):0], $signed(DataMem[i]), $unsigned(DataMem[i]));
+		for (i = 0; i <= (`DM_SIZE-1); i = i + 1) begin
+			$display("Mem[%d] = signed =  %d , unsigned = %d", i[(`DM_BITS-1):0], $signed(DataMem[i]), $unsigned(DataMem[i]));
 		end
 	end 
 `endif
