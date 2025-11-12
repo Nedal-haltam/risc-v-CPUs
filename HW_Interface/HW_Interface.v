@@ -1,6 +1,17 @@
 
 `include "defs.h"
 
+`define CPU_AddressBus AddressBus1[(`DM_BITS-1):0]
+
+`define DataMem_rden (ControlBus[1] && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+`define DataMem_wren (ControlBus[2] && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+
+`define MMIO_rden (ControlBus[1] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+`define MMIO_wren (ControlBus[2] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+
+`define MMIO_LED_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - 8)))
+`define MMIO_LED_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - 8)))
+
 module HW_Interface(
 
 	//////////// CLOCK //////////
@@ -38,6 +49,10 @@ end
 reg `BIT_WIDTH offset;
 reg done;
 
+// MMIO
+reg [9:0] LED_MM_REG;
+reg `BIT_WIDTH MMIODataBus;
+
 wire clk;
 wire rst;
 wire cpu_clk;
@@ -49,13 +64,13 @@ wire `BIT_WIDTH write_ecall_fd;
 wire `BIT_WIDTH write_ecall_address;
 wire `BIT_WIDTH write_ecall_len;
 wire datatrigger;
-wire [(`MEMORY_BITS-1):0] write_ecall_mem_addr;
+wire [(`DM_BITS-1):0] write_ecall_mem_addr;
 
-wire `BIT_WIDTH AddressBus1, DMDataBus, write_DMDataBus, DataBusOut1;
+wire `BIT_WIDTH AddressBus1, DMDataBus, CPUDataBusIn, write_DMDataBus, CPUDataBusOut;
 wire [10:0] ControlBus;
 wire `BIT_WIDTH CyclesConsumed;
 
-always @(negedge clk or posedge rst) begin
+always@(negedge clk or posedge rst) begin
     if (rst) begin
 		done    <= 1'b1;
         offset  <= 0;
@@ -83,8 +98,8 @@ CPU cpu_dut
 	.cpu_clk(cpu_clk),
 	.rst(rst),
 	.AddressBus(AddressBus1),
-	.DataBusIn(DMDataBus),
-	.DataBusOut(DataBusOut1),
+	.DataBusIn(CPUDataBusIn),
+	.DataBusOut(CPUDataBusOut),
 	.ControlBus(ControlBus),
 	.CyclesConsumed(CyclesConsumed),
 
@@ -99,10 +114,10 @@ CPU cpu_dut
 dualpram dualpram_inst
 (
 	.clock_a(~clk),
-	.rden_a(ControlBus[1]),
-	.wren_a(ControlBus[2]),
-	.address_a(AddressBus1[(`MEMORY_BITS-1):0]),
-	.data_a(DataBusOut1),
+	.rden_a(`DataMem_rden),
+	.wren_a(`DataMem_wren),
+	.address_a(`CPU_AddressBus),
+	.data_a(CPUDataBusOut),
 	.q_a(DMDataBus),
 
 	.clock_b(clk),
@@ -113,42 +128,53 @@ dualpram dualpram_inst
 	.q_b(write_DMDataBus)
 );
 
+// MMIO control ckt
+always@(negedge clk or posedge rst) begin
+	if (rst) begin
+		LED_MM_REG <= 0;
+	end
+	else if (`MMIO_rden) begin
+		if (`MMIO_LED_rden) begin
+			MMIODataBus[63:10] <= 0;
+			MMIODataBus[9:0] <= LED_MM_REG;
+		end
+		// add other MM regs to read from
+	end
+	else if (`MMIO_wren) begin
+		if (`MMIO_LED_wren) begin
+			LED_MM_REG <= CPUDataBusOut[9:0];
+		end
+		// add other MM regs to write to
+	end
+end
+
 // bcd7seg HEX0_DISP
 // (
 // 	.num(write_ecall_len[3:0]),
 // 	.display(HEX0)
 // );
 
-// bcd7seg HEX1_DISP
-// (
-// 	.num(write_ecall_len[7:4]),
-// 	.display(HEX1)
-// );
-
-// bcd7seg HEX2_DISP
-// (
-// 	.num(pc[11:8]),
-// 	.display(HEX2)
-// );
-
 assign datatrigger = (!done) ? (rst | ~clk) : (datatrigger);
 assign ARDUINO_IO[7:0] = (!done && (offset) <= (write_ecall_len)) ? write_DMDataBus[7:0] : 8'd0;
 assign ARDUINO_IO[8] = datatrigger;
 assign ARDUINO_RESET_N = 1'b1;
-assign write_ecall_mem_addr = write_ecall_address[(`MEMORY_BITS-1):0] + offset[(`MEMORY_BITS-1):0];
+assign write_ecall_mem_addr = write_ecall_address[(`DM_BITS-1):0] + offset[(`DM_BITS-1):0];
 assign write_ecall_finished = done;
 // TODO: show an idnication that the FPGA finished correctly through the 7seg, leds, exit code, ...
 assign clk = ClockDivider[9];
 assign rst = ~KEY[0];
 
-assign LEDR[0] = clk;
-assign LEDR[1] = cpu_clk;
-assign LEDR[2] = rst;
-assign LEDR[3] = datatrigger;
-assign LEDR[4] = done;
-assign LEDR[5] = write_ecall_finished;
-assign LEDR[6] = write_ecall;
-assign LEDR[7] = exit_ecall;
+assign CPUDataBusIn = (`DataMem_rden) ? DMDataBus : MMIODataBus;
+assign LEDR = LED_MM_REG;
+
+assign HEX0[0] = clk;
+assign HEX0[1] = cpu_clk;
+assign HEX0[2] = rst;
+assign HEX0[3] = datatrigger;
+assign HEX0[4] = done;
+assign HEX0[5] = write_ecall_finished;
+assign HEX0[6] = write_ecall;
+assign HEX0[7] = exit_ecall;
 
 
 endmodule
