@@ -2,12 +2,11 @@
 `include "defs.h"
 
 `define CPU_AddressBus AddressBus1[(`DM_BITS-1):0]
-
 `define DataMem_rden (ControlBus[1] && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
 `define DataMem_wren (ControlBus[2] && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
-
 `define MMIO_rden (ControlBus[1] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
 `define MMIO_wren (ControlBus[2] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+
 
 `define MMIO_LED_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (1 * 8))))
 `define MMIO_LED_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (1 * 8))))
@@ -61,23 +60,25 @@ reg `BIT_WIDTH offset;
 reg done;
 
 // MMIO
-// LEDs
+//------------------------------------------------
+// mm_leds
 reg `BIT_WIDTH LED_MM_REG;
 reg `BIT_WIDTH MMIODataBus;
+//------------------------------------------------
+//------------------------------------------------
 // mm_alu
 // 50 * 1000 cycle to get a delay of 5 sec
 reg `BIT_WIDTH alu_in1, alu_in2, alu_out;
 reg `BIT_WIDTH alu_start;
 reg `BIT_WIDTH alu_done;
+
 reg alu_done_set;
 wire alu_start_set;
 wire alu_done_rden;
-
 parameter [3:0] ALU_STATE_OFF  = 4'd1;
 parameter [3:0] ALU_STATE_ON   = 4'd2;
 reg `BIT_WIDTH alu_counter;
 reg [3:0] alu_state;
-// mm_alu
 
 wire clk;
 wire rst;
@@ -160,9 +161,13 @@ always@(negedge clk or posedge rst) begin
 		LED_MM_REG <= 0;
 	end
 	else if (`MMIO_rden) begin
+		//------------------------------------------------
+		// mm_leds
 		if (`MMIO_LED_rden) begin
 			MMIODataBus <= LED_MM_REG;
 		end
+		//------------------------------------------------
+		// mm_alu
 		else if (`MMIO_ALU_in1_rden) begin
 			MMIODataBus <= alu_in1;
 		end
@@ -178,32 +183,30 @@ always@(negedge clk or posedge rst) begin
 		else if (`MMIO_ALU_done_rden) begin
 			MMIODataBus <= alu_done;
 		end
+		//------------------------------------------------
 		// add other MM regs to read from
 	end
 	else if (`MMIO_wren) begin
+		//------------------------------------------------
+		// mm_leds
 		if (`MMIO_LED_wren) begin
 			LED_MM_REG <= CPUDataBusOut;
 		end
+		//------------------------------------------------
+		// mm_alu
 		else if (`MMIO_ALU_in1_wren)begin
 			alu_in1 <= CPUDataBusOut;
 		end
 		else if (`MMIO_ALU_in2_wren)begin
 			alu_in2 <= CPUDataBusOut;
 		end
-		// else if (`MMIO_ALU_out_wren)begin
-		// 	alu_out <= CPUDataBusOut;
-		// end
-		// else if (`MMIO_ALU_start_wren)begin
-		// 	alu_start <= CPUDataBusOut;
-		// end
-		// else if (`MMIO_ALU_done_wren)begin
-		// 	alu_done <= CPUDataBusOut;
-		// end
+		//------------------------------------------------
 		// add other MM regs to write to
 	end
 end
 
 
+//----------------------------------------------------------------------------------------
 // alu_start: reset after set
 always@(posedge clk or posedge rst) begin
 	if (rst) begin
@@ -257,13 +260,12 @@ always@(posedge clk or posedge rst) begin
 		endcase
 	end
 end
-
 assign alu_done_rden = `MMIO_ALU_done_rden;
 assign alu_start_set = `MMIO_ALU_start_wren && (CPUDataBusOut == 64'd1);
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
-
-
-
+//----------------------------------------------------------------------------------------
 
 
 // bcd7seg HEX0_DISP
