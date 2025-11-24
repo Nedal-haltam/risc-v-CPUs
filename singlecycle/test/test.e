@@ -14,6 +14,13 @@
 #define vadd_start    (16384 - (11 * 8))
 #define vadd_done     (16384 - (12 * 8))
 
+#define conv1d_addr_in1 (16384 - (13 * 8))
+#define conv1d_addr_in2 (16384 - (14 * 8))
+#define conv1d_addr_out (16384 - (15 * 8))
+#define conv1d_vsize    (16384 - (16 * 8))
+#define conv1d_start    (16384 - (17 * 8))
+#define conv1d_done     (16384 - (18 * 8))
+
 func mmread(auto address)
 {
     return *address;
@@ -66,42 +73,86 @@ func mm_alu_add()
     print("alu_out = %d\n", mmread(alu_out));
     print("--------------------------------------------------\n");
 }
-#define VSIZE 10
+#define VADD_VSIZE 10
 func mm_vadd()
 {
     print("---------------------MM vector add example started---------------------\n");
-    auto xs[VSIZE];
-    auto ys[VSIZE];
-    auto zs[VSIZE];
+    auto xs[VADD_VSIZE];
+    auto ys[VADD_VSIZE];
+    auto zs[VADD_VSIZE];
 
-    for (auto i = 0; i < VSIZE; i += 1) xs[i] = 3 * (i + 1) + 1;
-    for (auto i = 0; i < VSIZE; i += 1) ys[i] = 4 * (i + 1) + 1;
-    for (auto i = 0; i < VSIZE; i += 1) zs[i] = 0;
+    for (auto i = 0; i < VADD_VSIZE; i += 1) xs[i] = 3 * (i + 1) + 1;
+    for (auto i = 0; i < VADD_VSIZE; i += 1) ys[i] = 4 * (i + 1) + 1;
+    for (auto i = 0; i < VADD_VSIZE; i += 1) zs[i] = 0;
 
     mmwrite(vadd_addr_in1, xs);
     mmwrite(vadd_addr_in2, ys);
     mmwrite(vadd_addr_out, zs);
-    mmwrite(vadd_vsize, VSIZE);
+    mmwrite(vadd_vsize, VADD_VSIZE);
 
-    print("xs mmread(%d), (%d): ", mmread(vadd_addr_in1), xs); for (auto i = 0; i < VSIZE; i += 1) print("%d ", xs[i]); print("\n");
-    print("ys mmread(%d), (%d): ", mmread(vadd_addr_in2), ys); for (auto i = 0; i < VSIZE; i += 1) print("%d ", ys[i]); print("\n");
-    print("zs mmread(%d), (%d): ", mmread(vadd_addr_out), zs); for (auto i = 0; i < VSIZE; i += 1) print("%d ", zs[i]); print("\n");
+    print("xs mmread(%d), (%d): ", mmread(vadd_addr_in1), xs); for (auto i = 0; i < VADD_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys mmread(%d), (%d): ", mmread(vadd_addr_in2), ys); for (auto i = 0; i < VADD_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs mmread(%d), (%d): ", mmread(vadd_addr_out), zs); for (auto i = 0; i < VADD_VSIZE; i += 1) print("%d ", zs[i]); print("\n");
 
     mmwrite(vadd_start, 1);
     while(!mmread(vadd_done));
 
     print("it is DONE!\n");
 
-    print("xs mmread(%d), (%d): ", mmread(vadd_addr_in1), xs); for (auto i = 0; i < VSIZE; i += 1) print("%d ", xs[i]); print("\n");
-    print("ys mmread(%d), (%d): ", mmread(vadd_addr_in2), ys); for (auto i = 0; i < VSIZE; i += 1) print("%d ", ys[i]); print("\n");
-    print("zs mmread(%d), (%d): ", mmread(vadd_addr_out), zs); for (auto i = 0; i < VSIZE; i += 1) print("%d ", zs[i]); print("\n");
+    print("xs mmread(%d), (%d): ", mmread(vadd_addr_in1), xs); for (auto i = 0; i < VADD_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys mmread(%d), (%d): ", mmread(vadd_addr_in2), ys); for (auto i = 0; i < VADD_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs mmread(%d), (%d): ", mmread(vadd_addr_out), zs); for (auto i = 0; i < VADD_VSIZE; i += 1) print("%d ", zs[i]); print("\n");
 
+    print("-----------------------------------------------------------------------\n");
+}
+
+#define CONV1D_VSIZE 10
+func mm_conv1d()
+{
+    print("---------------------MM 1D convolution example started---------------------\n");
+    auto xs[CONV1D_VSIZE];
+    auto ys[CONV1D_VSIZE];
+    auto zs[2 * CONV1D_VSIZE - 1];
+    for (auto i = 0; i < CONV1D_VSIZE; i += 1) xs[i] = 2 * (i + 1) + 1;
+    for (auto i = 0; i < CONV1D_VSIZE; i += 1) ys[i] = 3 * (i + 1) + 1;
+    for (auto i = 0; i < CONV1D_VSIZE; i += 1)
+    {
+        for (auto j = 0; j < CONV1D_VSIZE; j += 1)
+        {
+            zs[i + j] += xs[i] * ys[j];
+        }
+    }
+    print("Golden output:\n");
+    print("xs: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs: "); for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
+    for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) zs[i] = 0;
+
+    mmwrite(conv1d_addr_in1, xs);
+    mmwrite(conv1d_addr_in2, ys);
+    mmwrite(conv1d_addr_out, zs);
+    mmwrite(conv1d_vsize, CONV1D_VSIZE);
+
+    print("Before:\n");
+    print("xs: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs: "); for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
+
+    mmwrite(conv1d_start, 1);
+    while(!mmread(conv1d_done));
+
+    print("it is DONE!\n");
+
+    print("Accelerator Output:\n");
+    print("xs: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs: "); for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
     print("-----------------------------------------------------------------------\n");
 }
 
 func main()
 {
-    mm_vadd();
+    mm_conv1d();
     return 0;
 }
 // dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./singlecycle/test/Generated/test -dump -sim ./singlecycle/test/test.e
