@@ -106,15 +106,16 @@ func mm_vadd()
     print("-----------------------------------------------------------------------\n");
 }
 
-#define CONV1D_VSIZE 10
+#define CONV1D_VSIZE 4
 func mm_conv1d()
 {
-    print("---------------------MM 1D convolution example started---------------------\n");
+    print("---------------------MM 1D convolution example started---\n");
     auto xs[CONV1D_VSIZE];
     auto ys[CONV1D_VSIZE];
     auto zs[2 * CONV1D_VSIZE - 1];
     for (auto i = 0; i < CONV1D_VSIZE; i += 1) xs[i] = 2 * (i + 1) + 1;
     for (auto i = 0; i < CONV1D_VSIZE; i += 1) ys[i] = 3 * (i + 1) + 1;
+    for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) zs[i] = 0;
     for (auto i = 0; i < CONV1D_VSIZE; i += 1)
     {
         for (auto j = 0; j < CONV1D_VSIZE; j += 1)
@@ -147,7 +148,7 @@ func mm_conv1d()
     print("xs: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
     print("ys: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
     print("zs: "); for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
-    print("-----------------------------------------------------------------------\n");
+    print("---------------------------------------------------------------\n");
 }
 
 func main()

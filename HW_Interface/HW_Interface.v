@@ -198,7 +198,7 @@ always@(negedge clk or posedge rst) begin
 			done <= 1'b1;
 		end
 		if (!done) begin
-			offset <= offset + 64'd1;
+			offset <= offset + 1'b1;
 		end
 		else begin
 			offset <= 0;
@@ -609,7 +609,7 @@ always@(posedge clk or posedge rst) begin
 				end
 			end
 			CONV1D_STATE_WRITE_C: begin
-				if (conv1d_offset >= 19) begin
+				if (conv1d_offset >= (2 * conv1d_vsize - 1)) begin
 					conv1d_dm_p2_wren <= 1'b0;
 					conv1d_done_set <= 1'b1;
 					conv1d_dm_p2_en <= 1'b0;
@@ -634,26 +634,14 @@ SystolicArray conv1d_dut
     .clk(clk)
 	,.rst(conv1d_state == CONV1D_STATE_ACC_RESET)
 	,.trigger(conv1d_trigger)
-    ,.Dim0Input00Lane0(conv1d_regas[0])
-    ,.Dim0Input01Lane0(conv1d_regas[1])
-    ,.Dim0Input02Lane0(conv1d_regas[2])
-    ,.Dim0Input03Lane0(conv1d_regas[3])
-    ,.Dim0Input04Lane0(conv1d_regas[4])
-    ,.Dim0Input05Lane0(conv1d_regas[5])
-    ,.Dim0Input06Lane0(conv1d_regas[6])
-    ,.Dim0Input07Lane0(conv1d_regas[7])
-    ,.Dim0Input08Lane0(conv1d_regas[8])
-    ,.Dim0Input09Lane0(conv1d_regas[9])
-    ,.Dim1Input00Lane0(conv1d_regbs[0])
-    ,.Dim1Input01Lane0(conv1d_regbs[1])
-    ,.Dim1Input02Lane0(conv1d_regbs[2])
-    ,.Dim1Input03Lane0(conv1d_regbs[3])
-    ,.Dim1Input04Lane0(conv1d_regbs[4])
-    ,.Dim1Input05Lane0(conv1d_regbs[5])
-    ,.Dim1Input06Lane0(conv1d_regbs[6])
-    ,.Dim1Input07Lane0(conv1d_regbs[7])
-    ,.Dim1Input08Lane0(conv1d_regbs[8])
-    ,.Dim1Input09Lane0(conv1d_regbs[9])
+    ,.Dim0Input0Lane0(conv1d_regas[0])
+    ,.Dim0Input1Lane0(conv1d_regas[1])
+    ,.Dim0Input2Lane0(conv1d_regas[2])
+    ,.Dim0Input3Lane0(conv1d_regas[3])
+    ,.Dim1Input0Lane0(conv1d_regbs[0])
+    ,.Dim1Input1Lane0(conv1d_regbs[1])
+    ,.Dim1Input2Lane0(conv1d_regbs[2])
+    ,.Dim1Input3Lane0(conv1d_regbs[3])
 
 	,.DimOutput0(conv1d_regcs[0])
 	,.DimOutput1(conv1d_regcs[1])
@@ -662,26 +650,14 @@ SystolicArray conv1d_dut
 	,.DimOutput4(conv1d_regcs[4])
 	,.DimOutput5(conv1d_regcs[5])
 	,.DimOutput6(conv1d_regcs[6])
-	,.DimOutput7(conv1d_regcs[7])
-	,.DimOutput8(conv1d_regcs[8])
-	,.DimOutput9(conv1d_regcs[9])
-	,.DimOutput10(conv1d_regcs[10])
-	,.DimOutput11(conv1d_regcs[11])
-	,.DimOutput12(conv1d_regcs[12])
-	,.DimOutput13(conv1d_regcs[13])
-	,.DimOutput14(conv1d_regcs[14])
-	,.DimOutput15(conv1d_regcs[15])
-	,.DimOutput16(conv1d_regcs[16])
-	,.DimOutput17(conv1d_regcs[17])
-	,.DimOutput18(conv1d_regcs[18])
 );
 //----------------------------------------------------------------------------------------
 
-assign clkPort2     = (conv1d_dm_p2_en) ? (~clk) : ((vadd_dm_p2_en) ? (~clk)   : clk);
-assign rdenPort2    = (conv1d_dm_p2_en) ? (~conv1d_dm_p2_wren) : ((vadd_dm_p2_en) ? (~vadd_dm_p2_wren) : !done);
-assign wrenPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_wren) : ((vadd_dm_p2_en) ? (vadd_dm_p2_wren) : 1'b0);
-assign addressPort2 = (conv1d_dm_p2_en) ? (conv1d_dm_p2_address) : ((vadd_dm_p2_en) ? (vadd_dm_p2_address) : write_ecall_mem_addr);
-assign dataPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_writedata) : ((vadd_dm_p2_en) ? (vadd_dm_p2_writedata)    : 0);
+assign clkPort2     = (conv1d_dm_p2_en) ? (~clk) : clk;
+assign rdenPort2    = (conv1d_dm_p2_en) ? (~conv1d_dm_p2_wren) : !done;
+assign wrenPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_wren) : 1'b0;
+assign addressPort2 = (conv1d_dm_p2_en) ? (conv1d_dm_p2_address) : write_ecall_mem_addr;
+assign dataPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_writedata) : 0;
 
 assign clk = ClockDivider[9];
 assign rst = ~KEY[0];
@@ -745,26 +721,14 @@ endmodule
 module SystolicArray
 (
     input clk, rst, trigger
-    ,input `BIT_WIDTH Dim0Input00Lane0
-    ,input `BIT_WIDTH Dim0Input01Lane0
-    ,input `BIT_WIDTH Dim0Input02Lane0
-    ,input `BIT_WIDTH Dim0Input03Lane0
-    ,input `BIT_WIDTH Dim0Input04Lane0
-    ,input `BIT_WIDTH Dim0Input05Lane0
-    ,input `BIT_WIDTH Dim0Input06Lane0
-    ,input `BIT_WIDTH Dim0Input07Lane0
-    ,input `BIT_WIDTH Dim0Input08Lane0
-    ,input `BIT_WIDTH Dim0Input09Lane0
-    ,input `BIT_WIDTH Dim1Input00Lane0
-    ,input `BIT_WIDTH Dim1Input01Lane0
-    ,input `BIT_WIDTH Dim1Input02Lane0
-    ,input `BIT_WIDTH Dim1Input03Lane0
-    ,input `BIT_WIDTH Dim1Input04Lane0
-    ,input `BIT_WIDTH Dim1Input05Lane0
-    ,input `BIT_WIDTH Dim1Input06Lane0
-    ,input `BIT_WIDTH Dim1Input07Lane0
-    ,input `BIT_WIDTH Dim1Input08Lane0
-    ,input `BIT_WIDTH Dim1Input09Lane0
+    ,input `BIT_WIDTH Dim0Input0Lane0
+    ,input `BIT_WIDTH Dim0Input1Lane0
+    ,input `BIT_WIDTH Dim0Input2Lane0
+    ,input `BIT_WIDTH Dim0Input3Lane0
+    ,input `BIT_WIDTH Dim1Input0Lane0
+    ,input `BIT_WIDTH Dim1Input1Lane0
+    ,input `BIT_WIDTH Dim1Input2Lane0
+    ,input `BIT_WIDTH Dim1Input3Lane0
 	,output `BIT_WIDTH DimOutput0
 	,output `BIT_WIDTH DimOutput1
 	,output `BIT_WIDTH DimOutput2
@@ -772,49 +736,25 @@ module SystolicArray
 	,output `BIT_WIDTH DimOutput4
 	,output `BIT_WIDTH DimOutput5
 	,output `BIT_WIDTH DimOutput6
-	,output `BIT_WIDTH DimOutput7
-	,output `BIT_WIDTH DimOutput8
-	,output `BIT_WIDTH DimOutput9
-	,output `BIT_WIDTH DimOutput10
-	,output `BIT_WIDTH DimOutput11
-	,output `BIT_WIDTH DimOutput12
-	,output `BIT_WIDTH DimOutput13
-	,output `BIT_WIDTH DimOutput14
-	,output `BIT_WIDTH DimOutput15
-	,output `BIT_WIDTH DimOutput16
-	,output `BIT_WIDTH DimOutput17
-	,output `BIT_WIDTH DimOutput18
 );
-    wire `BIT_WIDTH PassThroughWires0Lane0[9:0];
-    wire `BIT_WIDTH PassThroughWires1Lane0[9:0];
-    assign PassThroughWires0Lane0[0] = Dim0Input00Lane0;
-    assign PassThroughWires0Lane0[1] = Dim0Input01Lane0;
-    assign PassThroughWires0Lane0[2] = Dim0Input02Lane0;
-    assign PassThroughWires0Lane0[3] = Dim0Input03Lane0;
-    assign PassThroughWires0Lane0[4] = Dim0Input04Lane0;
-    assign PassThroughWires0Lane0[5] = Dim0Input05Lane0;
-    assign PassThroughWires0Lane0[6] = Dim0Input06Lane0;
-    assign PassThroughWires0Lane0[7] = Dim0Input07Lane0;
-    assign PassThroughWires0Lane0[8] = Dim0Input08Lane0;
-    assign PassThroughWires0Lane0[9] = Dim0Input09Lane0;
-    assign PassThroughWires1Lane0[0] = Dim1Input00Lane0;
-    assign PassThroughWires1Lane0[1] = Dim1Input01Lane0;
-    assign PassThroughWires1Lane0[2] = Dim1Input02Lane0;
-    assign PassThroughWires1Lane0[3] = Dim1Input03Lane0;
-    assign PassThroughWires1Lane0[4] = Dim1Input04Lane0;
-    assign PassThroughWires1Lane0[5] = Dim1Input05Lane0;
-    assign PassThroughWires1Lane0[6] = Dim1Input06Lane0;
-    assign PassThroughWires1Lane0[7] = Dim1Input07Lane0;
-    assign PassThroughWires1Lane0[8] = Dim1Input08Lane0;
-    assign PassThroughWires1Lane0[9] = Dim1Input09Lane0;
-    wire `BIT_WIDTH PEOutDim0Lane0 [9:0][9:0];
-    wire `BIT_WIDTH PEOutDim1Lane0 [9:0][9:0];
-    wire `BIT_WIDTH PEValues [99:0];
+    wire `BIT_WIDTH PassThroughWires0Lane0[3:0];
+    wire `BIT_WIDTH PassThroughWires1Lane0[3:0];
+    assign PassThroughWires0Lane0[0] = Dim0Input0Lane0;
+    assign PassThroughWires0Lane0[1] = Dim0Input1Lane0;
+    assign PassThroughWires0Lane0[2] = Dim0Input2Lane0;
+    assign PassThroughWires0Lane0[3] = Dim0Input3Lane0;
+    assign PassThroughWires1Lane0[0] = Dim1Input0Lane0;
+    assign PassThroughWires1Lane0[1] = Dim1Input1Lane0;
+    assign PassThroughWires1Lane0[2] = Dim1Input2Lane0;
+    assign PassThroughWires1Lane0[3] = Dim1Input3Lane0;
+    wire `BIT_WIDTH PEOutDim0Lane0 [3:0][3:0];
+    wire `BIT_WIDTH PEOutDim1Lane0 [3:0][3:0];
+    wire `BIT_WIDTH PEValues [15:0];
     genvar Dim0Index, Dim1Index, DummyIndex;
     generate
-	    for (Dim0Index = 0; Dim0Index < 10; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
-		    for (Dim1Index = 0; Dim1Index < 10; Dim1Index = Dim1Index + 1) begin : Dim1IndexForLoopBlock
-				localparam PECount = Dim1Index * 10 * 1 + Dim0Index * 1 + 0;
+	    for (Dim0Index = 0; Dim0Index < 4; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
+		    for (Dim1Index = 0; Dim1Index < 4; Dim1Index = Dim1Index + 1) begin : Dim1IndexForLoopBlock
+				localparam PECount = Dim1Index * 4 * 1 + Dim0Index * 1 + 0;
 				wire `BIT_WIDTH InDim0Lane0;
 				assign InDim0Lane0 = PassThroughWires0Lane0[Dim0Index];
 				wire `BIT_WIDTH InDim1Lane0;
@@ -833,22 +773,22 @@ module SystolicArray
 		    end
 	    end
     endgenerate
-    reg `BIT_WIDTH OutputDim [18:0];
+    reg `BIT_WIDTH OutputDim [6:0];
     reg `BIT_WIDTH index = 0;
     integer i;
     integer j;
     always@(posedge clk) begin
         if (rst) begin
-            for (i = 0; i < 19; i = i + 1) begin
+            for (i = 0; i < 7; i = i + 1) begin
                 OutputDim[i] <= 0;
             end
             index = 0;
         end
         else begin
             if (index < 2) begin
-                for (i = 0; i < 10; i = i + 1) begin
-                    for (j = 0; j < 10; j = j + 1) begin
-                        OutputDim[i + j] = OutputDim[i + j] + PEValues[10 * j + i];
+                for (i = 0; i < 4; i = i + 1) begin
+                    for (j = 0; j < 4; j = j + 1) begin
+                        OutputDim[i + j] = OutputDim[i + j] + PEValues[4 * j + i];
                     end
                 end
             end
@@ -863,24 +803,12 @@ module SystolicArray
 	assign DimOutput4 = OutputDim[4];
 	assign DimOutput5 = OutputDim[5];
 	assign DimOutput6 = OutputDim[6];
-	assign DimOutput7 = OutputDim[7];
-	assign DimOutput8 = OutputDim[8];
-	assign DimOutput9 = OutputDim[9];
-	assign DimOutput10 = OutputDim[10];
-	assign DimOutput11 = OutputDim[11];
-	assign DimOutput12 = OutputDim[12];
-	assign DimOutput13 = OutputDim[13];
-	assign DimOutput14 = OutputDim[14];
-	assign DimOutput15 = OutputDim[15];
-	assign DimOutput16 = OutputDim[16];
-	assign DimOutput17 = OutputDim[17];
-	assign DimOutput18 = OutputDim[18];
 
-    integer k;
+	integer k;
 `ifdef VSCODE
     initial begin
         `ADVANCE_N_CYCLE(5);
-        for (k = 0; k < 19; k = k + 1) begin
+        for (k = 0; k < 7; k = k + 1) begin
             $display("Output%-1d : Value = %-1d",k, $signed(OutputDim[k]));
         end
     end
