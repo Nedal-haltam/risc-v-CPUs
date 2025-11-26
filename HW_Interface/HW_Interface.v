@@ -652,12 +652,26 @@ SystolicArray conv1d_dut
 	,.DimOutput6(conv1d_regcs[6])
 );
 //----------------------------------------------------------------------------------------
+`define write_clkPort2     (clk)
+`define write_rdenPort2    (!done)
+`define write_wrenPort2    (1'b0)
+`define write_addressPort2 (write_ecall_mem_addr)
+`define write_dataPort2    (0)
 
-assign clkPort2     = (conv1d_dm_p2_en) ? (~clk) : clk;
-assign rdenPort2    = (conv1d_dm_p2_en) ? (~conv1d_dm_p2_wren) : !done;
-assign wrenPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_wren) : 1'b0;
-assign addressPort2 = (conv1d_dm_p2_en) ? (conv1d_dm_p2_address) : write_ecall_mem_addr;
-assign dataPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_writedata) : 0;
+assign clkPort2     = (conv1d_dm_p2_en) ? (~clk)                   
+				    : ((vadd_dm_p2_en) ? (~clk) : `write_clkPort2);
+
+assign rdenPort2    = (conv1d_dm_p2_en) ? (~conv1d_dm_p2_wren)     
+				    : ((vadd_dm_p2_en) ? (~vadd_dm_p2_wren) : `write_rdenPort2);
+
+assign wrenPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_wren)      
+				    : ((vadd_dm_p2_en) ? (vadd_dm_p2_wren) : `write_wrenPort2);
+
+assign addressPort2 = (conv1d_dm_p2_en) ? (conv1d_dm_p2_address)   
+				    : ((vadd_dm_p2_en) ? (vadd_dm_p2_address) : `write_addressPort2);
+
+assign dataPort2    = (conv1d_dm_p2_en) ? (conv1d_dm_p2_writedata) 
+				    : ((vadd_dm_p2_en) ? (vadd_dm_p2_writedata) : `write_dataPort2);
 
 assign clk = ClockDivider[9];
 assign rst = ~KEY[0];
@@ -672,8 +686,10 @@ assign write_ecall_finished = done;
 //-------------------
 assign CPUDataBusIn = (`DataMem_rden) ? DMDataBusPort1 : MMIODataBus;
 
-
-assign LEDR = LED_MM_REG[9:0];
+// assign LEDR = LED_MM_REG[9:0];
+assign LEDR[0] = vadd_dm_p2_en;
+assign LEDR[1] = conv1d_dm_p2_en;
+assign LEDR[9:2] = 0;
 assign HEX0[0] = clk;
 assign HEX0[1] = cpu_clk;
 assign HEX0[2] = rst;
