@@ -21,6 +21,13 @@
 #define conv1d_start    (16384 - (17 * 8))
 #define conv1d_done     (16384 - (18 * 8))
 
+#define conv1d_pl_addr_in1 (16384 - (19 * 8))
+#define conv1d_pl_addr_in2 (16384 - (20 * 8))
+#define conv1d_pl_addr_out (16384 - (21 * 8))
+#define conv1d_pl_vsize    (16384 - (22 * 8))
+#define conv1d_pl_start    (16384 - (23 * 8))
+#define conv1d_pl_done     (16384 - (24 * 8))
+
 func mmread(auto address)
 {
     return *address;
@@ -148,6 +155,51 @@ func mm_conv1d()
     print("xs: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
     print("ys: "); for (auto i = 0; i < CONV1D_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
     print("zs: "); for (auto i = 0; i < 2 * CONV1D_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
+    print("---------------------------------------------------------------\n");
+}
+
+#define CONV1D_PL_VSIZE 4
+func mm_conv1d_pl()
+{
+    print("-------MM 1D convolution (PL) example started---\n");
+    auto xs[CONV1D_PL_VSIZE];
+    auto ys[CONV1D_PL_VSIZE];
+    auto zs[2 * CONV1D_PL_VSIZE - 1];
+    for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) xs[i] = 2 * (i + 1) + 1;
+    for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) ys[i] = 3 * (i + 1) + 1;
+    for (auto i = 0; i < 2 * CONV1D_PL_VSIZE - 1; i += 1) zs[i] = 0;
+    for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1)
+    {
+        for (auto j = 0; j < CONV1D_PL_VSIZE; j += 1)
+        {
+            zs[i + j] += xs[i] * ys[j];
+        }
+    }
+    print("Golden output:\n");
+    print("xs: "); for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys: "); for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs: "); for (auto i = 0; i < 2 * CONV1D_PL_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
+    for (auto i = 0; i < 2 * CONV1D_PL_VSIZE - 1; i += 1) zs[i] = 0;
+
+    mmwrite(conv1d_pl_addr_in1, xs);
+    mmwrite(conv1d_pl_addr_in2, ys);
+    mmwrite(conv1d_pl_addr_out, zs);
+    mmwrite(conv1d_pl_vsize, CONV1D_PL_VSIZE);
+
+    print("Before:\n");
+    print("xs: "); for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys: "); for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs: "); for (auto i = 0; i < 2 * CONV1D_PL_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
+
+    mmwrite(conv1d_pl_start, 1);
+    while(!mmread(conv1d_pl_done));
+
+    print("it is DONE!\n");
+
+    print("Accelerator Output:\n");
+    print("xs: "); for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) print("%d ", xs[i]); print("\n");
+    print("ys: "); for (auto i = 0; i < CONV1D_PL_VSIZE; i += 1) print("%d ", ys[i]); print("\n");
+    print("zs: "); for (auto i = 0; i < 2 * CONV1D_PL_VSIZE - 1; i += 1) print("%d ", zs[i]); print("\n");
     print("---------------------------------------------------------------\n");
 }
 

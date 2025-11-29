@@ -1,8 +1,10 @@
 *.vvp
-/HW_Interface/db
-/HW_Interface/incremental_db
-/PipeLine/.qsys_edit
-/PipeLine
+*/hw_if_de10_lite/db
+*/hw_if_de2_115/db
+*/hw_if_de10_lite/incremental_db
+*/hw_if_de2_115/incremental_db
+*/PipeLine/.qsys_edit
+*/PipeLine
 *.vcd
 *.rpt
 *.summary
@@ -13,4 +15,7 @@
 *.done
 *.qws
 *.smsg
-/singlecycle/test/Generated
+*/singlecycle/test/Generated
+*/hw_if_de10_lite/export_db
+*/hw_if_de2_115/export_db
+*.pin
