@@ -1,2 +1,7 @@
 Comparing Software output with Hardware output
+5c5
+< index =          2 , reg_out : signed =                 7168 , unsigned =                 7168
+---
+> index =          2 , reg_out : signed =                 8192 , unsigned =                 8192
+Difference detected
 -------------------------------------------------------------------------------------------------------------------------------------
