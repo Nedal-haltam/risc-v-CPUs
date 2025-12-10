@@ -118,7 +118,9 @@ module controlUnit
 								7'b0000001: begin // "mul"
 									aluop <= `ALU_OPCODE_MUL;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b001: begin
@@ -126,7 +128,9 @@ module controlUnit
 								7'b0000000: begin // "sll"
 									aluop <= `ALU_OPCODE_SLL;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b010: begin
@@ -140,7 +144,9 @@ module controlUnit
 								7'b0000010: begin // "sne"
 									aluop <= `ALU_OPCODE_SNE;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b011: begin
@@ -148,7 +154,9 @@ module controlUnit
 								7'b0000000: begin // "sltu"
 									aluop <= `ALU_OPCODE_SLTU;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b100: begin
@@ -159,7 +167,9 @@ module controlUnit
 								7'b0000001: begin // "div"
 									aluop <= `ALU_OPCODE_DIV;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b101: begin
@@ -173,7 +183,9 @@ module controlUnit
 								7'b0000001: begin // "divu"
 									aluop <= `ALU_OPCODE_DIVU;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b110: begin
@@ -184,7 +196,9 @@ module controlUnit
 								7'b0000001: begin // "rem"
 									aluop <= `ALU_OPCODE_REM;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
 						3'b111: begin
@@ -195,10 +209,14 @@ module controlUnit
 								7'b0000001: begin // "remu"
 									aluop <= `ALU_OPCODE_REMU;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
-						default: begin end
+						default: begin
+							aluop <= 0;
+						end
 					endcase
 				end
 				// end of R-TYPE instructions
@@ -246,10 +264,14 @@ module controlUnit
 								7'b0100000: begin // "srai"
 									aluop <= `ALU_OPCODE_SRA;
 								end
-								default: begin end
+								default: begin
+									aluop <= 0;
+								end
 							endcase
 						end
-						default: begin end
+						default: begin
+							aluop <= 0;
+						end
 					endcase
 				end
 				7'b1110011: begin
@@ -271,10 +293,14 @@ module controlUnit
 								12'b000000000000: begin // "ecall_enable"
 									ecall_enable <= 1'b1;
 								end
-								default: begin end
+								default: begin
+									ecall_enable <= 0;
+								end
 							endcase
 						end
-						default: begin end
+						default: begin
+							ecall_enable <= 0;
+						end
 					endcase
 				end
 				7'b0000011: begin 
@@ -309,7 +335,9 @@ module controlUnit
 						3'b101: begin // "lhu"
 							loadtype <= `LOAD_HALFWORD_UNSIGNED;
 						end
-						default: begin end
+						default: begin
+							loadtype <= 0;
+						end
 					endcase
 				end
 				7'b1110111: begin // "jalr"
@@ -360,7 +388,9 @@ module controlUnit
 						3'b011: begin // "sd"
 							storetype <= `STORE_DOUBLEWORD;
 						end
-						default: begin end
+						default: begin
+							storetype <= 0;
+						end
 					endcase
 				end
 				7'b1100011: begin
@@ -395,7 +425,9 @@ module controlUnit
 						3'b111: begin // "bgeu"
 							IsPFC <= $unsigned(RegFileDataOut_1) >= $unsigned(RegFileDataOut_2);
 						end
-						default: begin end
+						default: begin
+							IsPFC <= 0;
+						end
 					endcase
 				end
 				// end of S-TYPE instructions
@@ -461,7 +493,20 @@ module controlUnit
 					aluop <= `ALU_OPCODE_ADD;
 				end
 				// end of U-TYPE instructions
-				default: begin end
+				default: begin
+					WriteRegister <= 0;
+					IsPFC <= 0;
+					PFC_PC <= 0;
+					RegWriteEn <= 0;
+					MemReadEn <= 0;
+					MemWriteEn <= 0;
+					alu_in_1 <= 0;
+					alu_in_2 <= 0;
+					aluop <= 0;
+					loadtype <= 0;
+					storetype <= 0;
+					ecall_enable <= 0;
+				end
 			endcase
 		end	
 	end

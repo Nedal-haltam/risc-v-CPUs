@@ -11,7 +11,7 @@ set_global_assignment -name PROJECT_CREATION_TIME_DATE "20:05:42 JULY 01,2025"
 set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 484
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 7
-set_global_assignment -name SDC_FILE HW_Interface.SDC
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 6
 
 #============================================================
 # CLOCK
@@ -230,7 +230,6 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name OPTIMIZATION_MODE BALANCED
-set_global_assignment -name QIP_FILE dualpram.qip
 set_global_assignment -name ENABLE_OCT_DONE OFF
 set_global_assignment -name EXTERNAL_FLASH_FALLBACK_ADDRESS 00000000
 set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
@@ -240,6 +239,11 @@ set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name VERILOG_FILE ../singlecycle/CPU.v
+set_global_assignment -name VERILOG_FILE HW_Interface.v
+set_global_assignment -name SDC_FILE HW_Interface.SDC
+set_global_assignment -name QIP_FILE dualpram.qip
 set_global_assignment -name QIP_FILE singleprom.qip
+set_global_assignment -name SEARCH_PATH ../common
 set_global_assignment -name SEARCH_PATH ../singlecycle
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

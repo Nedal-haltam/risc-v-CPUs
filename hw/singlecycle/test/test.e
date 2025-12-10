@@ -205,7 +205,7 @@ func mm_conv1d_pl()
 
 func main()
 {
-    mm_conv1d();
+    mm_leds_counter_loop();
     return 0;
 }
 // dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./singlecycle/test/Generated/test -dump -sim ./singlecycle/test/test.e
