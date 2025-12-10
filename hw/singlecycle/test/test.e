@@ -40,7 +40,7 @@ func mmwrite(auto address, auto value)
 func mm_leds_counter_loop()
 {
     auto counter = 0;
-    while(1)
+    while(counter < 200)
     {
         print("counter = %d\n", counter);
 
@@ -57,7 +57,6 @@ func mm_leds_counter_loop()
 
         counter += 1;
         mmwrite(LED, counter);
-        if (counter == 200) break;
     }
 }
 
@@ -208,4 +207,4 @@ func main()
     mm_leds_counter_loop();
     return 0;
 }
-// dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./singlecycle/test/Generated/test -dump -sim ./singlecycle/test/test.e
+// dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./hw/singlecycle/test/Generated/test -dump -sim ./hw/singlecycle/test/test.e
