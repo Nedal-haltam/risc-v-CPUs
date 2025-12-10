@@ -19,3 +19,4 @@
 */hw_if_de10_lite/export_db
 */hw_if_de2_115/export_db
 *.pin
+/hw/hw_if_de10_lite/output_files
