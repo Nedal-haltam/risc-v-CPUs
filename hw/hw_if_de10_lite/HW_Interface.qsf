@@ -239,13 +239,14 @@ set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
-set_global_assignment -name VERILOG_FILE ../singlecycle/CPU.v
-set_global_assignment -name VERILOG_FILE HW_Interface.v
-set_global_assignment -name SDC_FILE HW_Interface.SDC
-set_global_assignment -name QIP_FILE dualpram.qip
-set_global_assignment -name QIP_FILE singleprom.qip
 set_global_assignment -name SEARCH_PATH ../common
 set_global_assignment -name SEARCH_PATH ../singlecycle
 set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS OFF
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name VERILOG_FILE HW_Interface.v
+set_global_assignment -name SDC_FILE HW_Interface.SDC
+set_global_assignment -name VERILOG_FILE ../common/accs.v
+set_global_assignment -name VERILOG_FILE ../singlecycle/CPU.v
+set_global_assignment -name QIP_FILE dualpram.qip
+set_global_assignment -name QIP_FILE singleprom.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
