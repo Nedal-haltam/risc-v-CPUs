@@ -92,21 +92,19 @@ run_sw:
 run_hw:
 	@if [ "$(SimulateHW)" = "1" ]; then \
 		echo "[$(INDEX)/$(TOTAL)]: Simulating $(BENCH) on Single Cycle Hardware"; \
-		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -I./singlecycle -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
-			-D MEMORY_SIZE=$(MEM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
-			./Sim.v; \
+		$(IVERILOG) -I$(BENCHMARK_DIR)/$(BENCH)/Generated -I./hw/singlecycle -o $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp \
+			-D simulate -D MAX_CLOCKS=1000000 ./Sim.v; \
 		$(VVP) $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC.vvp 2>&1 | grep -Ev 'VCD info:|\$$finish called' > $(BENCHMARK_DIR)/$(BENCH)/Generated/VERILOG_SC_OUT.txt; \
 	else \
 		echo "Skipping hardware simulation for $(BENCH)"; \
 	fi
 
 syntax:
-	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -I./singlecycle -o /dev/null \
-	-D MEMORY_SIZE=$(MEM_SIZE) -D MEMORY_BITS=$(DM_BITS) -D simulate -D MAX_CLOCKS=1000000 \
-	./Sim.v; \
+	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -I./hw/singlecycle -o /dev/null \
+	-D simulate -D MAX_CLOCKS=1000000 ./Sim.v; \
 
 TEST_DIR=./singlecycle/test
 test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./singlecycle/test/Generated/test -dump ./singlecycle/test/test.e
+	dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./hw/singlecycle/test/Generated/test -dump ./hw/singlecycle/test/test.e

@@ -1,10 +1,10 @@
 
 // `timescale 1ns/1ps
 
-`include "singlecycle/defs.h"
+`include "./hw/singlecycle/defs.h"
 
-`include "singlecycle/CPU.v"
-`include "singlecycle/DataMemory.v"
+`include "./hw/singlecycle/CPU.v"
+`include "./hw/singlecycle/DataMemory.v"
 
 module SingleCycle_sim;
 
