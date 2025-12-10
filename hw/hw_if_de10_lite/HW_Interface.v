@@ -335,9 +335,13 @@ assign write_ecall_finished = done;
 //-------------------
 assign CPUDataBusIn = (`DataMem_rden) ? DMDataBusPort1 : MMIODataBus;
 
-// assign LEDR = LED_MM_REG[9:0];
-assign LEDR[0] = mmio_dm_p2_en;
-assign LEDR[9:1] = 0;
+`ifdef ENABLE_MMIO_LED
+	assign LEDR = LED_MM_REG[9:0];
+`else
+	assign LEDR[0] = mmio_dm_p2_en;
+	assign LEDR[9:1] = 0;
+`endif
+
 assign HEX0[0] = clk;
 assign HEX0[1] = cpu_clk;
 assign HEX0[2] = rst;
