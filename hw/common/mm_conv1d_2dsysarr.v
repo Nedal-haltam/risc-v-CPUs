@@ -1,16 +1,18 @@
 //------------------------------------------------
 // mm_conv1d
-reg `BIT_WIDTH conv1d_addr_in1, conv1d_addr_in2, conv1d_addr_out;
-reg `BIT_WIDTH conv1d_vsize;
-reg `BIT_WIDTH conv1d_start, conv1d_done;
+`define CONV1D_VSIZE_MAX 10
 
-reg conv1d_dm_p2_en;
-reg [(`DM_BITS-1):0] conv1d_dm_p2_address;
-reg conv1d_dm_p2_wren;
-reg `BIT_WIDTH conv1d_dm_p2_writedata;
-wire conv1d_start_set;
-reg conv1d_done_set;
-wire conv1d_done_rden;
+(* preserve *) reg `BIT_WIDTH conv1d_addr_in1, conv1d_addr_in2, conv1d_addr_out;
+(* preserve *) reg `BIT_WIDTH conv1d_vsize;
+(* preserve *) reg `BIT_WIDTH conv1d_start, conv1d_done;
+
+(* preserve *) reg conv1d_dm_p2_en;
+(* preserve *) reg [(`DM_BITS-1):0] conv1d_dm_p2_address;
+(* preserve *) reg conv1d_dm_p2_wren;
+(* preserve *) reg `BIT_WIDTH conv1d_dm_p2_writedata;
+(* keep *) wire conv1d_start_set;
+(* preserve *) reg conv1d_done_set;
+(* keep *) wire conv1d_done_rden;
 parameter [3:0] CONV1D_STATE_OFF        = 4'd1;
 parameter [3:0] CONV1D_STATE_START      = 4'd2;
 parameter [3:0] CONV1D_STATE_SET_ADDR_A = 4'd3;
@@ -21,12 +23,12 @@ parameter [3:0] CONV1D_STATE_INC_OFFSET = 4'd7;
 parameter [3:0] CONV1D_STATE_ACC_RESET  = 4'd8;
 parameter [3:0] CONV1D_STATE_ACC_WAIT   = 4'd9;
 parameter [3:0] CONV1D_STATE_WRITE_C    = 4'd10;
-reg [3:0] conv1d_state;
-reg `BIT_WIDTH conv1d_regas [9:0];
-reg `BIT_WIDTH conv1d_regbs [9:0];
-wire `BIT_WIDTH conv1d_regcs [18:0];
-reg `BIT_WIDTH conv1d_offset;
-reg conv1d_trigger;
+(* preserve *) reg [3:0] conv1d_state;
+(* preserve *) reg `BIT_WIDTH conv1d_regas [`CONV1D_VSIZE_MAX - 1:0];
+(* preserve *) reg `BIT_WIDTH conv1d_regbs [`CONV1D_VSIZE_MAX - 1:0];
+(* keep *) wire `BIT_WIDTH conv1d_regcs [2 * `CONV1D_VSIZE_MAX - 1 - 1:0];
+(* preserve *) reg `BIT_WIDTH conv1d_offset;
+(* preserve *) reg conv1d_trigger;
 //------------------------------------------------
 
 // MMIO control circuit
@@ -81,6 +83,7 @@ always@(posedge clk or posedge rst) begin
 	end
 end
 
+integer i, j;
 always@(posedge clk or posedge rst) begin
 	if (rst) begin
 		conv1d_state <= CONV1D_STATE_OFF;
@@ -89,6 +92,10 @@ always@(posedge clk or posedge rst) begin
 		conv1d_offset <= 0;
 		conv1d_dm_p2_wren <= 0;
 		conv1d_trigger <= 0;
+		for (i = 0; i < `CONV1D_VSIZE_MAX; i = i + 1) begin
+			conv1d_regas[i] <= 0;
+			conv1d_regbs[i] <= 0;
+		end
 	end
 	else begin
 		case(conv1d_state)
@@ -113,7 +120,7 @@ always@(posedge clk or posedge rst) begin
 				end
 			end
 			CONV1D_STATE_SET_ADDR_A: begin
-				conv1d_dm_p2_address <= conv1d_addr_in1 + (64'd8 * conv1d_offset);
+				conv1d_dm_p2_address <= conv1d_addr_in1[`DM_BITS-1:0] + (14'd8 * conv1d_offset[`DM_BITS-1:0]);
 				conv1d_state <= CONV1D_STATE_READ_A;
 			end
 			CONV1D_STATE_READ_A: begin
@@ -121,7 +128,7 @@ always@(posedge clk or posedge rst) begin
 				conv1d_state <= CONV1D_STATE_SET_ADDR_B;
 			end
 			CONV1D_STATE_SET_ADDR_B: begin
-				conv1d_dm_p2_address <= conv1d_addr_in2 + (64'd8 * conv1d_offset);
+				conv1d_dm_p2_address <= conv1d_addr_in2[`DM_BITS-1:0] + (14'd8 * conv1d_offset[`DM_BITS-1:0]);
 				conv1d_state <= CONV1D_STATE_READ_B;
 			end
 			CONV1D_STATE_READ_B: begin
@@ -156,7 +163,7 @@ always@(posedge clk or posedge rst) begin
 					conv1d_state <= CONV1D_STATE_OFF;
 				end
 				else begin
-					conv1d_dm_p2_address <= conv1d_addr_out + (64'd8 * conv1d_offset);
+					conv1d_dm_p2_address <= conv1d_addr_out[`DM_BITS-1:0] + (14'd8 * conv1d_offset[`DM_BITS-1:0]);
 					conv1d_dm_p2_wren <= 1'b1;
 					conv1d_dm_p2_writedata <= conv1d_regcs[conv1d_offset];
 					conv1d_offset <= conv1d_offset + 1'b1;
@@ -169,7 +176,7 @@ end
 assign conv1d_done_rden = `MMIO_CONV1D_done_rden;
 assign conv1d_start_set = `MMIO_CONV1D_start_wren && (CPUDataBusOut == 64'd1);
 
-SystolicArray_conv1d_2dsys SystolicArray_conv1d_2dsys_dut
+(* noprune *) SystolicArray_conv1d_2dsys SystolicArray_conv1d_2dsys_dut
 (
     .clk(clk)
 	,.rst(conv1d_state == CONV1D_STATE_ACC_RESET)

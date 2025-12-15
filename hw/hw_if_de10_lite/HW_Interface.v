@@ -14,11 +14,12 @@
 `define MMIO_wren (ControlBus[2] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
 
 `define ENABLE_MMIO
-`define ENABLE_MMIO_LED
+// `define ENABLE_MMIO_LED
 // `define ENABLE_MMIO_ALU
 // `define ENABLE_MMIO_VADD
 // `define ENABLE_MMIO_CONV1D
-// `define ENABLE_MMIO_CONV1D_PL
+`define ENABLE_MMIO_CONV1D_PL
+
 
 `define MMIO_LED_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (1 * 8))))
 `define MMIO_LED_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (1 * 8))))
@@ -102,43 +103,43 @@ module HW_Interface(
 	inout 		          		ARDUINO_RESET_N
 );
 
-reg [24:0] ClockDivider;
+(* preserve *) reg [24:0] ClockDivider;
 always@(posedge ADC_CLK_10) begin
 	ClockDivider <= ClockDivider + 1'b1;
 end
 
-wire clk;
-wire rst;
-wire cpu_clk;
-wire `BIT_WIDTH pc;
+(* keep *) wire clk;
+(* keep *) wire rst;
+(* keep *) wire cpu_clk;
+(* keep *) wire `BIT_WIDTH pc;
 
-wire exit_ecall;
-wire write_ecall_finished;
-wire write_ecall;
-wire `BIT_WIDTH write_ecall_fd;
-wire `BIT_WIDTH write_ecall_address;
-wire `BIT_WIDTH write_ecall_len;
-wire datatrigger;
-wire [(`DM_BITS-1):0] write_ecall_mem_addr;
+(* keep *) wire exit_ecall;
+(* keep *) wire write_ecall_finished;
+(* keep *) wire write_ecall;
+(* keep *) wire `BIT_WIDTH write_ecall_fd;
+(* keep *) wire `BIT_WIDTH write_ecall_address;
+(* keep *) wire `BIT_WIDTH write_ecall_len;
+(* keep *) wire datatrigger;
+(* keep *) wire [(`DM_BITS-1):0] write_ecall_mem_addr;
 
-wire `BIT_WIDTH AddressBus1, DMDataBusPort1, CPUDataBusIn, DMDataBusPort2, CPUDataBusOut;
-wire [10:0] ControlBus;
-wire `BIT_WIDTH CyclesConsumed;
+(* keep *) wire `BIT_WIDTH AddressBus1, DMDataBusPort1, CPUDataBusIn, DMDataBusPort2, CPUDataBusOut;
+(* keep *) wire [10:0] ControlBus;
+(* keep *) wire `BIT_WIDTH CyclesConsumed;
 
-reg `BIT_WIDTH offset;
-reg done;
+(* preserve *) reg `BIT_WIDTH offset;
+(* preserve *) reg done;
 
-wire clkPort2, rdenPort2, wrenPort2;
-wire [(`DM_BITS - 1):0] addressPort2;
-wire `BIT_WIDTH dataPort2;
+(* keep *) wire clkPort2, rdenPort2, wrenPort2;
+(* keep *) wire [(`DM_BITS - 1):0] addressPort2;
+(* keep *) wire `BIT_WIDTH dataPort2;
 
 //------------------------------------------------
 // MMIO
-reg `BIT_WIDTH MMIODataBus = 0;
-wire mmio_dm_p2_en;
-wire mmio_clkPort2, mmio_rdenPort2, mmio_wrenPort2;
-wire [(`DM_BITS - 1):0] mmio_addressPort2;
-wire `BIT_WIDTH mmio_dataPort2;
+(* preserve *) reg `BIT_WIDTH MMIODataBus = 0;
+(* keep *) wire mmio_dm_p2_en;
+(* keep *) wire mmio_clkPort2, mmio_rdenPort2, mmio_wrenPort2;
+(* keep *) wire [(`DM_BITS - 1):0] mmio_addressPort2;
+(* keep *) wire `BIT_WIDTH mmio_dataPort2;
 //------------------------------------------------
 
 always@(negedge clk or posedge rst) begin
@@ -162,7 +163,7 @@ always@(negedge clk or posedge rst) begin
     end
 end
 
-CPU cpu_dut
+(* noprune *) CPU cpu_dut
 (
 	.pc(pc),
 	.InputClk(clk),
@@ -350,8 +351,8 @@ assign HEX0[4] = done;
 assign HEX0[5] = write_ecall_finished;
 assign HEX0[6] = write_ecall;
 assign HEX0[7] = exit_ecall;
-assign HEX1 = 0;
-assign HEX2 = 0;
+assign HEX1 = CyclesConsumed[7:0];
+assign HEX2 = pc[7:0];
 assign HEX3 = 0;
 assign HEX4 = 0;
 assign HEX5 = 0;
