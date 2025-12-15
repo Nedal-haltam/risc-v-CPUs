@@ -129,13 +129,13 @@ parameter PECount   = 0
 )
 (
     input clk, rst, trigger
-    ,input      [31:0] InDim0Lane0
-    ,output reg [31:0] OutDim0Lane0
-    ,output reg [31:0] PEValue
+    ,input      `BIT_WIDTH InDim0Lane0
+    ,output reg `BIT_WIDTH OutDim0Lane0
+    ,output reg `BIT_WIDTH PEValue
     ,input InternalRegisterEnable
-    ,input [31:0] InternalRegisterInputValue0
+    ,input `BIT_WIDTH InternalRegisterInputValue0
 );
-    reg [31:0] InternalRegister0;
+    reg `BIT_WIDTH InternalRegister0;
     always@(posedge clk) begin
         if (InternalRegisterEnable) begin
             InternalRegister0 <= InternalRegisterInputValue0;
@@ -155,9 +155,9 @@ endmodule
 module SystolicArray_conv1d_1dsys_pl
 (
     input clk, rst, trigger
-    ,input [31:0] Dim0InputLane0
-    ,input [31:0] InternalRegisterEnableIndex
-    ,input [31:0] InternalRegisterInputValue0
+    ,input `BIT_WIDTH Dim0InputLane0
+    ,input `BIT_WIDTH InternalRegisterEnableIndex
+    ,input `BIT_WIDTH InternalRegisterInputValue0
 
 	,output `BIT_WIDTH DimOutput0
 	,output `BIT_WIDTH DimOutput1
@@ -179,15 +179,15 @@ module SystolicArray_conv1d_1dsys_pl
 	,output `BIT_WIDTH DimOutput17
 	,output `BIT_WIDTH DimOutput18
 );
-    wire [31:0] PassThroughWires0Lane0;
+    wire `BIT_WIDTH PassThroughWires0Lane0;
     assign PassThroughWires0Lane0 = Dim0InputLane0;
-    wire [31:0] PEOutDim0Lane0 [9:0];
-    wire [31:0] PEValues [9:0];
+    wire `BIT_WIDTH PEOutDim0Lane0 [9:0];
+    wire `BIT_WIDTH PEValues [9:0];
     genvar Dim0Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 10; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 			localparam PECount = Dim0Index * 1 + 0;
-			wire [31:0] InDim0Lane0;
+			wire `BIT_WIDTH InDim0Lane0;
 			if (Dim0Index == 0) begin
 			    assign InDim0Lane0 = PassThroughWires0Lane0;
 			end
@@ -207,8 +207,8 @@ module SystolicArray_conv1d_1dsys_pl
 			);
 	    end
     endgenerate
-    reg [31:0] OutputDim [18:0];
-    reg [31:0] i = 0;
+    reg `BIT_WIDTH OutputDim [18:0];
+    reg `BIT_WIDTH i = 0;
     integer ii;
     always@(posedge clk) begin
         if (rst) begin
@@ -263,13 +263,13 @@ parameter PECount   = 0
 )
 (
     input clk, rst, trigger
-    ,input      [31:0] InDim0Lane0
-    ,output reg [31:0] OutDim0Lane0
-    ,output reg [31:0] PEValue
+    ,input      `BIT_WIDTH InDim0Lane0
+    ,output reg `BIT_WIDTH OutDim0Lane0
+    ,output reg `BIT_WIDTH PEValue
     ,input InternalRegisterEnable
-    ,input [31:0] InternalRegisterInputValue0
+    ,input `BIT_WIDTH InternalRegisterInputValue0
 );
-    reg [31:0] InternalRegister0;
+    reg `BIT_WIDTH InternalRegister0;
     always@(posedge clk) begin
         if (InternalRegisterEnable) begin
             InternalRegister0 <= InternalRegisterInputValue0;
@@ -289,19 +289,19 @@ endmodule
 module SystolicArray_conv1d_1dsys_bc
 (
     input clk, rst, trigger
-    ,input [31:0] Dim0InputLane0
-    ,input [31:0] InternalRegisterEnableIndex
-    ,input [31:0] InternalRegisterInputValue0
+    ,input `BIT_WIDTH Dim0InputLane0
+    ,input `BIT_WIDTH InternalRegisterEnableIndex
+    ,input `BIT_WIDTH InternalRegisterInputValue0
 );
-    wire [31:0] PassThroughWires0Lane0;
+    wire `BIT_WIDTH PassThroughWires0Lane0;
     assign PassThroughWires0Lane0 = Dim0InputLane0;
-    wire [31:0] PEOutDim0Lane0 [9:0];
-    wire [31:0] PEValues [9:0];
+    wire `BIT_WIDTH PEOutDim0Lane0 [9:0];
+    wire `BIT_WIDTH PEValues [9:0];
     genvar Dim0Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 10; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 			localparam PECount = Dim0Index * 1 + 0;
-			wire [31:0] InDim0Lane0;
+			wire `BIT_WIDTH InDim0Lane0;
 			assign InDim0Lane0 = PassThroughWires0Lane0;
 			PE_conv1d_1dsys_bc #(.PECount(PECount)) pe
 			(
@@ -316,8 +316,8 @@ module SystolicArray_conv1d_1dsys_bc
 			);
 	    end
     endgenerate
-    reg [31:0] OutputDim [18:0];
-    reg [31:0] i = 0;
+    reg `BIT_WIDTH OutputDim [18:0];
+    reg `BIT_WIDTH i = 0;
     integer ii;
     always@(posedge clk) begin
         if (rst) begin
