@@ -346,3 +346,200 @@ module SystolicArray_conv1d_1dsys_bc
 `endif
 endmodule
 ////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+module PE_conv2d
+#(
+parameter PECount   = 0
+,parameter DataWidth = 8
+)
+(
+    input clk, rst, trigger, input `BIT_WIDTH file
+    ,input      `BIT_WIDTH InDim0Lane0
+    ,output reg `BIT_WIDTH OutDim0Lane0
+    ,input      `BIT_WIDTH InDim0Lane1
+    ,output reg `BIT_WIDTH OutDim0Lane1
+    ,input      `BIT_WIDTH InDim0Lane2
+    ,output reg `BIT_WIDTH OutDim0Lane2
+    ,input      `BIT_WIDTH InDim1Lane0
+    ,output reg `BIT_WIDTH OutDim1Lane0
+    ,input      `BIT_WIDTH InDim1Lane1
+    ,output reg `BIT_WIDTH OutDim1Lane1
+    ,input      `BIT_WIDTH InDim1Lane2
+    ,output reg `BIT_WIDTH OutDim1Lane2
+    ,output reg `BIT_WIDTH PEValue
+    ,input InternalRegisterEnable
+    ,input `BIT_WIDTH InternalRegisterInputValue0
+);
+    reg `BIT_WIDTH InternalRegister0;
+    always@(posedge clk) begin
+        if (InternalRegisterEnable) begin
+            InternalRegister0 <= InternalRegisterInputValue0;
+        end
+    end
+    always@(posedge clk) begin
+        if (rst) begin
+            OutDim0Lane0 <= 0;
+            // OutDim0Lane1 <= 0;
+            // OutDim0Lane2 <= 0;
+            OutDim1Lane0 <= 0;
+            // OutDim1Lane1 <= 0;
+            // OutDim1Lane2 <= 0;
+            PEValue <= 0;
+        end
+        else if (trigger) begin
+            OutDim0Lane0 <= InDim0Lane0;
+            // OutDim0Lane1 <= InDim0Lane1;
+            // OutDim0Lane2 <= InDim0Lane2;
+            OutDim1Lane0 <= InDim0Lane0 * InternalRegister0;
+            // OutDim1Lane1 <= InDim0Lane1 * InternalRegister0;
+            // OutDim1Lane2 <= InDim0Lane2 * InternalRegister0;
+        end
+    end
+endmodule
+module SystolicArray_conv2d
+(
+    input clk, rst, trigger
+
+    ,input `BIT_WIDTH Dim0Input0Lane0
+    ,input `BIT_WIDTH Dim0Input0Lane1
+    ,input `BIT_WIDTH Dim0Input0Lane2
+    ,input `BIT_WIDTH Dim0Input1Lane0
+    ,input `BIT_WIDTH Dim0Input1Lane1
+    ,input `BIT_WIDTH Dim0Input1Lane2
+    ,input `BIT_WIDTH Dim0Input2Lane0
+    ,input `BIT_WIDTH Dim0Input2Lane1
+    ,input `BIT_WIDTH Dim0Input2Lane2
+    ,input `BIT_WIDTH Dim1Input0Lane0
+    ,input `BIT_WIDTH Dim1Input0Lane1
+    ,input `BIT_WIDTH Dim1Input0Lane2
+    ,input `BIT_WIDTH Dim1Input1Lane0
+    ,input `BIT_WIDTH Dim1Input1Lane1
+    ,input `BIT_WIDTH Dim1Input1Lane2
+    ,input `BIT_WIDTH Dim1Input2Lane0
+    ,input `BIT_WIDTH Dim1Input2Lane1
+    ,input `BIT_WIDTH Dim1Input2Lane2
+    ,input `BIT_WIDTH InternalRegisterEnableIndex
+    ,input `BIT_WIDTH InternalRegisterInputValue0
+
+    ,output `BIT_WIDTH Output0
+    ,output `BIT_WIDTH Output1
+    ,output `BIT_WIDTH Output2
+);
+    integer file;
+    wire `BIT_WIDTH PassThroughWires0Lane0[2:0];
+    wire `BIT_WIDTH PassThroughWires0Lane1[2:0];
+    wire `BIT_WIDTH PassThroughWires0Lane2[2:0];
+    wire `BIT_WIDTH PassThroughWires1Lane0[2:0];
+    wire `BIT_WIDTH PassThroughWires1Lane1[2:0];
+    wire `BIT_WIDTH PassThroughWires1Lane2[2:0];
+    assign PassThroughWires0Lane0[0] = Dim0Input0Lane0;
+    assign PassThroughWires0Lane1[0] = Dim0Input0Lane1;
+    assign PassThroughWires0Lane2[0] = Dim0Input0Lane2;
+    assign PassThroughWires0Lane0[1] = Dim0Input1Lane0;
+    assign PassThroughWires0Lane1[1] = Dim0Input1Lane1;
+    assign PassThroughWires0Lane2[1] = Dim0Input1Lane2;
+    assign PassThroughWires0Lane0[2] = Dim0Input2Lane0;
+    assign PassThroughWires0Lane1[2] = Dim0Input2Lane1;
+    assign PassThroughWires0Lane2[2] = Dim0Input2Lane2;
+    assign PassThroughWires1Lane0[0] = Dim1Input0Lane0;
+    assign PassThroughWires1Lane1[0] = Dim1Input0Lane1;
+    assign PassThroughWires1Lane2[0] = Dim1Input0Lane2;
+    assign PassThroughWires1Lane0[1] = Dim1Input1Lane0;
+    assign PassThroughWires1Lane1[1] = Dim1Input1Lane1;
+    assign PassThroughWires1Lane2[1] = Dim1Input1Lane2;
+    assign PassThroughWires1Lane0[2] = Dim1Input2Lane0;
+    assign PassThroughWires1Lane1[2] = Dim1Input2Lane1;
+    assign PassThroughWires1Lane2[2] = Dim1Input2Lane2;
+    wire `BIT_WIDTH PEOutDim0Lane0 [2:0][2:0];
+    wire `BIT_WIDTH PEOutDim0Lane1 [2:0][2:0];
+    wire `BIT_WIDTH PEOutDim0Lane2 [2:0][2:0];
+    wire `BIT_WIDTH PEOutDim1Lane0 [2:0][2:0];
+    wire `BIT_WIDTH PEOutDim1Lane1 [2:0][2:0];
+    wire `BIT_WIDTH PEOutDim1Lane2 [2:0][2:0];
+    wire `BIT_WIDTH PEValues [8:0];
+    genvar Dim0Index, Dim1Index, DummyIndex;
+    generate
+	    for (Dim0Index = 0; Dim0Index < 3; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
+		    for (Dim1Index = 0; Dim1Index < 3; Dim1Index = Dim1Index + 1) begin : Dim1IndexForLoopBlock
+				localparam PECount = Dim0Index * 3 * 1 + Dim1Index * 1 + 0;
+				wire `BIT_WIDTH InDim0Lane0;
+				wire `BIT_WIDTH InDim0Lane1;
+				wire `BIT_WIDTH InDim0Lane2;
+				if (Dim0Index == 0) begin
+				    assign InDim0Lane0 = PassThroughWires0Lane0[Dim1Index];
+				    assign InDim0Lane1 = PassThroughWires0Lane1[Dim1Index];
+				    assign InDim0Lane2 = PassThroughWires0Lane2[Dim1Index];
+				end
+				else begin
+				    assign InDim0Lane0 = PEOutDim0Lane0[Dim0Index-1][Dim1Index];
+				    assign InDim0Lane1 = PEOutDim0Lane1[Dim0Index-1][Dim1Index];
+				    assign InDim0Lane2 = PEOutDim0Lane2[Dim0Index-1][Dim1Index];
+				end
+				wire `BIT_WIDTH InDim1Lane0;
+				wire `BIT_WIDTH InDim1Lane1;
+				wire `BIT_WIDTH InDim1Lane2;
+				assign InDim1Lane0 = PassThroughWires1Lane0[Dim0Index];
+				assign InDim1Lane1 = PassThroughWires1Lane1[Dim0Index];
+				assign InDim1Lane2 = PassThroughWires1Lane2[Dim0Index];
+				PE_conv2d #(.PECount(PECount)) pe
+				(
+				    .clk(clk),
+				    .rst(rst),
+				    .trigger(trigger),
+				    .file(1),
+				    .InDim0Lane0(InDim0Lane0),
+				    .OutDim0Lane0(PEOutDim0Lane0[Dim0Index][Dim1Index]),
+				    .InDim0Lane1(InDim0Lane1),
+				    .OutDim0Lane1(PEOutDim0Lane1[Dim0Index][Dim1Index]),
+				    .InDim0Lane2(InDim0Lane2),
+				    .OutDim0Lane2(PEOutDim0Lane2[Dim0Index][Dim1Index]),
+				    .InDim1Lane0(InDim1Lane0),
+				    .OutDim1Lane0(PEOutDim1Lane0[Dim0Index][Dim1Index]),
+				    .InDim1Lane1(InDim1Lane1),
+				    .OutDim1Lane1(PEOutDim1Lane1[Dim0Index][Dim1Index]),
+				    .InDim1Lane2(InDim1Lane2),
+				    .OutDim1Lane2(PEOutDim1Lane2[Dim0Index][Dim1Index]),
+				    .PEValue(PEValues[PECount])
+				    ,.InternalRegisterEnable(InternalRegisterEnableIndex == PECount+1)
+				    ,.InternalRegisterInputValue0(InternalRegisterInputValue0)
+				);
+		    end
+	    end
+    endgenerate
+    wire signed `BIT_WIDTH SUM0 =
+        $signed(PEOutDim1Lane0[0][0]) + $signed(PEOutDim1Lane0[0][1]) + $signed(PEOutDim1Lane0[0][2]) +
+        $signed(PEOutDim1Lane0[1][0]) + $signed(PEOutDim1Lane0[1][1]) + $signed(PEOutDim1Lane0[1][2]) +
+        $signed(PEOutDim1Lane0[2][0]) + $signed(PEOutDim1Lane0[2][1]) + $signed(PEOutDim1Lane0[2][2]);
+
+    // wire signed `BIT_WIDTH SUM1 =
+    //     $signed(PEOutDim1Lane1[0][0]) + $signed(PEOutDim1Lane1[0][1]) + $signed(PEOutDim1Lane1[0][2]) +
+    //     $signed(PEOutDim1Lane1[1][0]) + $signed(PEOutDim1Lane1[1][1]) + $signed(PEOutDim1Lane1[1][2]) +
+    //     $signed(PEOutDim1Lane1[2][0]) + $signed(PEOutDim1Lane1[2][1]) + $signed(PEOutDim1Lane1[2][2]);
+
+    // wire signed `BIT_WIDTH SUM2 =
+    //     $signed(PEOutDim1Lane2[0][0]) + $signed(PEOutDim1Lane2[0][1]) + $signed(PEOutDim1Lane2[0][2]) +
+    //     $signed(PEOutDim1Lane2[1][0]) + $signed(PEOutDim1Lane2[1][1]) + $signed(PEOutDim1Lane2[1][2]) +
+    //     $signed(PEOutDim1Lane2[2][0]) + $signed(PEOutDim1Lane2[2][1]) + $signed(PEOutDim1Lane2[2][2]);
+
+    function [7:0] clamp8(input signed `BIT_WIDTH v);
+        reg signed `BIT_WIDTH abs_v;
+        begin
+            abs_v = (v < 0) ? -v : v;
+            if (abs_v < 0) // keep this in case we removed the abs
+                clamp8 = 8'd0;
+            else if (abs_v > 8'd255)
+                clamp8 = 8'd255;
+            else
+                clamp8 = abs_v[7:0];
+        end
+    endfunction
+
+    // wire [7:0] c0 = clamp8(SUM0);
+    // wire [7:0] c1 = clamp8(SUM1);
+    // wire [7:0] c2 = clamp8(SUM2);
+    assign Output0 = SUM0;
+    // assign Output1 = SUM1;
+    // assign Output2 = SUM2;
+
+endmodule
+////////////////////////////////////////////////////////////////////////////////////

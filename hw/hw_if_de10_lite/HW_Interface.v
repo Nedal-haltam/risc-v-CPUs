@@ -18,7 +18,8 @@
 // `define ENABLE_MMIO_ALU
 // `define ENABLE_MMIO_VADD
 // `define ENABLE_MMIO_CONV1D
-`define ENABLE_MMIO_CONV1D_PL
+// `define ENABLE_MMIO_CONV1D_PL
+`define ENABLE_MMIO_CONV2D
 
 
 `define MMIO_LED_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (1 * 8))))
@@ -73,6 +74,21 @@
 `define MMIO_CONV1D_PL_start_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (23 * 8))))
 `define MMIO_CONV1D_PL_done_rden     (ControlBus[1] && (`CPU_AddressBus == (16384 - (24 * 8))))
 `define MMIO_CONV1D_PL_done_wren     (ControlBus[2] && (`CPU_AddressBus == (16384 - (24 * 8))))
+
+`define MMIO_CONV2D_addr_input_rden   (ControlBus[1] && (`CPU_AddressBus == (16384 - (25 * 8))))
+`define MMIO_CONV2D_addr_input_wren   (ControlBus[2] && (`CPU_AddressBus == (16384 - (25 * 8))))
+`define MMIO_CONV2D_addr_kernel_rden  (ControlBus[1] && (`CPU_AddressBus == (16384 - (26 * 8))))
+`define MMIO_CONV2D_addr_kernel_wren  (ControlBus[2] && (`CPU_AddressBus == (16384 - (26 * 8))))
+`define MMIO_CONV2D_addr_out_rden     (ControlBus[1] && (`CPU_AddressBus == (16384 - (27 * 8))))
+`define MMIO_CONV2D_addr_out_wren     (ControlBus[2] && (`CPU_AddressBus == (16384 - (27 * 8))))
+`define MMIO_CONV2D_input_width_rden  (ControlBus[1] && (`CPU_AddressBus == (16384 - (28 * 8))))
+`define MMIO_CONV2D_input_width_wren  (ControlBus[2] && (`CPU_AddressBus == (16384 - (28 * 8))))
+`define MMIO_CONV2D_input_height_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (29 * 8))))
+`define MMIO_CONV2D_input_height_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (29 * 8))))
+`define MMIO_CONV2D_start_rden        (ControlBus[1] && (`CPU_AddressBus == (16384 - (30 * 8))))
+`define MMIO_CONV2D_start_wren        (ControlBus[2] && (`CPU_AddressBus == (16384 - (30 * 8))))
+`define MMIO_CONV2D_done_rden         (ControlBus[1] && (`CPU_AddressBus == (16384 - (31 * 8))))
+`define MMIO_CONV2D_done_wren         (ControlBus[2] && (`CPU_AddressBus == (16384 - (31 * 8))))
 
 module HW_Interface(
 
@@ -289,6 +305,29 @@ always@(negedge clk or posedge rst) begin
 			MMIODataBus <= conv1d_pl_done;
 		end
 `endif
+`ifdef ENABLE_MMIO_CONV2D
+		if (`MMIO_CONV2D_addr_input_rden) begin
+			MMIODataBus <= conv2d_addr_input;
+		end
+		if (`MMIO_CONV2D_addr_kernel_rden) begin
+			MMIODataBus <= conv2d_addr_kernel;
+		end
+		if (`MMIO_CONV2D_addr_out_rden) begin
+			MMIODataBus <= conv2d_addr_out;
+		end
+		if (`MMIO_CONV2D_input_width_rden) begin
+			MMIODataBus <= conv2d_input_width;
+		end
+		if (`MMIO_CONV2D_input_height_rden) begin
+			MMIODataBus <= conv2d_input_height;
+		end
+		if (`MMIO_CONV2D_start_rden) begin
+			MMIODataBus <= conv2d_start;
+		end
+		if (`MMIO_CONV2D_done_rden) begin
+			MMIODataBus <= conv2d_done;
+		end
+`endif
 `ifndef ENABLE_MMIO
 		MMIODataBus <= 0;
 `endif
@@ -309,6 +348,9 @@ end
 `endif
 `ifdef ENABLE_MMIO_CONV1D_PL
 	`include "mm_conv1d_pl.v"
+`endif
+`ifdef ENABLE_MMIO_CONV2D
+	`include "mm_conv2d.v"
 `endif
 
 assign clkPort2     = mmio_dm_p2_en ? mmio_clkPort2     : `write_clkPort2;
