@@ -8,10 +8,10 @@
 `define write_dataPort2    (0)
 
 `define CPU_AddressBus AddressBus1[(`DM_BITS-1):0]
-`define DataMem_rden (ControlBus[1] && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
-`define DataMem_wren (ControlBus[2] && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
-`define MMIO_rden (ControlBus[1] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
-`define MMIO_wren (ControlBus[2] && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+`define DataMem_rden (cpu_mem_read && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+`define DataMem_wren (cpu_mem_write && ~((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+`define MMIO_rden (cpu_mem_read && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
+`define MMIO_wren (cpu_mem_write && ((15360 <= `CPU_AddressBus) && (`CPU_AddressBus <= 16383)))
 
 `define ENABLE_MMIO
 // `define ENABLE_MMIO_LED
@@ -19,76 +19,77 @@
 // `define ENABLE_MMIO_VADD
 // `define ENABLE_MMIO_CONV1D
 // `define ENABLE_MMIO_CONV1D_PL
-`define ENABLE_MMIO_CONV2D
+// `define ENABLE_MMIO_CONV2D
 
 
-`define MMIO_LED_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (1 * 8))))
-`define MMIO_LED_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (1 * 8))))
+`define MMIO_LED_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (1 * 8))))
+`define MMIO_LED_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (1 * 8))))
 
-`define MMIO_ALU_in1_rden   (ControlBus[1] && (`CPU_AddressBus == (16384 - (2 * 8))))
-`define MMIO_ALU_in1_wren   (ControlBus[2] && (`CPU_AddressBus == (16384 - (2 * 8))))
-`define MMIO_ALU_in2_rden   (ControlBus[1] && (`CPU_AddressBus == (16384 - (3 * 8))))
-`define MMIO_ALU_in2_wren   (ControlBus[2] && (`CPU_AddressBus == (16384 - (3 * 8))))
-`define MMIO_ALU_out_rden   (ControlBus[1] && (`CPU_AddressBus == (16384 - (4 * 8))))
-`define MMIO_ALU_out_wren   (ControlBus[2] && (`CPU_AddressBus == (16384 - (4 * 8))))
-`define MMIO_ALU_start_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (5 * 8))))
-`define MMIO_ALU_start_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (5 * 8))))
-`define MMIO_ALU_done_rden  (ControlBus[1] && (`CPU_AddressBus == (16384 - (6 * 8))))
-`define MMIO_ALU_done_wren  (ControlBus[2] && (`CPU_AddressBus == (16384 - (6 * 8))))
+`define MMIO_ALU_in1_rden   (cpu_mem_read && (`CPU_AddressBus == (16384 - (2 * 8))))
+`define MMIO_ALU_in1_wren   (cpu_mem_write && (`CPU_AddressBus == (16384 - (2 * 8))))
+`define MMIO_ALU_in2_rden   (cpu_mem_read && (`CPU_AddressBus == (16384 - (3 * 8))))
+`define MMIO_ALU_in2_wren   (cpu_mem_write && (`CPU_AddressBus == (16384 - (3 * 8))))
+`define MMIO_ALU_out_rden   (cpu_mem_read && (`CPU_AddressBus == (16384 - (4 * 8))))
+`define MMIO_ALU_out_wren   (cpu_mem_write && (`CPU_AddressBus == (16384 - (4 * 8))))
+`define MMIO_ALU_start_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (5 * 8))))
+`define MMIO_ALU_start_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (5 * 8))))
+`define MMIO_ALU_done_rden  (cpu_mem_read && (`CPU_AddressBus == (16384 - (6 * 8))))
+`define MMIO_ALU_done_wren  (cpu_mem_write && (`CPU_AddressBus == (16384 - (6 * 8))))
 
-`define MMIO_VADD_addr_in1_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (7 * 8))))
-`define MMIO_VADD_addr_in1_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (7 * 8))))
-`define MMIO_VADD_addr_in2_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (8 * 8))))
-`define MMIO_VADD_addr_in2_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (8 * 8))))
-`define MMIO_VADD_addr_out_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (9 * 8))))
-`define MMIO_VADD_addr_out_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (9 * 8))))
-`define MMIO_VADD_vsize_rden    (ControlBus[1] && (`CPU_AddressBus == (16384 - (10 * 8))))
-`define MMIO_VADD_vsize_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (10 * 8))))
-`define MMIO_VADD_start_rden    (ControlBus[1] && (`CPU_AddressBus == (16384 - (11 * 8))))
-`define MMIO_VADD_start_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (11 * 8))))
-`define MMIO_VADD_done_rden     (ControlBus[1] && (`CPU_AddressBus == (16384 - (12 * 8))))
-`define MMIO_VADD_done_wren     (ControlBus[2] && (`CPU_AddressBus == (16384 - (12 * 8))))
+`define MMIO_VADD_addr_in1_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (7 * 8))))
+`define MMIO_VADD_addr_in1_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (7 * 8))))
+`define MMIO_VADD_addr_in2_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (8 * 8))))
+`define MMIO_VADD_addr_in2_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (8 * 8))))
+`define MMIO_VADD_addr_out_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (9 * 8))))
+`define MMIO_VADD_addr_out_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (9 * 8))))
+`define MMIO_VADD_vsize_rden    (cpu_mem_read && (`CPU_AddressBus == (16384 - (10 * 8))))
+`define MMIO_VADD_vsize_wren    (cpu_mem_write && (`CPU_AddressBus == (16384 - (10 * 8))))
+`define MMIO_VADD_start_rden    (cpu_mem_read && (`CPU_AddressBus == (16384 - (11 * 8))))
+`define MMIO_VADD_start_wren    (cpu_mem_write && (`CPU_AddressBus == (16384 - (11 * 8))))
+`define MMIO_VADD_done_rden     (cpu_mem_read && (`CPU_AddressBus == (16384 - (12 * 8))))
+`define MMIO_VADD_done_wren     (cpu_mem_write && (`CPU_AddressBus == (16384 - (12 * 8))))
 
-`define MMIO_CONV1D_addr_in1_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (13 * 8))))
-`define MMIO_CONV1D_addr_in1_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (13 * 8))))
-`define MMIO_CONV1D_addr_in2_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (14 * 8))))
-`define MMIO_CONV1D_addr_in2_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (14 * 8))))
-`define MMIO_CONV1D_addr_out_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (15 * 8))))
-`define MMIO_CONV1D_addr_out_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (15 * 8))))
-`define MMIO_CONV1D_vsize_rden    (ControlBus[1] && (`CPU_AddressBus == (16384 - (16 * 8))))
-`define MMIO_CONV1D_vsize_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (16 * 8))))
-`define MMIO_CONV1D_start_rden    (ControlBus[1] && (`CPU_AddressBus == (16384 - (17 * 8))))
-`define MMIO_CONV1D_start_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (17 * 8))))
-`define MMIO_CONV1D_done_rden     (ControlBus[1] && (`CPU_AddressBus == (16384 - (18 * 8))))
-`define MMIO_CONV1D_done_wren     (ControlBus[2] && (`CPU_AddressBus == (16384 - (18 * 8))))
+`define MMIO_CONV1D_addr_in1_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (13 * 8))))
+`define MMIO_CONV1D_addr_in1_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (13 * 8))))
+`define MMIO_CONV1D_addr_in2_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (14 * 8))))
+`define MMIO_CONV1D_addr_in2_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (14 * 8))))
+`define MMIO_CONV1D_addr_out_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (15 * 8))))
+`define MMIO_CONV1D_addr_out_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (15 * 8))))
+`define MMIO_CONV1D_vsize_rden    (cpu_mem_read && (`CPU_AddressBus == (16384 - (16 * 8))))
+`define MMIO_CONV1D_vsize_wren    (cpu_mem_write && (`CPU_AddressBus == (16384 - (16 * 8))))
+`define MMIO_CONV1D_start_rden    (cpu_mem_read && (`CPU_AddressBus == (16384 - (17 * 8))))
+`define MMIO_CONV1D_start_wren    (cpu_mem_write && (`CPU_AddressBus == (16384 - (17 * 8))))
+`define MMIO_CONV1D_done_rden     (cpu_mem_read && (`CPU_AddressBus == (16384 - (18 * 8))))
+`define MMIO_CONV1D_done_wren     (cpu_mem_write && (`CPU_AddressBus == (16384 - (18 * 8))))
 
-`define MMIO_CONV1D_PL_addr_in1_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (19 * 8))))
-`define MMIO_CONV1D_PL_addr_in1_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (19 * 8))))
-`define MMIO_CONV1D_PL_addr_in2_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (20 * 8))))
-`define MMIO_CONV1D_PL_addr_in2_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (20 * 8))))
-`define MMIO_CONV1D_PL_addr_out_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (21 * 8))))
-`define MMIO_CONV1D_PL_addr_out_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (21 * 8))))
-`define MMIO_CONV1D_PL_vsize_rden    (ControlBus[1] && (`CPU_AddressBus == (16384 - (22 * 8))))
-`define MMIO_CONV1D_PL_vsize_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (22 * 8))))
-`define MMIO_CONV1D_PL_start_rden    (ControlBus[1] && (`CPU_AddressBus == (16384 - (23 * 8))))
-`define MMIO_CONV1D_PL_start_wren    (ControlBus[2] && (`CPU_AddressBus == (16384 - (23 * 8))))
-`define MMIO_CONV1D_PL_done_rden     (ControlBus[1] && (`CPU_AddressBus == (16384 - (24 * 8))))
-`define MMIO_CONV1D_PL_done_wren     (ControlBus[2] && (`CPU_AddressBus == (16384 - (24 * 8))))
+`define MMIO_CONV1D_PL_addr_in1_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (19 * 8))))
+`define MMIO_CONV1D_PL_addr_in1_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (19 * 8))))
+`define MMIO_CONV1D_PL_addr_in2_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (20 * 8))))
+`define MMIO_CONV1D_PL_addr_in2_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (20 * 8))))
+`define MMIO_CONV1D_PL_addr_out_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (21 * 8))))
+`define MMIO_CONV1D_PL_addr_out_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (21 * 8))))
+`define MMIO_CONV1D_PL_vsize_rden    (cpu_mem_read && (`CPU_AddressBus == (16384 - (22 * 8))))
+`define MMIO_CONV1D_PL_vsize_wren    (cpu_mem_write && (`CPU_AddressBus == (16384 - (22 * 8))))
+`define MMIO_CONV1D_PL_start_rden    (cpu_mem_read && (`CPU_AddressBus == (16384 - (23 * 8))))
+`define MMIO_CONV1D_PL_start_wren    (cpu_mem_write && (`CPU_AddressBus == (16384 - (23 * 8))))
+`define MMIO_CONV1D_PL_done_rden     (cpu_mem_read && (`CPU_AddressBus == (16384 - (24 * 8))))
+`define MMIO_CONV1D_PL_done_wren     (cpu_mem_write && (`CPU_AddressBus == (16384 - (24 * 8))))
 
-`define MMIO_CONV2D_addr_input_rden   (ControlBus[1] && (`CPU_AddressBus == (16384 - (25 * 8))))
-`define MMIO_CONV2D_addr_input_wren   (ControlBus[2] && (`CPU_AddressBus == (16384 - (25 * 8))))
-`define MMIO_CONV2D_addr_kernel_rden  (ControlBus[1] && (`CPU_AddressBus == (16384 - (26 * 8))))
-`define MMIO_CONV2D_addr_kernel_wren  (ControlBus[2] && (`CPU_AddressBus == (16384 - (26 * 8))))
-`define MMIO_CONV2D_addr_out_rden     (ControlBus[1] && (`CPU_AddressBus == (16384 - (27 * 8))))
-`define MMIO_CONV2D_addr_out_wren     (ControlBus[2] && (`CPU_AddressBus == (16384 - (27 * 8))))
-`define MMIO_CONV2D_input_width_rden  (ControlBus[1] && (`CPU_AddressBus == (16384 - (28 * 8))))
-`define MMIO_CONV2D_input_width_wren  (ControlBus[2] && (`CPU_AddressBus == (16384 - (28 * 8))))
-`define MMIO_CONV2D_input_height_rden (ControlBus[1] && (`CPU_AddressBus == (16384 - (29 * 8))))
-`define MMIO_CONV2D_input_height_wren (ControlBus[2] && (`CPU_AddressBus == (16384 - (29 * 8))))
-`define MMIO_CONV2D_start_rden        (ControlBus[1] && (`CPU_AddressBus == (16384 - (30 * 8))))
-`define MMIO_CONV2D_start_wren        (ControlBus[2] && (`CPU_AddressBus == (16384 - (30 * 8))))
-`define MMIO_CONV2D_done_rden         (ControlBus[1] && (`CPU_AddressBus == (16384 - (31 * 8))))
-`define MMIO_CONV2D_done_wren         (ControlBus[2] && (`CPU_AddressBus == (16384 - (31 * 8))))
+`define MMIO_CONV2D_addr_input_rden   (cpu_mem_read && (`CPU_AddressBus == (16384 - (25 * 8))))
+`define MMIO_CONV2D_addr_input_wren   (cpu_mem_write && (`CPU_AddressBus == (16384 - (25 * 8))))
+`define MMIO_CONV2D_addr_kernel_rden  (cpu_mem_read && (`CPU_AddressBus == (16384 - (26 * 8))))
+`define MMIO_CONV2D_addr_kernel_wren  (cpu_mem_write && (`CPU_AddressBus == (16384 - (26 * 8))))
+`define MMIO_CONV2D_addr_out_rden     (cpu_mem_read && (`CPU_AddressBus == (16384 - (27 * 8))))
+`define MMIO_CONV2D_addr_out_wren     (cpu_mem_write && (`CPU_AddressBus == (16384 - (27 * 8))))
+`define MMIO_CONV2D_input_width_rden  (cpu_mem_read && (`CPU_AddressBus == (16384 - (28 * 8))))
+`define MMIO_CONV2D_input_width_wren  (cpu_mem_write && (`CPU_AddressBus == (16384 - (28 * 8))))
+`define MMIO_CONV2D_input_height_rden (cpu_mem_read && (`CPU_AddressBus == (16384 - (29 * 8))))
+`define MMIO_CONV2D_input_height_wren (cpu_mem_write && (`CPU_AddressBus == (16384 - (29 * 8))))
+`define MMIO_CONV2D_start_rden        (cpu_mem_read && (`CPU_AddressBus == (16384 - (30 * 8))))
+`define MMIO_CONV2D_start_wren        (cpu_mem_write && (`CPU_AddressBus == (16384 - (30 * 8))))
+`define MMIO_CONV2D_done_rden         (cpu_mem_read && (`CPU_AddressBus == (16384 - (31 * 8))))
+`define MMIO_CONV2D_done_wren         (cpu_mem_write && (`CPU_AddressBus == (16384 - (31 * 8))))
+
 
 module HW_Interface(
 
@@ -125,6 +126,8 @@ always@(posedge ADC_CLK_10) begin
 end
 
 (* keep *) wire clk;
+(* keep *) wire cpu_mem_read;
+(* keep *) wire cpu_mem_write;
 (* keep *) wire rst;
 (* keep *) wire cpu_clk;
 (* keep *) wire `BIT_WIDTH pc;
@@ -401,6 +404,8 @@ assign HEX5 = 0;
 
 assign clk = ClockDivider[9];
 assign rst = ~KEY[0];
+assign cpu_mem_read = ControlBus[1];
+assign cpu_mem_write = ControlBus[2];
 
 endmodule
 
