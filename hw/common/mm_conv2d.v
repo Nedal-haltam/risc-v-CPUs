@@ -1,6 +1,5 @@
 //------------------------------------------------
 // mm_conv2d
-`define BATCH_SIZE (10)
 `define KW (3)
 `define KH (3)
 
