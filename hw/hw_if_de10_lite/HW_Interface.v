@@ -224,7 +224,7 @@ dualpram dualpram_inst
 	.clock_a(~clk),
 	.rden_a(`DataMem_rden),
 	.wren_a(`DataMem_wren),
-	.address_a(`CPU_AddressBus),
+	.address_a((`CPU_AddressBus) >> 3),
 	.data_a(CPUDataBusOut),
 	.q_a(DMDataBusPort1),
 
@@ -232,7 +232,7 @@ dualpram dualpram_inst
 	.clock_b(clkPort2),
 	.rden_b(rdenPort2),
 	.wren_b(wrenPort2),
-	.address_b(addressPort2),
+	.address_b((addressPort2) >> 3),
 	.data_b(dataPort2),
 	.q_b(DMDataBusPort2)
 );

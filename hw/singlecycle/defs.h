@@ -15,7 +15,7 @@
         `define DM_INIT_FILE_PATH "DM_INIT.INIT"
     `endif // simulate
 
-    `define IM_BITS (13)
+    `define IM_BITS (14)
     `define IM_SIZE (1 << `IM_BITS)
 
     `define DM_BITS (14)
