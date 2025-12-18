@@ -242,7 +242,7 @@ always@(posedge clk or posedge rst) begin
             end
             CONV2D_STATE_WRITE_BACK: begin
                 if (!conv2d_dm_p2_wren) begin
-					conv2d_dm_p2_address <= conv2d_addr_out[`DM_BITS-1:0] + (14'd8 * conv2d_wb_index);
+					conv2d_dm_p2_address <= conv2d_addr_out[`DM_BITS-1:0] + (14'd8 * conv2d_wb_index[`DM_BITS-1:0]);
 					conv2d_dm_p2_wren <= 1'b1;
 					conv2d_dm_p2_writedata <= SystolicOutput0;
 					conv2d_state <= CONV2D_STATE_WRITE_BACK;

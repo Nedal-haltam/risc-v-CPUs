@@ -52,8 +52,8 @@ module dualpram (
 	q_a,
 	q_b);
 
-	input	[(`DM_BITS - 1):0]  address_a;
-	input	[(`DM_BITS - 1):0]  address_b;
+	input	[(`DM_BITS - 1 - 3):0]  address_a;
+	input	[(`DM_BITS - 1 - 3):0]  address_b;
 	input	  clock_a;
 	input	  clock_b;
 	input	[63:0]  data_a;
