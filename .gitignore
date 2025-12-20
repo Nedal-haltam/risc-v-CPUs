@@ -22,3 +22,4 @@
 /hw/hw_if_de10_lite/output_files
 /hw/singlecycle/test
 *.bak
+/hw/hw_if_de2_115/.qsys_edit
