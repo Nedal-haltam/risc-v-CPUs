@@ -6,11 +6,11 @@ parameter PECount   = 0
 )
 (
     input clk, rst, trigger
-    ,input      `BIT_WIDTH InDim0Lane0
-    ,output reg `BIT_WIDTH OutDim0Lane0
-    ,input      `BIT_WIDTH InDim1Lane0
-    ,output reg `BIT_WIDTH OutDim1Lane0
-    ,output reg `BIT_WIDTH PEValue
+    ,input      `INT_BIT_WIDTH InDim0Lane0
+    ,output reg `INT_BIT_WIDTH OutDim0Lane0
+    ,input      `INT_BIT_WIDTH InDim1Lane0
+    ,output reg `INT_BIT_WIDTH OutDim1Lane0
+    ,output reg `INT_BIT_WIDTH PEValue
 );
     always@(posedge clk) begin
         if (rst) begin
@@ -28,24 +28,24 @@ endmodule
 module SystolicArray_conv1d_2dsys
 (
     input clk, rst, trigger
-    ,input `BIT_WIDTH Dim0Input0Lane0
-    ,input `BIT_WIDTH Dim0Input1Lane0
-    ,input `BIT_WIDTH Dim0Input2Lane0
-    ,input `BIT_WIDTH Dim0Input3Lane0
-    ,input `BIT_WIDTH Dim1Input0Lane0
-    ,input `BIT_WIDTH Dim1Input1Lane0
-    ,input `BIT_WIDTH Dim1Input2Lane0
-    ,input `BIT_WIDTH Dim1Input3Lane0
-	,output `BIT_WIDTH DimOutput0
-	,output `BIT_WIDTH DimOutput1
-	,output `BIT_WIDTH DimOutput2
-	,output `BIT_WIDTH DimOutput3
-	,output `BIT_WIDTH DimOutput4
-	,output `BIT_WIDTH DimOutput5
-	,output `BIT_WIDTH DimOutput6
+    ,input `INT_BIT_WIDTH Dim0Input0Lane0
+    ,input `INT_BIT_WIDTH Dim0Input1Lane0
+    ,input `INT_BIT_WIDTH Dim0Input2Lane0
+    ,input `INT_BIT_WIDTH Dim0Input3Lane0
+    ,input `INT_BIT_WIDTH Dim1Input0Lane0
+    ,input `INT_BIT_WIDTH Dim1Input1Lane0
+    ,input `INT_BIT_WIDTH Dim1Input2Lane0
+    ,input `INT_BIT_WIDTH Dim1Input3Lane0
+	,output `INT_BIT_WIDTH DimOutput0
+	,output `INT_BIT_WIDTH DimOutput1
+	,output `INT_BIT_WIDTH DimOutput2
+	,output `INT_BIT_WIDTH DimOutput3
+	,output `INT_BIT_WIDTH DimOutput4
+	,output `INT_BIT_WIDTH DimOutput5
+	,output `INT_BIT_WIDTH DimOutput6
 );
-    wire `BIT_WIDTH PassThroughWires0Lane0[3:0];
-    wire `BIT_WIDTH PassThroughWires1Lane0[3:0];
+    wire `INT_BIT_WIDTH PassThroughWires0Lane0[3:0];
+    wire `INT_BIT_WIDTH PassThroughWires1Lane0[3:0];
     assign PassThroughWires0Lane0[0] = Dim0Input0Lane0;
     assign PassThroughWires0Lane0[1] = Dim0Input1Lane0;
     assign PassThroughWires0Lane0[2] = Dim0Input2Lane0;
@@ -54,17 +54,17 @@ module SystolicArray_conv1d_2dsys
     assign PassThroughWires1Lane0[1] = Dim1Input1Lane0;
     assign PassThroughWires1Lane0[2] = Dim1Input2Lane0;
     assign PassThroughWires1Lane0[3] = Dim1Input3Lane0;
-    wire `BIT_WIDTH PEOutDim0Lane0 [3:0][3:0];
-    wire `BIT_WIDTH PEOutDim1Lane0 [3:0][3:0];
-    wire `BIT_WIDTH PEValues [15:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane0 [3:0][3:0];
+    wire `INT_BIT_WIDTH PEOutDim1Lane0 [3:0][3:0];
+    wire `INT_BIT_WIDTH PEValues [15:0];
     genvar Dim0Index, Dim1Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 4; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 		    for (Dim1Index = 0; Dim1Index < 4; Dim1Index = Dim1Index + 1) begin : Dim1IndexForLoopBlock
 				localparam PECount = Dim1Index * 4 * 1 + Dim0Index * 1 + 0;
-				wire `BIT_WIDTH InDim0Lane0;
+				wire `INT_BIT_WIDTH InDim0Lane0;
 				assign InDim0Lane0 = PassThroughWires0Lane0[Dim0Index];
-				wire `BIT_WIDTH InDim1Lane0;
+				wire `INT_BIT_WIDTH InDim1Lane0;
 				assign InDim1Lane0 = PassThroughWires1Lane0[Dim1Index];
 				PE_conv1d_2dsys #(.PECount(PECount)) pe
 				(
@@ -80,8 +80,8 @@ module SystolicArray_conv1d_2dsys
 		    end
 	    end
     endgenerate
-    reg `BIT_WIDTH OutputDim [6:0];
-    reg `BIT_WIDTH index = 0;
+    reg `INT_BIT_WIDTH OutputDim [6:0];
+    reg `INT_BIT_WIDTH index = 0;
     integer i;
     integer j;
     always@(posedge clk) begin
@@ -129,13 +129,13 @@ parameter PECount   = 0
 )
 (
     input clk, rst, trigger
-    ,input      `BIT_WIDTH InDim0Lane0
-    ,output reg `BIT_WIDTH OutDim0Lane0
-    ,output reg `BIT_WIDTH PEValue
+    ,input      `INT_BIT_WIDTH InDim0Lane0
+    ,output reg `INT_BIT_WIDTH OutDim0Lane0
+    ,output reg `INT_BIT_WIDTH PEValue
     ,input InternalRegisterEnable
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 );
-    reg `BIT_WIDTH InternalRegister0;
+    reg `INT_BIT_WIDTH InternalRegister0;
     always@(posedge clk) begin
         if (InternalRegisterEnable) begin
             InternalRegister0 <= InternalRegisterInputValue0;
@@ -155,39 +155,39 @@ endmodule
 module SystolicArray_conv1d_1dsys_pl
 (
     input clk, rst, trigger
-    ,input `BIT_WIDTH Dim0InputLane0
-    ,input `BIT_WIDTH InternalRegisterEnableIndex
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH Dim0InputLane0
+    ,input `INT_BIT_WIDTH InternalRegisterEnableIndex
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 
-	,output `BIT_WIDTH DimOutput0
-	,output `BIT_WIDTH DimOutput1
-	,output `BIT_WIDTH DimOutput2
-	,output `BIT_WIDTH DimOutput3
-	,output `BIT_WIDTH DimOutput4
-	,output `BIT_WIDTH DimOutput5
-	,output `BIT_WIDTH DimOutput6
-	,output `BIT_WIDTH DimOutput7
-	,output `BIT_WIDTH DimOutput8
-	,output `BIT_WIDTH DimOutput9
-	,output `BIT_WIDTH DimOutput10
-	,output `BIT_WIDTH DimOutput11
-	,output `BIT_WIDTH DimOutput12
-	,output `BIT_WIDTH DimOutput13
-	,output `BIT_WIDTH DimOutput14
-	,output `BIT_WIDTH DimOutput15
-	,output `BIT_WIDTH DimOutput16
-	,output `BIT_WIDTH DimOutput17
-	,output `BIT_WIDTH DimOutput18
+	,output `INT_BIT_WIDTH DimOutput0
+	,output `INT_BIT_WIDTH DimOutput1
+	,output `INT_BIT_WIDTH DimOutput2
+	,output `INT_BIT_WIDTH DimOutput3
+	,output `INT_BIT_WIDTH DimOutput4
+	,output `INT_BIT_WIDTH DimOutput5
+	,output `INT_BIT_WIDTH DimOutput6
+	,output `INT_BIT_WIDTH DimOutput7
+	,output `INT_BIT_WIDTH DimOutput8
+	,output `INT_BIT_WIDTH DimOutput9
+	,output `INT_BIT_WIDTH DimOutput10
+	,output `INT_BIT_WIDTH DimOutput11
+	,output `INT_BIT_WIDTH DimOutput12
+	,output `INT_BIT_WIDTH DimOutput13
+	,output `INT_BIT_WIDTH DimOutput14
+	,output `INT_BIT_WIDTH DimOutput15
+	,output `INT_BIT_WIDTH DimOutput16
+	,output `INT_BIT_WIDTH DimOutput17
+	,output `INT_BIT_WIDTH DimOutput18
 );
-    wire `BIT_WIDTH PassThroughWires0Lane0;
+    wire `INT_BIT_WIDTH PassThroughWires0Lane0;
     assign PassThroughWires0Lane0 = Dim0InputLane0;
-    wire `BIT_WIDTH PEOutDim0Lane0 [9:0];
-    wire `BIT_WIDTH PEValues [9:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane0 [9:0];
+    wire `INT_BIT_WIDTH PEValues [9:0];
     genvar Dim0Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 10; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 			localparam PECount = Dim0Index * 1 + 0;
-			wire `BIT_WIDTH InDim0Lane0;
+			wire `INT_BIT_WIDTH InDim0Lane0;
 			if (Dim0Index == 0) begin
 			    assign InDim0Lane0 = PassThroughWires0Lane0;
 			end
@@ -207,8 +207,8 @@ module SystolicArray_conv1d_1dsys_pl
 			);
 	    end
     endgenerate
-    reg `BIT_WIDTH OutputDim [18:0];
-    reg `BIT_WIDTH i = 0;
+    reg `INT_BIT_WIDTH OutputDim [18:0];
+    reg `INT_BIT_WIDTH i = 0;
     integer ii;
     always@(posedge clk) begin
         if (rst) begin
@@ -263,13 +263,13 @@ parameter PECount   = 0
 )
 (
     input clk, rst, trigger
-    ,input      `BIT_WIDTH InDim0Lane0
-    ,output reg `BIT_WIDTH OutDim0Lane0
-    ,output reg `BIT_WIDTH PEValue
+    ,input      `INT_BIT_WIDTH InDim0Lane0
+    ,output reg `INT_BIT_WIDTH OutDim0Lane0
+    ,output reg `INT_BIT_WIDTH PEValue
     ,input InternalRegisterEnable
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 );
-    reg `BIT_WIDTH InternalRegister0;
+    reg `INT_BIT_WIDTH InternalRegister0;
     always@(posedge clk) begin
         if (InternalRegisterEnable) begin
             InternalRegister0 <= InternalRegisterInputValue0;
@@ -289,19 +289,19 @@ endmodule
 module SystolicArray_conv1d_1dsys_bc
 (
     input clk, rst, trigger
-    ,input `BIT_WIDTH Dim0InputLane0
-    ,input `BIT_WIDTH InternalRegisterEnableIndex
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH Dim0InputLane0
+    ,input `INT_BIT_WIDTH InternalRegisterEnableIndex
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 );
-    wire `BIT_WIDTH PassThroughWires0Lane0;
+    wire `INT_BIT_WIDTH PassThroughWires0Lane0;
     assign PassThroughWires0Lane0 = Dim0InputLane0;
-    wire `BIT_WIDTH PEOutDim0Lane0 [9:0];
-    wire `BIT_WIDTH PEValues [9:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane0 [9:0];
+    wire `INT_BIT_WIDTH PEValues [9:0];
     genvar Dim0Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 10; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 			localparam PECount = Dim0Index * 1 + 0;
-			wire `BIT_WIDTH InDim0Lane0;
+			wire `INT_BIT_WIDTH InDim0Lane0;
 			assign InDim0Lane0 = PassThroughWires0Lane0;
 			PE_conv1d_1dsys_bc #(.PECount(PECount)) pe
 			(
@@ -316,8 +316,8 @@ module SystolicArray_conv1d_1dsys_bc
 			);
 	    end
     endgenerate
-    reg `BIT_WIDTH OutputDim [18:0];
-    reg `BIT_WIDTH i = 0;
+    reg `INT_BIT_WIDTH OutputDim [18:0];
+    reg `INT_BIT_WIDTH i = 0;
     integer ii;
     always@(posedge clk) begin
         if (rst) begin
@@ -353,24 +353,24 @@ parameter PECount   = 0
 ,parameter DataWidth = 8
 )
 (
-    input clk, rst, trigger, input `BIT_WIDTH file
-    ,input      `BIT_WIDTH InDim0Lane0
-    ,output reg `BIT_WIDTH OutDim0Lane0
-    ,input      `BIT_WIDTH InDim0Lane1
-    ,output reg `BIT_WIDTH OutDim0Lane1
-    ,input      `BIT_WIDTH InDim0Lane2
-    ,output reg `BIT_WIDTH OutDim0Lane2
-    ,input      `BIT_WIDTH InDim1Lane0
-    ,output reg `BIT_WIDTH OutDim1Lane0
-    ,input      `BIT_WIDTH InDim1Lane1
-    ,output reg `BIT_WIDTH OutDim1Lane1
-    ,input      `BIT_WIDTH InDim1Lane2
-    ,output reg `BIT_WIDTH OutDim1Lane2
-    ,output reg `BIT_WIDTH PEValue
+    input clk, rst, trigger, input `INT_BIT_WIDTH file
+    ,input      `INT_BIT_WIDTH InDim0Lane0
+    ,output reg `INT_BIT_WIDTH OutDim0Lane0
+    ,input      `INT_BIT_WIDTH InDim0Lane1
+    ,output reg `INT_BIT_WIDTH OutDim0Lane1
+    ,input      `INT_BIT_WIDTH InDim0Lane2
+    ,output reg `INT_BIT_WIDTH OutDim0Lane2
+    ,input      `INT_BIT_WIDTH InDim1Lane0
+    ,output reg `INT_BIT_WIDTH OutDim1Lane0
+    ,input      `INT_BIT_WIDTH InDim1Lane1
+    ,output reg `INT_BIT_WIDTH OutDim1Lane1
+    ,input      `INT_BIT_WIDTH InDim1Lane2
+    ,output reg `INT_BIT_WIDTH OutDim1Lane2
+    ,output reg `INT_BIT_WIDTH PEValue
     ,input InternalRegisterEnable
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 );
-    reg `BIT_WIDTH InternalRegister0;
+    reg `INT_BIT_WIDTH InternalRegister0;
     always@(posedge clk) begin
         if (InternalRegisterEnable) begin
             InternalRegister0 <= InternalRegisterInputValue0;
@@ -400,38 +400,38 @@ module SystolicArray_conv2d
 (
     input clk, rst, trigger
 
-    ,input `BIT_WIDTH Dim0Input0Lane0
-    ,input `BIT_WIDTH Dim0Input0Lane1
-    ,input `BIT_WIDTH Dim0Input0Lane2
-    ,input `BIT_WIDTH Dim0Input1Lane0
-    ,input `BIT_WIDTH Dim0Input1Lane1
-    ,input `BIT_WIDTH Dim0Input1Lane2
-    ,input `BIT_WIDTH Dim0Input2Lane0
-    ,input `BIT_WIDTH Dim0Input2Lane1
-    ,input `BIT_WIDTH Dim0Input2Lane2
-    ,input `BIT_WIDTH Dim1Input0Lane0
-    ,input `BIT_WIDTH Dim1Input0Lane1
-    ,input `BIT_WIDTH Dim1Input0Lane2
-    ,input `BIT_WIDTH Dim1Input1Lane0
-    ,input `BIT_WIDTH Dim1Input1Lane1
-    ,input `BIT_WIDTH Dim1Input1Lane2
-    ,input `BIT_WIDTH Dim1Input2Lane0
-    ,input `BIT_WIDTH Dim1Input2Lane1
-    ,input `BIT_WIDTH Dim1Input2Lane2
-    ,input `BIT_WIDTH InternalRegisterEnableIndex
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH Dim0Input0Lane0
+    ,input `INT_BIT_WIDTH Dim0Input0Lane1
+    ,input `INT_BIT_WIDTH Dim0Input0Lane2
+    ,input `INT_BIT_WIDTH Dim0Input1Lane0
+    ,input `INT_BIT_WIDTH Dim0Input1Lane1
+    ,input `INT_BIT_WIDTH Dim0Input1Lane2
+    ,input `INT_BIT_WIDTH Dim0Input2Lane0
+    ,input `INT_BIT_WIDTH Dim0Input2Lane1
+    ,input `INT_BIT_WIDTH Dim0Input2Lane2
+    ,input `INT_BIT_WIDTH Dim1Input0Lane0
+    ,input `INT_BIT_WIDTH Dim1Input0Lane1
+    ,input `INT_BIT_WIDTH Dim1Input0Lane2
+    ,input `INT_BIT_WIDTH Dim1Input1Lane0
+    ,input `INT_BIT_WIDTH Dim1Input1Lane1
+    ,input `INT_BIT_WIDTH Dim1Input1Lane2
+    ,input `INT_BIT_WIDTH Dim1Input2Lane0
+    ,input `INT_BIT_WIDTH Dim1Input2Lane1
+    ,input `INT_BIT_WIDTH Dim1Input2Lane2
+    ,input `INT_BIT_WIDTH InternalRegisterEnableIndex
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 
-    ,output `BIT_WIDTH Output0
-    ,output `BIT_WIDTH Output1
-    ,output `BIT_WIDTH Output2
+    ,output `INT_BIT_WIDTH Output0
+    ,output `INT_BIT_WIDTH Output1
+    ,output `INT_BIT_WIDTH Output2
 );
     integer file;
-    wire `BIT_WIDTH PassThroughWires0Lane0[2:0];
-    wire `BIT_WIDTH PassThroughWires0Lane1[2:0];
-    wire `BIT_WIDTH PassThroughWires0Lane2[2:0];
-    wire `BIT_WIDTH PassThroughWires1Lane0[2:0];
-    wire `BIT_WIDTH PassThroughWires1Lane1[2:0];
-    wire `BIT_WIDTH PassThroughWires1Lane2[2:0];
+    wire `INT_BIT_WIDTH PassThroughWires0Lane0[2:0];
+    wire `INT_BIT_WIDTH PassThroughWires0Lane1[2:0];
+    wire `INT_BIT_WIDTH PassThroughWires0Lane2[2:0];
+    wire `INT_BIT_WIDTH PassThroughWires1Lane0[2:0];
+    wire `INT_BIT_WIDTH PassThroughWires1Lane1[2:0];
+    wire `INT_BIT_WIDTH PassThroughWires1Lane2[2:0];
     assign PassThroughWires0Lane0[0] = Dim0Input0Lane0;
     assign PassThroughWires0Lane1[0] = Dim0Input0Lane1;
     assign PassThroughWires0Lane2[0] = Dim0Input0Lane2;
@@ -450,21 +450,21 @@ module SystolicArray_conv2d
     assign PassThroughWires1Lane0[2] = Dim1Input2Lane0;
     assign PassThroughWires1Lane1[2] = Dim1Input2Lane1;
     assign PassThroughWires1Lane2[2] = Dim1Input2Lane2;
-    wire `BIT_WIDTH PEOutDim0Lane0 [2:0][2:0];
-    wire `BIT_WIDTH PEOutDim0Lane1 [2:0][2:0];
-    wire `BIT_WIDTH PEOutDim0Lane2 [2:0][2:0];
-    wire `BIT_WIDTH PEOutDim1Lane0 [2:0][2:0];
-    wire `BIT_WIDTH PEOutDim1Lane1 [2:0][2:0];
-    wire `BIT_WIDTH PEOutDim1Lane2 [2:0][2:0];
-    wire `BIT_WIDTH PEValues [8:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane0 [2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane1 [2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane2 [2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim1Lane0 [2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim1Lane1 [2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim1Lane2 [2:0][2:0];
+    wire `INT_BIT_WIDTH PEValues [8:0];
     genvar Dim0Index, Dim1Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 3; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 		    for (Dim1Index = 0; Dim1Index < 3; Dim1Index = Dim1Index + 1) begin : Dim1IndexForLoopBlock
 				localparam PECount = Dim0Index * 3 * 1 + Dim1Index * 1 + 0;
-				wire `BIT_WIDTH InDim0Lane0;
-				wire `BIT_WIDTH InDim0Lane1;
-				wire `BIT_WIDTH InDim0Lane2;
+				wire `INT_BIT_WIDTH InDim0Lane0;
+				wire `INT_BIT_WIDTH InDim0Lane1;
+				wire `INT_BIT_WIDTH InDim0Lane2;
 				if (Dim0Index == 0) begin
 				    assign InDim0Lane0 = PassThroughWires0Lane0[Dim1Index];
 				    assign InDim0Lane1 = PassThroughWires0Lane1[Dim1Index];
@@ -475,9 +475,9 @@ module SystolicArray_conv2d
 				    assign InDim0Lane1 = PEOutDim0Lane1[Dim0Index-1][Dim1Index];
 				    assign InDim0Lane2 = PEOutDim0Lane2[Dim0Index-1][Dim1Index];
 				end
-				wire `BIT_WIDTH InDim1Lane0;
-				wire `BIT_WIDTH InDim1Lane1;
-				wire `BIT_WIDTH InDim1Lane2;
+				wire `INT_BIT_WIDTH InDim1Lane0;
+				wire `INT_BIT_WIDTH InDim1Lane1;
+				wire `INT_BIT_WIDTH InDim1Lane2;
 				assign InDim1Lane0 = PassThroughWires1Lane0[Dim0Index];
 				assign InDim1Lane1 = PassThroughWires1Lane1[Dim0Index];
 				assign InDim1Lane2 = PassThroughWires1Lane2[Dim0Index];
@@ -506,23 +506,23 @@ module SystolicArray_conv2d
 		    end
 	    end
     endgenerate
-    wire signed `BIT_WIDTH SUM0 =
+    wire signed `INT_BIT_WIDTH SUM0 =
         $signed(PEOutDim1Lane0[0][0]) + $signed(PEOutDim1Lane0[0][1]) + $signed(PEOutDim1Lane0[0][2]) +
         $signed(PEOutDim1Lane0[1][0]) + $signed(PEOutDim1Lane0[1][1]) + $signed(PEOutDim1Lane0[1][2]) +
         $signed(PEOutDim1Lane0[2][0]) + $signed(PEOutDim1Lane0[2][1]) + $signed(PEOutDim1Lane0[2][2]);
 
-    // wire signed `BIT_WIDTH SUM1 =
+    // wire signed `INT_BIT_WIDTH SUM1 =
     //     $signed(PEOutDim1Lane1[0][0]) + $signed(PEOutDim1Lane1[0][1]) + $signed(PEOutDim1Lane1[0][2]) +
     //     $signed(PEOutDim1Lane1[1][0]) + $signed(PEOutDim1Lane1[1][1]) + $signed(PEOutDim1Lane1[1][2]) +
     //     $signed(PEOutDim1Lane1[2][0]) + $signed(PEOutDim1Lane1[2][1]) + $signed(PEOutDim1Lane1[2][2]);
 
-    // wire signed `BIT_WIDTH SUM2 =
+    // wire signed `INT_BIT_WIDTH SUM2 =
     //     $signed(PEOutDim1Lane2[0][0]) + $signed(PEOutDim1Lane2[0][1]) + $signed(PEOutDim1Lane2[0][2]) +
     //     $signed(PEOutDim1Lane2[1][0]) + $signed(PEOutDim1Lane2[1][1]) + $signed(PEOutDim1Lane2[1][2]) +
     //     $signed(PEOutDim1Lane2[2][0]) + $signed(PEOutDim1Lane2[2][1]) + $signed(PEOutDim1Lane2[2][2]);
 
-    function [7:0] clamp8(input signed `BIT_WIDTH v);
-        reg signed `BIT_WIDTH abs_v;
+    function [7:0] clamp8(input signed `INT_BIT_WIDTH v);
+        reg signed `INT_BIT_WIDTH abs_v;
         begin
             abs_v = (v < 0) ? -v : v;
             if (abs_v < 0) // keep this in case we removed the abs
@@ -550,18 +550,18 @@ parameter PECount   = 0
 ,parameter DataWidth = 32
 )
 (
-    input clk, rst, trigger, input `BIT_WIDTH file
-    ,input      `BIT_WIDTH InDim0Lane0
-    ,output reg `BIT_WIDTH OutDim0Lane0
-    ,input      `BIT_WIDTH InDim1Lane0
-    ,output reg `BIT_WIDTH OutDim1Lane0
-    ,input      `BIT_WIDTH InDim2Lane0
-    ,output reg `BIT_WIDTH OutDim2Lane0
-    ,output reg `BIT_WIDTH PEValue
+    input clk, rst, trigger, input `INT_BIT_WIDTH file
+    ,input      `INT_BIT_WIDTH InDim0Lane0
+    ,output reg `INT_BIT_WIDTH OutDim0Lane0
+    ,input      `INT_BIT_WIDTH InDim1Lane0
+    ,output reg `INT_BIT_WIDTH OutDim1Lane0
+    ,input      `INT_BIT_WIDTH InDim2Lane0
+    ,output reg `INT_BIT_WIDTH OutDim2Lane0
+    ,output reg `INT_BIT_WIDTH PEValue
     ,input InternalRegisterEnable
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 );
-    reg `BIT_WIDTH InternalRegister0;
+    reg `INT_BIT_WIDTH InternalRegister0;
     always@(posedge clk) begin
         if (InternalRegisterEnable) begin
             InternalRegister0 <= InternalRegisterInputValue0;
@@ -583,44 +583,44 @@ endmodule
 module SystolicArray_conv3d
 (
     input clk, rst, trigger
-    ,input `BIT_WIDTH Dim0Input00Lane0
-    ,input `BIT_WIDTH Dim0Input01Lane0
-    ,input `BIT_WIDTH Dim0Input02Lane0
-    ,input `BIT_WIDTH Dim0Input10Lane0
-    ,input `BIT_WIDTH Dim0Input11Lane0
-    ,input `BIT_WIDTH Dim0Input12Lane0
-    ,input `BIT_WIDTH Dim0Input20Lane0
-    ,input `BIT_WIDTH Dim0Input21Lane0
-    ,input `BIT_WIDTH Dim0Input22Lane0
-    ,input `BIT_WIDTH Dim1Input00Lane0
-    ,input `BIT_WIDTH Dim1Input01Lane0
-    ,input `BIT_WIDTH Dim1Input02Lane0
-    ,input `BIT_WIDTH Dim1Input10Lane0
-    ,input `BIT_WIDTH Dim1Input11Lane0
-    ,input `BIT_WIDTH Dim1Input12Lane0
-    ,input `BIT_WIDTH Dim1Input20Lane0
-    ,input `BIT_WIDTH Dim1Input21Lane0
-    ,input `BIT_WIDTH Dim1Input22Lane0
-    ,input `BIT_WIDTH Dim2Input00Lane0
-    ,input `BIT_WIDTH Dim2Input01Lane0
-    ,input `BIT_WIDTH Dim2Input02Lane0
-    ,input `BIT_WIDTH Dim2Input10Lane0
-    ,input `BIT_WIDTH Dim2Input11Lane0
-    ,input `BIT_WIDTH Dim2Input12Lane0
-    ,input `BIT_WIDTH Dim2Input20Lane0
-    ,input `BIT_WIDTH Dim2Input21Lane0
-    ,input `BIT_WIDTH Dim2Input22Lane0
+    ,input `INT_BIT_WIDTH Dim0Input00Lane0
+    ,input `INT_BIT_WIDTH Dim0Input01Lane0
+    ,input `INT_BIT_WIDTH Dim0Input02Lane0
+    ,input `INT_BIT_WIDTH Dim0Input10Lane0
+    ,input `INT_BIT_WIDTH Dim0Input11Lane0
+    ,input `INT_BIT_WIDTH Dim0Input12Lane0
+    ,input `INT_BIT_WIDTH Dim0Input20Lane0
+    ,input `INT_BIT_WIDTH Dim0Input21Lane0
+    ,input `INT_BIT_WIDTH Dim0Input22Lane0
+    ,input `INT_BIT_WIDTH Dim1Input00Lane0
+    ,input `INT_BIT_WIDTH Dim1Input01Lane0
+    ,input `INT_BIT_WIDTH Dim1Input02Lane0
+    ,input `INT_BIT_WIDTH Dim1Input10Lane0
+    ,input `INT_BIT_WIDTH Dim1Input11Lane0
+    ,input `INT_BIT_WIDTH Dim1Input12Lane0
+    ,input `INT_BIT_WIDTH Dim1Input20Lane0
+    ,input `INT_BIT_WIDTH Dim1Input21Lane0
+    ,input `INT_BIT_WIDTH Dim1Input22Lane0
+    ,input `INT_BIT_WIDTH Dim2Input00Lane0
+    ,input `INT_BIT_WIDTH Dim2Input01Lane0
+    ,input `INT_BIT_WIDTH Dim2Input02Lane0
+    ,input `INT_BIT_WIDTH Dim2Input10Lane0
+    ,input `INT_BIT_WIDTH Dim2Input11Lane0
+    ,input `INT_BIT_WIDTH Dim2Input12Lane0
+    ,input `INT_BIT_WIDTH Dim2Input20Lane0
+    ,input `INT_BIT_WIDTH Dim2Input21Lane0
+    ,input `INT_BIT_WIDTH Dim2Input22Lane0
 
-    ,input `BIT_WIDTH InternalRegisterEnableIndex
-    ,input `BIT_WIDTH InternalRegisterInputValue0
+    ,input `INT_BIT_WIDTH InternalRegisterEnableIndex
+    ,input `INT_BIT_WIDTH InternalRegisterInputValue0
 
-    ,output `BIT_WIDTH Output0
+    ,output `INT_BIT_WIDTH Output0
 
 );
     integer file;
-    wire `BIT_WIDTH PassThroughWires0Lane0[2:0][2:0];
-    wire `BIT_WIDTH PassThroughWires1Lane0[2:0][2:0];
-    wire `BIT_WIDTH PassThroughWires2Lane0[2:0][2:0];
+    wire `INT_BIT_WIDTH PassThroughWires0Lane0[2:0][2:0];
+    wire `INT_BIT_WIDTH PassThroughWires1Lane0[2:0][2:0];
+    wire `INT_BIT_WIDTH PassThroughWires2Lane0[2:0][2:0];
     assign PassThroughWires0Lane0[0][0] = Dim0Input00Lane0;
     assign PassThroughWires0Lane0[0][1] = Dim0Input01Lane0;
     assign PassThroughWires0Lane0[0][2] = Dim0Input02Lane0;
@@ -648,26 +648,26 @@ module SystolicArray_conv3d
     assign PassThroughWires2Lane0[2][0] = Dim2Input20Lane0;
     assign PassThroughWires2Lane0[2][1] = Dim2Input21Lane0;
     assign PassThroughWires2Lane0[2][2] = Dim2Input22Lane0;
-    wire `BIT_WIDTH PEOutDim0Lane0 [2:0][2:0][2:0];
-    wire `BIT_WIDTH PEOutDim1Lane0 [2:0][2:0][2:0];
-    wire `BIT_WIDTH PEOutDim2Lane0 [2:0][2:0][2:0];
-    wire `BIT_WIDTH PEValues [26:0];
+    wire `INT_BIT_WIDTH PEOutDim0Lane0 [2:0][2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim1Lane0 [2:0][2:0][2:0];
+    wire `INT_BIT_WIDTH PEOutDim2Lane0 [2:0][2:0][2:0];
+    wire `INT_BIT_WIDTH PEValues [26:0];
     genvar Dim0Index, Dim1Index, Dim2Index, DummyIndex;
     generate
 	    for (Dim0Index = 0; Dim0Index < 3; Dim0Index = Dim0Index + 1) begin : Dim0IndexForLoopBlock
 		    for (Dim1Index = 0; Dim1Index < 3; Dim1Index = Dim1Index + 1) begin : Dim1IndexForLoopBlock
 			    for (Dim2Index = 0; Dim2Index < 3; Dim2Index = Dim2Index + 1) begin : Dim2IndexForLoopBlock
 					localparam PECount = Dim0Index * 3 * 3 * 1 + Dim1Index * 3 * 1 + Dim2Index * 1 + 0;
-					wire `BIT_WIDTH InDim0Lane0;
+					wire `INT_BIT_WIDTH InDim0Lane0;
 					if (Dim0Index == 0) begin
 					    assign InDim0Lane0 = PassThroughWires0Lane0[Dim1Index][Dim2Index];
 					end
 					else begin
 					    assign InDim0Lane0 = PEOutDim0Lane0[Dim0Index-1][Dim1Index][Dim2Index];
 					end
-					wire `BIT_WIDTH InDim1Lane0;
+					wire `INT_BIT_WIDTH InDim1Lane0;
 					assign InDim1Lane0 = PassThroughWires1Lane0[Dim0Index][Dim2Index];
-					wire `BIT_WIDTH InDim2Lane0;
+					wire `INT_BIT_WIDTH InDim2Lane0;
 					assign InDim2Lane0 = PassThroughWires2Lane0[Dim0Index][Dim1Index];
 					PE_conv3d #(.PECount(PECount)) pe
 					(
@@ -689,10 +689,10 @@ module SystolicArray_conv3d
 		    end
 	    end
     endgenerate
-    wire signed `BIT_WIDTH SUM0 =
+    wire signed `INT_BIT_WIDTH SUM0 =
         $signed(PEOutDim1Lane0[0][0][0]) + $signed(PEOutDim1Lane0[0][0][1]) + $signed(PEOutDim1Lane0[0][0][2]) + $signed(PEOutDim1Lane0[0][1][0]) + $signed(PEOutDim1Lane0[0][1][1]) + $signed(PEOutDim1Lane0[0][1][2]) + $signed(PEOutDim1Lane0[0][2][0]) + $signed(PEOutDim1Lane0[0][2][1]) + $signed(PEOutDim1Lane0[0][2][2]) + $signed(PEOutDim1Lane0[1][0][0]) + $signed(PEOutDim1Lane0[1][0][1]) + $signed(PEOutDim1Lane0[1][0][2]) + $signed(PEOutDim1Lane0[1][1][0]) + $signed(PEOutDim1Lane0[1][1][1]) + $signed(PEOutDim1Lane0[1][1][2]) + $signed(PEOutDim1Lane0[1][2][0]) + $signed(PEOutDim1Lane0[1][2][1]) + $signed(PEOutDim1Lane0[1][2][2]) + $signed(PEOutDim1Lane0[2][0][0]) + $signed(PEOutDim1Lane0[2][0][1]) + $signed(PEOutDim1Lane0[2][0][2]) + $signed(PEOutDim1Lane0[2][1][0]) + $signed(PEOutDim1Lane0[2][1][1]) + $signed(PEOutDim1Lane0[2][1][2]) + $signed(PEOutDim1Lane0[2][2][0]) + $signed(PEOutDim1Lane0[2][2][1]) + $signed(PEOutDim1Lane0[2][2][2]) +  0;
-    function [7:0] clamp8(input signed `BIT_WIDTH v);
-        reg signed `BIT_WIDTH abs_v;
+    function [7:0] clamp8(input signed `INT_BIT_WIDTH v);
+        reg signed `INT_BIT_WIDTH abs_v;
         begin
             abs_v = (v < 0) ? -v : v;
             if (abs_v < 0) // keep this in case we removed the abs
@@ -704,7 +704,7 @@ module SystolicArray_conv3d
         end
     endfunction
 
-    // wire `BIT_WIDTH c0 = SUM0;
+    // wire `INT_BIT_WIDTH c0 = SUM0;
     assign Output0 = SUM0;
 
 

@@ -4,6 +4,8 @@
 
     `define reset (4)
     `define BIT_WIDTH [63:0]
+    `define INT_BITS (32)
+    `define INT_BIT_WIDTH [31:0]
     `define RA (5'd1)
     `ifndef simulate
         `define IM_INIT_FILE_PATH "./test/Generated/test_IM_INIT.INIT"
