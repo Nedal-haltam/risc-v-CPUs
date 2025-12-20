@@ -156,7 +156,7 @@ end
 (* keep *) wire `BIT_WIDTH write_ecall_address;
 (* keep *) wire `BIT_WIDTH write_ecall_len;
 (* keep *) wire datatrigger;
-(* keep *) wire [(`DM_BITS-1):0] write_ecall_mem_addr;
+(* keep *) wire [(`DM_BITS-1) - 3:0] write_ecall_mem_addr;
 
 (* keep *) wire `BIT_WIDTH AddressBus1, DMDataBusPort1, CPUDataBusIn, DMDataBusPort2, CPUDataBusOut;
 (* keep *) wire [10:0] ControlBus;
@@ -166,7 +166,7 @@ end
 (* preserve *) reg done;
 
 (* keep *) wire clkPort2, rdenPort2, wrenPort2;
-(* keep *) wire [(`DM_BITS - 1):0] addressPort2;
+(* keep *) wire [(`DM_BITS - 1) - 3:0] addressPort2;
 (* keep *) wire `BIT_WIDTH dataPort2;
 
 //------------------------------------------------
@@ -224,7 +224,7 @@ dualpram dualpram_inst
 	.clock_a(~clk),
 	.rden_a(`DataMem_rden),
 	.wren_a(`DataMem_wren),
-	.address_a((`CPU_AddressBus) >> 3),
+	.address_a((ControlBus[6:3] == `LOAD_DOUBLEWORD || ControlBus[10:7] == `STORE_DOUBLEWORD) ? AddressBus1[(`DM_BITS-1):3] : AddressBus1[(`DM_BITS-1) - 3:0]),
 	.data_a(CPUDataBusOut),
 	.q_a(DMDataBusPort1),
 
@@ -232,7 +232,7 @@ dualpram dualpram_inst
 	.clock_b(clkPort2),
 	.rden_b(rdenPort2),
 	.wren_b(wrenPort2),
-	.address_b((addressPort2) >> 3),
+	.address_b((addressPort2)),
 	.data_b(dataPort2),
 	.q_b(DMDataBusPort2)
 );
@@ -405,7 +405,7 @@ end
 assign clkPort2     = mmio_dm_p2_en ? mmio_clkPort2     : `write_clkPort2;
 assign rdenPort2    = mmio_dm_p2_en ? mmio_rdenPort2    : `write_rdenPort2;
 assign wrenPort2    = mmio_dm_p2_en ? mmio_wrenPort2    : `write_wrenPort2;
-assign addressPort2 = mmio_dm_p2_en ? mmio_addressPort2 : `write_addressPort2;
+assign addressPort2 = mmio_dm_p2_en ? mmio_addressPort2[(`DM_BITS - 1):3] : `write_addressPort2;
 assign dataPort2    = mmio_dm_p2_en ? mmio_dataPort2    : `write_dataPort2;
 
 `ifndef ENABLE_MMIO
@@ -422,7 +422,7 @@ assign datatrigger = (!done) ? (rst | ~clk) : (datatrigger);
 assign ARDUINO_IO[7:0] = (!done && (offset) <= (write_ecall_len)) ? DMDataBusPort2[7:0] : 8'd0;
 assign ARDUINO_IO[8] = datatrigger;
 assign ARDUINO_RESET_N = 1'b1;
-assign write_ecall_mem_addr = write_ecall_address[(`DM_BITS-1):0] + offset[(`DM_BITS-1):0];
+assign write_ecall_mem_addr = write_ecall_address[(`DM_BITS-1) - 3:0] + offset[(`DM_BITS-1) - 3:0];
 assign write_ecall_finished = done;
 //-------------------
 assign CPUDataBusIn = (`DataMem_rden) ? DMDataBusPort1 : MMIODataBus;
