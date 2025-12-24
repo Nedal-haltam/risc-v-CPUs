@@ -103,8 +103,8 @@ syntax:
 	@$(IVERILOG) -I$(BENCHMARK_DIR)/BinarySearch/Generated -I./hw/singlecycle -o /dev/null \
 	-D simulate -D MAX_CLOCKS=1000000 ./Sim.v; \
 
-TEST_DIR=./singlecycle/test
+TEST_DIR=./hw/singlecycle/test
 test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./hw/singlecycle/test/Generated/test -dump ./hw/singlecycle/test/test.e -imsize 16384 -dmsize 2048
+	dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o $(TEST_DIR)/Generated/test -dump $(TEST_DIR)/test.e -imsize 16384 -dmsize 2048
