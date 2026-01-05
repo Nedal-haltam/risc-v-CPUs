@@ -419,7 +419,7 @@ assign dataPort2    = mmio_dm_p2_en ? mmio_dataPort2    : `write_dataPort2;
 `endif
 
 //-------------------
-assign datatrigger = (!done) ? (rst | ~clk) : (datatrigger);
+assign datatrigger = (!done) & (rst | ~clk);
 assign ARDUINO_IO[7:0] = (!done && (offset) <= (write_ecall_len)) ? DMDataBusPort2[7:0] : 8'd0;
 assign ARDUINO_IO[8] = datatrigger;
 assign ARDUINO_IO[15:9] = 0;
