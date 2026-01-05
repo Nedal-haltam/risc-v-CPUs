@@ -27,7 +27,7 @@ BENCHMARKS=\
 	"SumOfNumbers" \
 	"Swapping"
 
-.PHONY: all serial parallel parallel-inside run_benchmark run_sw run_hw test
+.PHONY: all serial parallel parallel-inside run_benchmark run_sw run_hw build-test sim-test
 
 # constants
 MEM_SIZE=8192
@@ -104,7 +104,9 @@ syntax:
 	-D simulate -D MAX_CLOCKS=1000000 ./Sim.v; \
 
 TEST_DIR=./hw/singlecycle/test
-test:
+build-test:
 	@rm -rf $(TEST_DIR)/Generated
 	@mkdir -p $(TEST_DIR)/Generated
-	dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o $(TEST_DIR)/Generated/test -dump $(TEST_DIR)/test.e -imsize 16384 -dmsize 2048
+	@dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o $(TEST_DIR)/Generated/test -dump $(TEST_DIR)/test.e -imsize 16384 -dmsize 2048
+sim-test:
+	@dotnet ../Epsilon/bin/Debug/net8.0/Epsilon.dll -o ./hw/singlecycle/test/Generated/test -dump -sim ./hw/singlecycle/test/test.e -imsize 16384 -dmsize 2048
