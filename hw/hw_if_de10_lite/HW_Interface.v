@@ -21,6 +21,7 @@
 // `define ENABLE_MMIO_CONV1D_PL
 // `define ENABLE_MMIO_CONV2D
 `define ENABLE_MMIO_CONV3D
+`define ENABLE_MMIO_TIMER
 
 
 `define MMIO_LED_rden (cpu_mem_read && (`CPU_AddressBus == (`DM_SIZE - (1 * 8))))
@@ -107,6 +108,11 @@
 `define MMIO_CONV3D_start_wren        (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (38 * 8))))
 `define MMIO_CONV3D_done_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (39 * 8))))
 `define MMIO_CONV3D_done_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (39 * 8))))
+
+`define MMIO_TIMER_timer_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (40 * 8))))
+`define MMIO_TIMER_timer_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (40 * 8))))
+`define MMIO_TIMER_start_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (41 * 8))))
+`define MMIO_TIMER_start_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (41 * 8))))
 
 module HW_Interface(
 
@@ -375,6 +381,14 @@ always@(negedge clk or posedge rst) begin
 			MMIODataBus <= conv3d_done;
 		end
 `endif
+`ifdef ENABLE_MMIO_TIMER
+		if (`MMIO_TIMER_timer_rden) begin
+			MMIODataBus <= timer_timer;
+		end
+		if (`MMIO_TIMER_start_rden) begin
+			MMIODataBus <= timer_start;
+		end
+`endif
 `ifndef ENABLE_MMIO
 		MMIODataBus <= 0;
 `endif
@@ -401,6 +415,9 @@ end
 `endif
 `ifdef ENABLE_MMIO_CONV3D
 	`include "mm_conv3d.v"
+`endif
+`ifdef ENABLE_MMIO_TIMER
+	`include "mm_timer.v"
 `endif
 
 assign clkPort2     = mmio_dm_p2_en ? mmio_clkPort2     : `write_clkPort2;
