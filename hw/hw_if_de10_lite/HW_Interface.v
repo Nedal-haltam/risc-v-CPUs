@@ -137,11 +137,6 @@ module HW_Interface(
 	inout 		          		ARDUINO_RESET_N
 );
 
-(* preserve *) reg [24:0] ClockDivider;
-always@(posedge ADC_CLK_10) begin
-	ClockDivider <= ClockDivider + 1'b1;
-end
-
 (* keep *) wire clk;
 (* keep *) wire cpu_mem_read;
 (* keep *) wire cpu_mem_write;
@@ -177,6 +172,12 @@ end
 (* keep *) wire [(`DM_BITS - 1):0] mmio_addressPort2;
 (* keep *) wire `BIT_WIDTH mmio_dataPort2;
 //------------------------------------------------
+
+sys_clk_pll	sys_clk_pll_inst
+(
+	.inclk0 (ADC_CLK_10),
+	.c0 (clk)
+);
 
 always@(negedge clk or posedge rst) begin
     if (rst) begin
@@ -421,6 +422,7 @@ assign dataPort2    = mmio_dm_p2_en ? mmio_dataPort2    : `write_dataPort2;
 assign datatrigger = (!done) ? (rst | ~clk) : (datatrigger);
 assign ARDUINO_IO[7:0] = (!done && (offset) <= (write_ecall_len)) ? DMDataBusPort2[7:0] : 8'd0;
 assign ARDUINO_IO[8] = datatrigger;
+assign ARDUINO_IO[15:9] = 0;
 assign ARDUINO_RESET_N = 1'b1;
 assign write_ecall_mem_addr = write_ecall_address[(`DM_BITS-1) - 3:0] + offset[(`DM_BITS-1) - 3:0];
 assign write_ecall_finished = done;
@@ -434,7 +436,7 @@ assign CPUDataBusIn = (`DataMem_rden) ? DMDataBusPort1 : MMIODataBus;
 	assign LEDR[9:1] = 0;
 `endif
 
-assign HEX0[0] = clk;
+assign HEX0[0] = CyclesConsumed[25];
 assign HEX0[1] = cpu_clk;
 assign HEX0[2] = rst;
 assign HEX0[3] = datatrigger;
@@ -448,7 +450,6 @@ assign HEX3 = 0;
 assign HEX4 = 0;
 assign HEX5 = 0;
 
-assign clk = ClockDivider[9];
 assign rst = ~KEY[0];
 assign cpu_mem_read = ControlBus[1];
 assign cpu_mem_write = ControlBus[2];
