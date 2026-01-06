@@ -108,11 +108,17 @@
 `define MMIO_CONV3D_start_wren        (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (38 * 8))))
 `define MMIO_CONV3D_done_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (39 * 8))))
 `define MMIO_CONV3D_done_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (39 * 8))))
+`define MMIO_CONV3D_counter_load_kernel_rden   (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (40 * 8))))
+`define MMIO_CONV3D_counter_load_kernel_wren   (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (40 * 8))))
+`define MMIO_CONV3D_counter_input_feed_rden    (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (41 * 8))))
+`define MMIO_CONV3D_counter_input_feed_wren    (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (41 * 8))))
+`define MMIO_CONV3D_counter_output_unfeed_rden (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (42 * 8))))
+`define MMIO_CONV3D_counter_output_unfeed_wren (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (42 * 8))))
 
-`define MMIO_TIMER_timer_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (40 * 8))))
-`define MMIO_TIMER_timer_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (40 * 8))))
-`define MMIO_TIMER_start_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (41 * 8))))
-`define MMIO_TIMER_start_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (41 * 8))))
+`define MMIO_TIMER_timer_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (43 * 8))))
+`define MMIO_TIMER_timer_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (43 * 8))))
+`define MMIO_TIMER_start_rden         (cpu_mem_read  && (`CPU_AddressBus == (`DM_SIZE - (44 * 8))))
+`define MMIO_TIMER_start_wren         (cpu_mem_write && (`CPU_AddressBus == (`DM_SIZE - (44 * 8))))
 
 module HW_Interface(
 
@@ -381,6 +387,15 @@ always@(negedge clk or posedge rst) begin
 		end
 		if (`MMIO_CONV3D_done_rden) begin
 			MMIODataBus <= conv3d_done;
+		end
+		if (`MMIO_CONV3D_counter_load_kernel_rden) begin
+			MMIODataBus <= conv3d_counter_load_kernel;
+		end
+		if (`MMIO_CONV3D_counter_input_feed_rden) begin
+			MMIODataBus <= conv3d_counter_input_feed;
+		end
+		if (`MMIO_CONV3D_counter_output_unfeed_rden) begin
+			MMIODataBus <= conv3d_counter_output_unfeed;
 		end
 `endif
 `ifdef ENABLE_MMIO_TIMER
