@@ -143,7 +143,7 @@ module HW_Interface(
 	inout 		          		ARDUINO_RESET_N
 );
 
-(* keep *) wire clk;
+(* keep *) wire clk, clk1M, clkP1M, clkP01M;
 (* keep *) wire cpu_mem_read;
 (* keep *) wire cpu_mem_write;
 (* keep *) wire rst;
@@ -181,8 +181,10 @@ module HW_Interface(
 
 sys_clk_pll	sys_clk_pll_inst
 (
-	.inclk0 (ADC_CLK_10),
-	.c0 (clk)
+	.inclk0(ADC_CLK_10),
+	.c0(clk1M),
+	.c1(clkP1M),
+	.c2(clkP01M)
 );
 
 always@(negedge clk or posedge rst) begin
@@ -467,6 +469,7 @@ assign HEX3 = 0;
 assign HEX4 = 0;
 assign HEX5 = 0;
 
+assign clk = clkP01M;
 assign rst = ~KEY[0];
 assign cpu_mem_read = ControlBus[1];
 assign cpu_mem_write = ControlBus[2];

@@ -107,7 +107,7 @@ module sys_clk_pll (
 		altpll_component.clk1_duty_cycle = 50,
 		altpll_component.clk1_multiply_by = 1,
 		altpll_component.clk1_phase_shift = "0",
-		altpll_component.clk2_divide_by = 1000,
+		altpll_component.clk2_divide_by = 850,
 		altpll_component.clk2_duty_cycle = 50,
 		altpll_component.clk2_multiply_by = 1,
 		altpll_component.clk2_phase_shift = "0",
