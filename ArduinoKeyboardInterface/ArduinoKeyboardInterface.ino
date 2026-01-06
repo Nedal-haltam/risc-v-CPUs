@@ -159,6 +159,7 @@ void loop() {
         Serial.print('\n');
         Serial.print((char)0x0D);
       }
+      else if (DataIn == '%') {}
       else
       {
         Serial.print((char)DataIn);
