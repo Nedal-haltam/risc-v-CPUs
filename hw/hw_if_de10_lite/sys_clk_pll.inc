@@ -20,5 +20,7 @@ FUNCTION sys_clk_pll
 )
 
 RETURNS (
-	c0
+	c0,
+	c1,
+	c2
 );
