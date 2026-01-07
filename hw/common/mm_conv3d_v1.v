@@ -188,27 +188,22 @@ always@(posedge clk or posedge rst) begin
 			end
 //////////////////////////////////////////////
 			CONV3D_STATE_READ_KERNEL: begin
-                conv3d_dm_p2_address <= conv3d_addr_kernel[`DM_BITS-1:0] + (14'd8 * conv3d_offset[`DM_BITS-1:0]);
-                conv3d_counter_load_kernel <= conv3d_counter_load_kernel + 1'b1;
-                conv3d_state <= CONV3D_STATE_LOAD_KERNEL;
-			end
-			CONV3D_STATE_LOAD_KERNEL: begin
-                conv3d_counter_load_kernel <= conv3d_counter_load_kernel + 1'b1;
-                if ((conv3d_offset + 1'b1) < (`KW * `KH * `KD)) begin
-                    conv3d_dm_p2_address <= conv3d_addr_kernel[`DM_BITS-1:0] + (14'd8 * (conv3d_offset[`DM_BITS-1:0] + 14'd1));
-
-                    InternalRegisterEnableIndex <= conv3d_offset + 1'b1;
-                    InternalRegisterInputValue0 <= DMDataBusPort2[`INT_BITS-1:0];
-                    conv3d_offset <= conv3d_offset + 1'b1;
+                if (conv3d_offset < (`KW * `KH * `KD)) begin
+                    conv3d_dm_p2_address <= conv3d_addr_kernel[`DM_BITS-1:0] + (14'd8 * conv3d_offset[`DM_BITS-1:0]);
+                    conv3d_counter_load_kernel <= conv3d_counter_load_kernel + 1'b1;
                     conv3d_state <= CONV3D_STATE_LOAD_KERNEL;
                 end
                 else begin
-                    InternalRegisterEnableIndex <= conv3d_offset + 1'b1;
-                    InternalRegisterInputValue0 <= DMDataBusPort2[`INT_BITS-1:0];
-
                     conv3d_offset <= 0;
                     conv3d_state <= CONV3D_STATE_INPUT_FEED;
                 end
+			end
+			CONV3D_STATE_LOAD_KERNEL: begin
+				InternalRegisterEnableIndex <= conv3d_offset + 1'b1;
+				InternalRegisterInputValue0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_load_kernel <= conv3d_counter_load_kernel + 1'b1;
+                conv3d_offset <= conv3d_offset + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_KERNEL;
 			end
 //////////////////////////////////////////////
             CONV3D_STATE_INPUT_FEED: begin
@@ -240,48 +235,80 @@ always@(posedge clk or posedge rst) begin
             end
             CONV3D_STATE_LOAD_INPUT00: begin
                 Dim0Input00Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT01;
+            end
+            CONV3D_STATE_READ_INPUT01: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd1 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd0 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT01;
             end
             CONV3D_STATE_LOAD_INPUT01: begin
                 Dim0Input01Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT02;
+            end
+            CONV3D_STATE_READ_INPUT02: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd2 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd0 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT02;
             end
             CONV3D_STATE_LOAD_INPUT02: begin
                 Dim0Input02Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT10;
+            end
+            CONV3D_STATE_READ_INPUT10: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd0 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd1 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT10;
             end
             CONV3D_STATE_LOAD_INPUT10: begin
                 Dim0Input10Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT11;
+            end
+            CONV3D_STATE_READ_INPUT11: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd1 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd1 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT11;
             end
             CONV3D_STATE_LOAD_INPUT11: begin
                 Dim0Input11Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT12;
+            end
+            CONV3D_STATE_READ_INPUT12: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd2 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd1 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT12;
             end
             CONV3D_STATE_LOAD_INPUT12: begin
                 Dim0Input12Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT20;
+            end
+            CONV3D_STATE_READ_INPUT20: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd0 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd2 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT20;
             end
             CONV3D_STATE_LOAD_INPUT20: begin
                 Dim0Input20Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT21;
+            end
+            CONV3D_STATE_READ_INPUT21: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd1 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd2 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT21;
             end
             CONV3D_STATE_LOAD_INPUT21: begin
                 Dim0Input21Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
+                conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
+                conv3d_state <= CONV3D_STATE_READ_INPUT22;
+            end
+            CONV3D_STATE_READ_INPUT22: begin
                 conv3d_dm_p2_address <= conv3d_addr_input[`DM_BITS-1:0] + (14'd8 * (index[`DM_BITS-1:0] +  (14'd2 + depth_offset[`DM_BITS-1:0]) * pw[`DM_BITS-1:0] * ph[`DM_BITS-1:0] + 14'd2 * pw[`DM_BITS-1:0]));
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
                 conv3d_state <= CONV3D_STATE_LOAD_INPUT22;
@@ -289,27 +316,36 @@ always@(posedge clk or posedge rst) begin
             CONV3D_STATE_LOAD_INPUT22: begin
                 Dim0Input22Lane0 <= DMDataBusPort2[`INT_BITS-1:0];
                 conv3d_counter_input_feed <= conv3d_counter_input_feed + 1'b1;
-                conv3d_x <= conv3d_x + 1'b1;
-                conv3d_trigger <= 1'b1;
                 conv3d_state <= CONV3D_STATE_TRIGGER;
             end
 //////////////////////////////////////////////
             CONV3D_STATE_TRIGGER: begin
-                if (conv3d_trigger) begin
-                    conv3d_trigger <= 0;
-                    conv3d_offset <= conv3d_offset + 1'b1;
-                    index <= index + 1'b1;
+                if (!conv3d_trigger) begin
+                    conv3d_trigger <= 1'b1;
                     conv3d_state <= CONV3D_STATE_TRIGGER;
                 end
                 else begin
-                    if ((conv3d_x) >= `KW) begin
-                        conv3d_dm_p2_address <= conv3d_addr_out[`DM_BITS-1:0] + (14'd8 * conv3d_wb_index[`DM_BITS-1:0]);
-                        conv3d_dm_p2_wren <= 1'b1;
-                        conv3d_dm_p2_writedata <= SystolicOutput0;
-                        conv3d_counter_output_unfeed <= conv3d_counter_output_unfeed + 1'b1;
-                    end
+                    conv3d_trigger <= 0;
+                    conv3d_offset <= conv3d_offset + 1'b1;
+                    conv3d_x <= conv3d_x + 1'b1;
+                    index <= index + 1'b1;
+                    conv3d_state <= CONV3D_STATE_POINT;
+                end
+            end
+            CONV3D_STATE_POINT: begin
+                if (conv3d_x >= `KW) begin
+                    conv3d_state <= CONV3D_STATE_WRITE_BACK;
+                end
+                else begin
                     conv3d_state <= CONV3D_STATE_INPUT_FEED;
                 end
+            end
+            CONV3D_STATE_WRITE_BACK: begin
+                conv3d_dm_p2_address <= conv3d_addr_out[`DM_BITS-1:0] + (14'd8 * conv3d_wb_index[`DM_BITS-1:0]);
+                conv3d_dm_p2_wren <= 1'b1;
+                conv3d_dm_p2_writedata <= SystolicOutput0;
+                conv3d_counter_output_unfeed <= conv3d_counter_output_unfeed + 1'b1;
+                conv3d_state <= CONV3D_STATE_INPUT_FEED;
             end
             CONV3D_STATE_FINISHED: begin
                 conv3d_done_set <= 1'b1;
